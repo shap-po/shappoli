@@ -1,0 +1,98 @@
+package com.github.shap_po.shappoli.power;
+
+import com.github.shap_po.shappoli.Shappoli;
+import com.github.shap_po.shappoli.data.ShappoliDataTypes;
+import com.github.shap_po.shappoli.data.TrinketSlotData;
+import dev.emi.trinkets.api.SlotReference;
+import io.github.apace100.apoli.data.ApoliDataTypes;
+import io.github.apace100.apoli.power.Power;
+import io.github.apace100.apoli.power.PowerType;
+import io.github.apace100.apoli.power.factory.PowerFactory;
+import io.github.apace100.calio.data.SerializableData;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.inventory.StackReference;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.Pair;
+import net.minecraft.world.World;
+
+import java.util.function.Consumer;
+import java.util.function.Predicate;
+
+public class ActionOnTrinketUpdate extends Power {
+    private final Consumer<Entity> entityActionOnEquip;
+    private final Consumer<Pair<World, StackReference>> itemActionOnEquip;
+    private final Consumer<Entity> entityActionOnUnequip;
+    private final Consumer<Pair<World, StackReference>> itemActionOnUnequip;
+    private final Predicate<Pair<World, ItemStack>> itemCondition;
+    private final TrinketSlotData slot;
+
+    public ActionOnTrinketUpdate(
+        PowerType<?> type,
+        LivingEntity entity,
+        Consumer<Entity> entityActionOnEquip,
+        Consumer<Pair<World, StackReference>> itemActionOnEquip,
+        Consumer<Entity> entityActionOnUnequip,
+        Consumer<Pair<World, StackReference>> itemActionOnUnequip,
+        Predicate<Pair<World, ItemStack>> itemCondition,
+        TrinketSlotData slot
+    ) {
+        super(type, entity);
+        this.entityActionOnEquip = entityActionOnEquip;
+        this.itemActionOnEquip = itemActionOnEquip;
+        this.entityActionOnUnequip = entityActionOnUnequip;
+        this.itemActionOnUnequip = itemActionOnUnequip;
+        this.itemCondition = itemCondition;
+        this.slot = slot;
+    }
+
+
+    public boolean doesApply(LivingEntity actor, SlotReference slotReference, ItemStack item) {
+        return (slot == null || slot.test(slotReference)) && (itemCondition == null || itemCondition.test(new Pair<>(actor.getWorld(), item)));
+    }
+
+    public void apply(LivingEntity actor, SlotReference slotReference, boolean isEquipping) {
+        if (isEquipping) {
+            if (entityActionOnEquip != null) {
+                entityActionOnEquip.accept(actor);
+            }
+            if (itemActionOnEquip != null) {
+                itemActionOnEquip.accept(new Pair<>(actor.getWorld(), StackReference.of(slotReference.inventory(), slotReference.index())));
+            }
+        } else {
+            if (entityActionOnUnequip != null) {
+                entityActionOnUnequip.accept(actor);
+            }
+            if (itemActionOnUnequip != null) {
+                // FIXME: stack is a copy of an item, not the actual item, IDK how to fix it yet
+                Shappoli.LOGGER.warn("Item action on unequip is not implemented yet!");
+                itemActionOnUnequip.accept(new Pair<>(actor.getWorld(), StackReference.of(slotReference.inventory(), slotReference.index())));
+            }
+        }
+
+    }
+
+    // TODO: replace slot with slots
+    public static PowerFactory createFactory() {
+        return new PowerFactory<>(
+            Shappoli.identifier("action_on_trinket_update"),
+            new SerializableData()
+                .add("entity_action_on_equip", ApoliDataTypes.ENTITY_ACTION, null)
+                .add("item_action_on_equip", ApoliDataTypes.ITEM_ACTION, null)
+                .add("entity_action_on_unequip", ApoliDataTypes.ENTITY_ACTION, null)
+//                .add("item_action_on_unequip", ApoliDataTypes.ITEM_ACTION, null)
+                .add("item_condition", ApoliDataTypes.ITEM_CONDITION, null)
+                .add("slot", ShappoliDataTypes.TRINKET_SLOT, null),
+            data -> (type, player) -> new ActionOnTrinketUpdate(
+                type,
+                player,
+                data.get("entity_action_on_equip"),
+                data.get("item_action_on_equip"),
+                data.get("entity_action_on_unequip"),
+                data.get("item_action_on_unequip"),
+                data.get("item_condition"),
+                data.get("slot")
+            )
+        ).allowCondition();
+    }
+}

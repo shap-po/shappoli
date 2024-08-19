@@ -11,7 +11,11 @@ public class ShappoliDataTypes {
             .add("name", SerializableDataTypes.STRING, null)
             .add("group", SerializableDataTypes.STRING, null)
             .add("index", SerializableDataTypes.INT, null),
-        (data) -> new TrinketSlotData(data.getString("name"), data.getString("group"), data.getInt("index")),
+        (data) -> new TrinketSlotData(
+            data.getString("name"),
+            data.getString("group"),
+            data.isPresent("index") ? data.getInt("index") : null
+        ),
         ((serializableData, trinketSlotData) -> {
             SerializableData.Instance data = serializableData.new Instance();
             data.set("name", trinketSlotData.name);

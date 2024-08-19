@@ -89,7 +89,8 @@ public class ActionOnTrinketUpdate extends Power {
                 data.get("entity_action_on_equip"),
                 data.get("item_action_on_equip"),
                 data.get("entity_action_on_unequip"),
-                data.get("item_action_on_unequip"),
+//                data.get("item_action_on_unequip"),
+                null,
                 data.get("item_condition"),
                 data.get("slot")
             )

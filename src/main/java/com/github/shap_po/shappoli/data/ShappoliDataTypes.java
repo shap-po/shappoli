@@ -4,6 +4,8 @@ import io.github.apace100.calio.data.SerializableData;
 import io.github.apace100.calio.data.SerializableDataType;
 import io.github.apace100.calio.data.SerializableDataTypes;
 
+import java.util.List;
+
 public class ShappoliDataTypes {
     public static final SerializableDataType<TrinketSlotData> TRINKET_SLOT = SerializableDataType.compound(
         TrinketSlotData.class,
@@ -24,4 +26,6 @@ public class ShappoliDataTypes {
             return data;
         })
     );
+
+    public static final SerializableDataType<List<TrinketSlotData>> TRINKET_SLOTS = SerializableDataType.list(TRINKET_SLOT);
 }

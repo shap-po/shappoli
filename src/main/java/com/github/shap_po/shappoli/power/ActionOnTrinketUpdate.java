@@ -16,6 +16,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Pair;
 import net.minecraft.world.World;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
@@ -25,7 +27,7 @@ public class ActionOnTrinketUpdate extends Power {
     private final Consumer<Entity> entityActionOnUnequip;
     private final Consumer<Pair<World, StackReference>> itemActionOnUnequip;
     private final Predicate<Pair<World, ItemStack>> itemCondition;
-    private final TrinketSlotData slot;
+    private final List<TrinketSlotData> slots;
 
     public ActionOnTrinketUpdate(
         PowerType<?> type,
@@ -35,7 +37,8 @@ public class ActionOnTrinketUpdate extends Power {
         Consumer<Entity> entityActionOnUnequip,
         Consumer<Pair<World, StackReference>> itemActionOnUnequip,
         Predicate<Pair<World, ItemStack>> itemCondition,
-        TrinketSlotData slot
+        TrinketSlotData slot,
+        List<TrinketSlotData> slots
     ) {
         super(type, entity);
         this.entityActionOnEquip = entityActionOnEquip;
@@ -43,12 +46,19 @@ public class ActionOnTrinketUpdate extends Power {
         this.entityActionOnUnequip = entityActionOnUnequip;
         this.itemActionOnUnequip = itemActionOnUnequip;
         this.itemCondition = itemCondition;
-        this.slot = slot;
+        this.slots = new ArrayList<>();
+        if (slot != null) {
+            this.slots.add(slot);
+        }
+        if (slots != null) {
+            this.slots.addAll(slots);
+        }
     }
 
 
     public boolean doesApply(LivingEntity actor, SlotReference slotReference, ItemStack item) {
-        return (slot == null || slot.test(slotReference)) && (itemCondition == null || itemCondition.test(new Pair<>(actor.getWorld(), item)));
+        return ((slots.isEmpty() || slots.stream().anyMatch(slot -> slot.test(slotReference))) &&
+            (itemCondition == null || itemCondition.test(new Pair<>(actor.getWorld(), item))));
     }
 
     public void apply(LivingEntity actor, SlotReference slotReference, boolean isEquipping) {
@@ -82,7 +92,9 @@ public class ActionOnTrinketUpdate extends Power {
                 .add("entity_action_on_unequip", ApoliDataTypes.ENTITY_ACTION, null)
 //                .add("item_action_on_unequip", ApoliDataTypes.ITEM_ACTION, null)
                 .add("item_condition", ApoliDataTypes.ITEM_CONDITION, null)
-                .add("slot", ShappoliDataTypes.TRINKET_SLOT, null),
+                .add("slot", ShappoliDataTypes.TRINKET_SLOT, null)
+                .add("slots", ShappoliDataTypes.TRINKET_SLOTS, null)
+            ,
             data -> (type, player) -> new ActionOnTrinketUpdate(
                 type,
                 player,
@@ -92,7 +104,8 @@ public class ActionOnTrinketUpdate extends Power {
 //                data.get("item_action_on_unequip"),
                 null,
                 data.get("item_condition"),
-                data.get("slot")
+                data.get("slot"),
+                data.get("slots")
             )
         ).allowCondition();
     }

@@ -14,6 +14,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Pair;
 import net.minecraft.world.World;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Predicate;
 
 public class EquippedTrinketCondition {
@@ -27,11 +29,17 @@ public class EquippedTrinketCondition {
         }
 
         Predicate<Pair<World, ItemStack>> itemCondition = data.get("item_condition");
-        TrinketSlotData slot = data.get("slot");
+        List<TrinketSlotData> slots = new ArrayList<>();
+        if (data.isPresent("slot")) {
+            slots.add(data.get("slot"));
+        }
+        if (data.isPresent("slots")) {
+            slots.addAll(data.get("slots"));
+        }
 
         boolean isEquipped = false;
         for (Pair<SlotReference, ItemStack> trinket : component.get().getEquipped((i) -> true)) {
-            if ((slot == null || slot.test(trinket.getLeft())) &&
+            if ((slots.isEmpty() || slots.stream().anyMatch(slot -> slot.test(trinket.getLeft()))) &&
                 (itemCondition == null || itemCondition.test(new Pair<>(entity.getWorld(), trinket.getRight())))
             ) {
                 isEquipped = true;
@@ -47,7 +55,9 @@ public class EquippedTrinketCondition {
             Shappoli.identifier("equipped_trinket"),
             new SerializableData()
                 .add("item_condition", ApoliDataTypes.ITEM_CONDITION, null)
-                .add("slot", ShappoliDataTypes.TRINKET_SLOT, null),
+                .add("slot", ShappoliDataTypes.TRINKET_SLOT, null)
+                .add("slots", ShappoliDataTypes.TRINKET_SLOTS, null)
+            ,
             EquippedTrinketCondition::condition
         );
     }

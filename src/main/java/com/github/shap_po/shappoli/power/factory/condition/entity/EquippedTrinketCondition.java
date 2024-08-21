@@ -1,4 +1,4 @@
-package com.github.shap_po.shappoli.power;
+package com.github.shap_po.shappoli.power.factory.condition.entity;
 
 import com.github.shap_po.shappoli.Shappoli;
 import com.github.shap_po.shappoli.data.ShappoliDataTypes;

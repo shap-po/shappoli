@@ -1,0 +1,31 @@
+{
+  "type": "apoli:active_self",
+  "key": "key.attack",
+
+  "entity_action": {
+    "type": "apoli:if_else",
+    "condition": {
+      "type": "shappoli:equipped_trinket",
+      "slots": [
+        {
+          "group": "feet"
+        },
+        {
+          "name": "necklace"
+        }
+      ],
+      "item_condition": {
+        "type": "apoli:empty",
+        "inverted": true
+      }
+    },
+    "if_action": {
+      "type": "apoli:execute_command",
+      "command": "say Trinket found"
+    },
+    "else_action": {
+      "type": "apoli:execute_command",
+      "command": "say No trinket found"
+    }
+  }
+}

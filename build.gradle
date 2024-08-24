@@ -65,6 +65,26 @@ repositories {
     }
 }
 
+loom {
+    mods {
+        register("shappoli") {
+            sourceSet(sourceSets.main)
+            sourceSet(sourceSets.test)
+        }
+    }
+    runs {
+        client {
+            client()
+            source(sourceSets.test)
+            setConfigName("Minecraft Client")
+        }
+        server {
+            server()
+            source(sourceSets.test)
+            setConfigName("Minecraft Server")
+        }
+    }
+}
 
 dependencies {
     minecraft "com.mojang:minecraft:${project.minecraft_version}"

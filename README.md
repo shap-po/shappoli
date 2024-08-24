@@ -80,3 +80,15 @@ Use `inverted` `origins:empty` item condition to check if slot is not empty.
     }
 }
 ```
+
+### Is block
+
+Type: `Item condition`
+
+Checks if the item can be placed as a block.
+
+```jsonc
+{
+  "type": "shappoli:is_block"
+}
+```

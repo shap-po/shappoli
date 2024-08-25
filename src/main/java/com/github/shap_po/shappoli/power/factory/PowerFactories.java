@@ -1,6 +1,7 @@
 package com.github.shap_po.shappoli.power.factory;
 
 import com.github.shap_po.shappoli.power.ActionOnTrinketUpdate;
+import com.github.shap_po.shappoli.power.ModifyVillagerReputation;
 import io.github.apace100.apoli.power.factory.PowerFactory;
 import io.github.apace100.apoli.power.factory.PowerFactorySupplier;
 import io.github.apace100.apoli.registry.ApoliRegistries;
@@ -12,6 +13,7 @@ public class PowerFactories {
         if (FabricLoader.getInstance().isModLoaded("trinkets")) {
             register(ActionOnTrinketUpdate::createFactory);
         }
+        register(ModifyVillagerReputation::createFactory);
     }
 
     private static void register(PowerFactory<?> powerFactory) {

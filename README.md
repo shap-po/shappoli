@@ -60,6 +60,25 @@ items.
 }
 ```
 
+### Modify villager reputation
+
+This power modifies the player's reputation with a villager, which is used to determine the prices of trades.
+
+```jsonc
+{
+  "type": "shappoli:modify_villager_reputation",
+  "bientity_condition": {
+    // Bi-entity condition, optional
+  },
+  "modifier": {
+    // Attribute Modifier, optional
+  },
+  "modifiers": [
+    // List of attribute modifiers, optional
+  ]
+}
+```
+
 ## Actions
 
 ### Modify trinket

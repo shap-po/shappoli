@@ -3,8 +3,6 @@ package com.github.shap_po.shappoli.power.factory.condition.entity;
 import com.github.shap_po.shappoli.Shappoli;
 import com.github.shap_po.shappoli.data.ShappoliDataTypes;
 import com.github.shap_po.shappoli.data.TrinketSlotData;
-import dev.emi.trinkets.api.SlotReference;
-import dev.emi.trinkets.api.TrinketsApi;
 import io.github.apace100.apoli.data.ApoliDataTypes;
 import io.github.apace100.apoli.power.factory.condition.ConditionFactory;
 import io.github.apace100.calio.data.SerializableData;
@@ -14,7 +12,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Pair;
 import net.minecraft.world.World;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
@@ -23,31 +20,11 @@ public class EquippedTrinketCondition {
         if (!(entity instanceof LivingEntity livingEntity)) {
             return false;
         }
-        var component = TrinketsApi.getTrinketComponent(livingEntity);
-        if (component.isEmpty()) {
-            return false;
-        }
 
         Predicate<Pair<World, ItemStack>> itemCondition = data.get("item_condition");
-        List<TrinketSlotData> slots = new ArrayList<>();
-        if (data.isPresent("slot")) {
-            slots.add(data.get("slot"));
-        }
-        if (data.isPresent("slots")) {
-            slots.addAll(data.get("slots"));
-        }
+        List<TrinketSlotData> slots = TrinketSlotData.getSlots(data);
 
-        boolean isEquipped = false;
-        for (Pair<SlotReference, ItemStack> trinket : component.get().getEquipped((i) -> true)) {
-            if ((slots.isEmpty() || slots.stream().anyMatch(slot -> slot.test(trinket.getLeft()))) &&
-                (itemCondition == null || itemCondition.test(new Pair<>(entity.getWorld(), trinket.getRight())))
-            ) {
-                isEquipped = true;
-                break;
-            }
-        }
-
-        return isEquipped;
+        return TrinketSlotData.getTrinkets(livingEntity, slots, itemCondition).anyMatch(pair -> true);
     }
 
     public static ConditionFactory<Entity> getFactory() {

@@ -16,7 +16,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Pair;
 import net.minecraft.world.World;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -37,7 +36,6 @@ public class ActionOnTrinketUpdate extends Power {
         Consumer<Entity> entityActionOnUnequip,
         Consumer<Pair<World, StackReference>> itemActionOnUnequip,
         Predicate<Pair<World, ItemStack>> itemCondition,
-        TrinketSlotData slot,
         List<TrinketSlotData> slots
     ) {
         super(type, entity);
@@ -46,13 +44,7 @@ public class ActionOnTrinketUpdate extends Power {
         this.entityActionOnUnequip = entityActionOnUnequip;
         this.itemActionOnUnequip = itemActionOnUnequip;
         this.itemCondition = itemCondition;
-        this.slots = new ArrayList<>();
-        if (slot != null) {
-            this.slots.add(slot);
-        }
-        if (slots != null) {
-            this.slots.addAll(slots);
-        }
+        this.slots = slots;
     }
 
 
@@ -82,7 +74,6 @@ public class ActionOnTrinketUpdate extends Power {
 
     }
 
-    // TODO: replace slot with slots
     public static PowerFactory createFactory() {
         return new PowerFactory<>(
             Shappoli.identifier("action_on_trinket_update"),
@@ -104,8 +95,7 @@ public class ActionOnTrinketUpdate extends Power {
 //                data.get("item_action_on_unequip"),
                 null,
                 data.get("item_condition"),
-                data.get("slot"),
-                data.get("slots")
+                TrinketSlotData.getSlots(data)
             )
         ).allowCondition();
     }

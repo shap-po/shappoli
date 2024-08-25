@@ -25,11 +25,9 @@ All fields are optional. If field is not present, it will not be checked.
 }
 ```
 
-## Actions
+## Powers
 
 ### Action on trinket update
-
-Type: `Entity action`
 
 This action is triggered when a trinket is equipped or unequipped. Note that when slot is emptied, this action will be
 triggered with `minecraft:air` item. Use `inverted` `origins:empty` item condition to trigger action only on non-empty
@@ -55,7 +53,45 @@ items.
   },
   "slot": {
     // Trinket slot
-  }
+  },
+  "slots": [
+    // List of trinket slots
+  ]
+}
+```
+
+## Actions
+
+### Modify trinket
+
+Type: `Entity action`
+
+Modifies the items from entity's trinket slots.
+
+Extremely similar to the `origins:modify_inventory` action, but for trinkets.
+
+```jsonc
+{
+    "type": "shappoli:modify_trinket",
+    "slot": {
+      // Trinket slot, optional
+    },
+    "slots": [
+      // List of trinket slots, optional
+    ],
+    "item_condition": {
+      // Item condition, optional
+      "type": "origins:empty",
+      "inverted": true
+    },
+    "item_action": {
+      // Item action
+    },
+    "entity_action": {
+      // Entity action, optional
+    },
+    "process_mode": "stacks", // "stacks" or "items", default "stacks"
+    "limit": 0 // Limit of items to process, default 1
 }
 ```
 
@@ -67,12 +103,17 @@ Type: `Item condition`
 
 Use `inverted` `origins:empty` item condition to check if slot is not empty.
 
+If no slots are provided, it will check if any trinket is equipped.
+
 ```jsonc
 {
   "type": "shappoli:equipped_trinket",
     "slot": {
-        // Trinket slot, optional, if not present, will check if any trinket is equipped
+        // Trinket slot, optional
     },
+    "slots": [
+        // List of trinket slots, optional
+    ]
     "item_condition": {
         // Item condition, optional
         "type": "origins:empty",

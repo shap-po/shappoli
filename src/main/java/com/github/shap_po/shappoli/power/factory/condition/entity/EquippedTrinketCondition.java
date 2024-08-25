@@ -3,6 +3,7 @@ package com.github.shap_po.shappoli.power.factory.condition.entity;
 import com.github.shap_po.shappoli.Shappoli;
 import com.github.shap_po.shappoli.data.ShappoliDataTypes;
 import com.github.shap_po.shappoli.data.TrinketSlotData;
+import com.github.shap_po.shappoli.util.TrinketsUtil;
 import io.github.apace100.apoli.data.ApoliDataTypes;
 import io.github.apace100.apoli.power.factory.condition.ConditionFactory;
 import io.github.apace100.calio.data.SerializableData;
@@ -24,7 +25,7 @@ public class EquippedTrinketCondition {
         Predicate<Pair<World, ItemStack>> itemCondition = data.get("item_condition");
         List<TrinketSlotData> slots = TrinketSlotData.getSlots(data);
 
-        return TrinketSlotData.getTrinkets(livingEntity, slots, itemCondition).anyMatch(pair -> true);
+        return TrinketsUtil.getTrinkets(livingEntity, slots, itemCondition).anyMatch(pair -> true);
     }
 
     public static ConditionFactory<Entity> getFactory() {

@@ -3,6 +3,7 @@ package com.github.shap_po.shappoli.power;
 import com.github.shap_po.shappoli.Shappoli;
 import com.github.shap_po.shappoli.data.ShappoliDataTypes;
 import com.github.shap_po.shappoli.data.TrinketSlotData;
+import com.github.shap_po.shappoli.util.TrinketsUtil;
 import dev.emi.trinkets.api.SlotReference;
 import io.github.apace100.apoli.data.ApoliDataTypes;
 import io.github.apace100.apoli.power.Power;
@@ -50,7 +51,7 @@ public class ActionOnTrinketUpdate extends Power {
 
     public boolean doesApply(LivingEntity actor, SlotReference slotReference, ItemStack item) {
         return ((slots.isEmpty() || slots.stream().anyMatch(slot -> slot.test(slotReference))) &&
-            (itemCondition == null || itemCondition.test(new Pair<>(actor.getWorld(), item))));
+            (itemCondition == null || itemCondition.test(TrinketsUtil.getItemConditionPair(actor, item))));
     }
 
     public void apply(LivingEntity actor, SlotReference slotReference, boolean isEquipping) {
@@ -59,7 +60,7 @@ public class ActionOnTrinketUpdate extends Power {
                 entityActionOnEquip.accept(actor);
             }
             if (itemActionOnEquip != null) {
-                itemActionOnEquip.accept(new Pair<>(actor.getWorld(), StackReference.of(slotReference.inventory(), slotReference.index())));
+                itemActionOnEquip.accept(TrinketsUtil.getItemActionPair(actor, slotReference));
             }
         } else {
             if (entityActionOnUnequip != null) {
@@ -68,7 +69,7 @@ public class ActionOnTrinketUpdate extends Power {
             if (itemActionOnUnequip != null) {
                 // FIXME: stack is a copy of an item, not the actual item, IDK how to fix it yet
                 Shappoli.LOGGER.warn("Item action on unequip is not implemented yet!");
-                itemActionOnUnequip.accept(new Pair<>(actor.getWorld(), StackReference.of(slotReference.inventory(), slotReference.index())));
+                itemActionOnUnequip.accept(TrinketsUtil.getItemActionPair(actor, slotReference));
             }
         }
 

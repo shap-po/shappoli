@@ -20,7 +20,7 @@ All fields are optional. If field is not present, it will not be checked.
 ```jsonc
 {
   "group": "", // Group name, eg "chest"
-  "name": "" // Slot name, eg "necklace"
+  "name": "", // Slot name, eg "necklace"
   "index: 0 // Slot index, if you have multiple slots
 }
 ```

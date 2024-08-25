@@ -1,0 +1,23 @@
+{
+  "type": "apoli:active_self",
+  "key": "key.attack",
+
+  "entity_action": {
+    "type": "shappoli:modify_trinket",
+    "slot": {
+      "group": "feet",
+      "name": "shoes"
+    },
+    "item_condition": {
+      "type": "apoli:empty",
+      "inverted": true
+    },
+    "item_action": {
+      "type": "apoli:consume"
+    },
+    "entity_action": {
+      "type": "apoli:execute_command",
+      "command": "say Modified trinket"
+    }
+  }
+}

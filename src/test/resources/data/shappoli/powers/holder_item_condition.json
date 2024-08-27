@@ -1,0 +1,18 @@
+{
+  "type": "apoli:active_self",
+  "key": "key.attack",
+  "condition": {
+    "type": "apoli:equipped_item",
+    "equipment_slot": "mainhand",
+    "item_condition": {
+      "type": "shappoli:holder",
+      "condition": {
+        "type": "apoli:sneaking"
+      }
+    }
+  },
+  "entity_action": {
+    "type": "apoli:execute_command",
+    "command": "say Condition met"
+  }
+}

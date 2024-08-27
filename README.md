@@ -152,3 +152,18 @@ Checks if the item can be placed as a block.
   "type": "shappoli:is_block"
 }
 ```
+
+### Holder
+
+Type: `Item condition`
+
+Checks if the condition on the item holder is met.
+
+```jsonc
+{
+  "type": "shappoli:holder",
+  "condition": {
+    // Entity condition
+  }
+}
+```

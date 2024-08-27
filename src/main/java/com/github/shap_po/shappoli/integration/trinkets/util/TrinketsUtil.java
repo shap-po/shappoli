@@ -1,6 +1,6 @@
-package com.github.shap_po.shappoli.util;
+package com.github.shap_po.shappoli.integration.trinkets.util;
 
-import com.github.shap_po.shappoli.data.TrinketSlotData;
+import com.github.shap_po.shappoli.integration.trinkets.data.TrinketSlotData;
 import dev.emi.trinkets.api.SlotReference;
 import dev.emi.trinkets.api.TrinketsApi;
 import net.minecraft.entity.LivingEntity;

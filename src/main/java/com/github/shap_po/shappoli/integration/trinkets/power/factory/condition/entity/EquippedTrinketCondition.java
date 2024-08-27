@@ -1,9 +1,9 @@
-package com.github.shap_po.shappoli.power.factory.condition.entity;
+package com.github.shap_po.shappoli.integration.trinkets.power.factory.condition.entity;
 
 import com.github.shap_po.shappoli.Shappoli;
-import com.github.shap_po.shappoli.data.ShappoliDataTypes;
-import com.github.shap_po.shappoli.data.TrinketSlotData;
-import com.github.shap_po.shappoli.util.TrinketsUtil;
+import com.github.shap_po.shappoli.integration.trinkets.data.ShappoliTrinketsDataTypes;
+import com.github.shap_po.shappoli.integration.trinkets.data.TrinketSlotData;
+import com.github.shap_po.shappoli.integration.trinkets.util.TrinketsUtil;
 import io.github.apace100.apoli.data.ApoliDataTypes;
 import io.github.apace100.apoli.power.factory.condition.ConditionFactory;
 import io.github.apace100.calio.data.SerializableData;
@@ -33,8 +33,8 @@ public class EquippedTrinketCondition {
             Shappoli.identifier("equipped_trinket"),
             new SerializableData()
                 .add("item_condition", ApoliDataTypes.ITEM_CONDITION, null)
-                .add("slot", ShappoliDataTypes.TRINKET_SLOT, null)
-                .add("slots", ShappoliDataTypes.TRINKET_SLOTS, null)
+                .add("slot", ShappoliTrinketsDataTypes.TRINKET_SLOT, null)
+                .add("slots", ShappoliTrinketsDataTypes.TRINKET_SLOTS, null)
             ,
             EquippedTrinketCondition::condition
         );

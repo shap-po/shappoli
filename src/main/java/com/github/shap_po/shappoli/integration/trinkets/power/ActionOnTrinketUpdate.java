@@ -1,9 +1,9 @@
-package com.github.shap_po.shappoli.power;
+package com.github.shap_po.shappoli.integration.trinkets.power;
 
 import com.github.shap_po.shappoli.Shappoli;
-import com.github.shap_po.shappoli.data.ShappoliDataTypes;
-import com.github.shap_po.shappoli.data.TrinketSlotData;
-import com.github.shap_po.shappoli.util.TrinketsUtil;
+import com.github.shap_po.shappoli.integration.trinkets.data.ShappoliTrinketsDataTypes;
+import com.github.shap_po.shappoli.integration.trinkets.data.TrinketSlotData;
+import com.github.shap_po.shappoli.integration.trinkets.util.TrinketsUtil;
 import dev.emi.trinkets.api.SlotReference;
 import io.github.apace100.apoli.data.ApoliDataTypes;
 import io.github.apace100.apoli.power.Power;
@@ -84,8 +84,8 @@ public class ActionOnTrinketUpdate extends Power {
                 .add("entity_action_on_unequip", ApoliDataTypes.ENTITY_ACTION, null)
 //                .add("item_action_on_unequip", ApoliDataTypes.ITEM_ACTION, null)
                 .add("item_condition", ApoliDataTypes.ITEM_CONDITION, null)
-                .add("slot", ShappoliDataTypes.TRINKET_SLOT, null)
-                .add("slots", ShappoliDataTypes.TRINKET_SLOTS, null)
+                .add("slot", ShappoliTrinketsDataTypes.TRINKET_SLOT, null)
+                .add("slots", ShappoliTrinketsDataTypes.TRINKET_SLOTS, null)
             ,
             data -> (type, player) -> new ActionOnTrinketUpdate(
                 type,

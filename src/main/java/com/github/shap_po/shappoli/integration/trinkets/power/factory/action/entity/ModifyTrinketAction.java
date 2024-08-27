@@ -1,9 +1,9 @@
-package com.github.shap_po.shappoli.power.factory.action.entity;
+package com.github.shap_po.shappoli.integration.trinkets.power.factory.action.entity;
 
 import com.github.shap_po.shappoli.Shappoli;
-import com.github.shap_po.shappoli.data.ShappoliDataTypes;
-import com.github.shap_po.shappoli.data.TrinketSlotData;
-import com.github.shap_po.shappoli.util.TrinketsUtil;
+import com.github.shap_po.shappoli.integration.trinkets.data.ShappoliTrinketsDataTypes;
+import com.github.shap_po.shappoli.integration.trinkets.data.TrinketSlotData;
+import com.github.shap_po.shappoli.integration.trinkets.util.TrinketsUtil;
 import io.github.apace100.apoli.data.ApoliDataTypes;
 import io.github.apace100.apoli.power.factory.action.ActionFactory;
 import io.github.apace100.apoli.util.InventoryUtil;
@@ -57,8 +57,8 @@ public class ModifyTrinketAction {
     public static ActionFactory<Entity> getFactory() {
         return new ActionFactory<>(Shappoli.identifier("modify_trinket"),
             new SerializableData()
-                .add("slot", ShappoliDataTypes.TRINKET_SLOT, null)
-                .add("slots", ShappoliDataTypes.TRINKET_SLOTS, null)
+                .add("slot", ShappoliTrinketsDataTypes.TRINKET_SLOT, null)
+                .add("slots", ShappoliTrinketsDataTypes.TRINKET_SLOTS, null)
                 .add("process_mode", ApoliDataTypes.PROCESS_MODE, InventoryUtil.ProcessMode.STACKS)
                 .add("entity_action", ApoliDataTypes.ENTITY_ACTION, null)
                 .add("item_action", ApoliDataTypes.ITEM_ACTION)

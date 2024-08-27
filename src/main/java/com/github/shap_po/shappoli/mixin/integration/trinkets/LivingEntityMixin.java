@@ -1,6 +1,6 @@
 package com.github.shap_po.shappoli.mixin.integration.trinkets;
 
-import com.github.shap_po.shappoli.power.ActionOnTrinketUpdate;
+import com.github.shap_po.shappoli.integration.trinkets.power.ActionOnTrinketUpdate;
 import dev.emi.trinkets.api.SlotType;
 import dev.emi.trinkets.api.TrinketInventory;
 import dev.emi.trinkets.api.TrinketsApi;

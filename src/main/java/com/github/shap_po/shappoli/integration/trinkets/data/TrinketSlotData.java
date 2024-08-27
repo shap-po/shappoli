@@ -1,4 +1,4 @@
-package com.github.shap_po.shappoli.data;
+package com.github.shap_po.shappoli.integration.trinkets.data;
 
 import dev.emi.trinkets.api.SlotReference;
 import dev.emi.trinkets.api.SlotType;

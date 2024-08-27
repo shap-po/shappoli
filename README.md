@@ -1,7 +1,8 @@
 # Shappoli
 
-An [Origins](https://modrinth.com/mod/origins) addon that provides [Trinkets](https://modrinth.com/mod/trinkets)
-compatibility.
+An [Origins](https://modrinth.com/mod/origins) addon that provides [Trinkets](https://modrinth.com/mod/trinkets) compatibility, event system and more.
+
+See [Test powers](https://github.com/shap-po/shappoli/tree/main/src/test/resources/data/shappoli/powers) for some examples.
 
 ## Requirements
 
@@ -9,7 +10,7 @@ compatibility.
 - [Fabric](https://fabricmc.net/)
 - [Fabric API](https://modrinth.com/mod/fabric-api)
 - [Origins](https://modrinth.com/mod/origins)
-- [Trinkets](https://modrinth.com/mod/trinkets) (optional)
+- [Trinkets](https://modrinth.com/mod/trinkets) (optional, enables trinkets support)
 
 ## Data types
 
@@ -29,9 +30,7 @@ All fields are optional. If field is not present, it will not be checked.
 
 ### Action on trinket update
 
-This action is triggered when a trinket is equipped or unequipped. Note that when slot is emptied, this action will be
-triggered with `minecraft:air` item. Use `inverted` `origins:empty` item condition to trigger action only on non-empty
-items.
+This action is triggered when a trinket is equipped or unequipped. Note that when slot is emptied, this action will be triggered with `minecraft:air` item. Use `inverted` `origins:empty` item condition to trigger action only on non-empty items.
 
 ```jsonc
 {

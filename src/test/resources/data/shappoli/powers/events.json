@@ -1,0 +1,58 @@
+{
+  "type": "apoli:multiple",
+
+  "receiver": {
+    "type": "shappoli:action_on_event_receive",
+    "action": {
+      "type": "apoli:execute_command",
+      "command": "say Received an event"
+    },
+    "bientity_action": {
+      "type": "apoli:actor_action",
+      "action": {
+        "type": "apoli:execute_command",
+        "command": "say Received a bientity event"
+      }
+    },
+    "entity_action": {
+      "type": "apoli:execute_command",
+      "command": "say Received an entity event"
+    },
+    "item_action": {
+      "type": "apoli:holder_action",
+      "action": {
+        "type": "apoli:execute_command",
+        "command": "say Received an item event"
+      }
+    }
+  },
+
+  "emitter_1": {
+    "type": "apoli:action_on_item_use",
+    "item_action": {
+      "type": "shappoli:send_event",
+      "receiver": "*:*_receiver"
+    },
+    "entity_action": {
+      "type": "shappoli:send_event",
+      "listener": "*:*_receiver"
+    }
+  },
+
+  "emitter_2": {
+    "type": "apoli:action_on_hit",
+    "bientity_action": {
+      "type": "shappoli:emit_event",
+      "receiver": "*:*_receiver"
+    }
+  },
+
+  "emitter_3": {
+    "type": "apoli:action_on_hit",
+    "bientity_action": {
+      "_": "This will show a warning, because emitter_1 is not a receiver",
+      "type": "shappoli:emit_event",
+      "listener": "*:*_emitter_1"
+    }
+  }
+}

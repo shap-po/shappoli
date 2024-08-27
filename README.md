@@ -60,6 +60,42 @@ items.
 }
 ```
 
+### Action on event receive
+
+This action is triggered when the player receives an event from the [Send event](#send-event) action.
+
+All fields are optional.
+
+```jsonc
+{
+  "type": "shappoli:action_on_event_receive",
+  "action": {
+    // Generic entity action, triggered when the player receives any event and the condition is met
+  },
+  
+  "bientity_action": {
+    // Bi-entity action, triggered when the player receives a bi-entity event and the bi-entity condition is met
+  },
+  "bientity_condition": {
+    // Bi-entity condition
+  },
+  
+    "entity_action": {
+        // Entity action, triggered when the player receives an entity event and the entity condition is met
+    },
+    "entity_condition": {
+        // Entity condition
+    },
+    
+    "item_action": {
+        // Item action, triggered when the player receives an item event and the item condition is met
+    },
+    "item_condition": {
+        // Item condition
+    }
+}
+```
+
 ### Modify villager reputation
 
 This power modifies the player's reputation with a villager, which is used to determine the prices of trades.
@@ -111,6 +147,23 @@ Extremely similar to the `origins:modify_inventory` action, but for trinkets.
     },
     "process_mode": "stacks", // "stacks" or "items", default "stacks"
     "limit": 0 // Limit of items to process, default 1
+}
+```
+
+### Send event
+
+Type: `Meta action` (`Bi-entity action`, `Entity action`, `Item action`)
+
+Sends an event with the bi-entity/entity/item payload to an [Action on event receive](#action-on-event-receive) power.
+
+```jsonc
+{
+  "type": "shappoli:send_event", // shappoli:emit_event is an alias
+  "receiver": "*:event_name", // name of the power to trigger
+  "listener": "", // an alias for receiver
+  "condition": {
+    // Condtion to check before sending the event
+  }
 }
 ```
 

@@ -188,15 +188,12 @@ Sends an event with the bi-entity/entity/item payload to an [Action on event rec
 
 ```json5
 {
-  "type": "shappoli:send_event",
   // shappoli:emit_event is an alias
-  "receiver": "*:event_name",
+  "type": "shappoli:send_event",
   // name of the power to trigger
-  "listener": "",
+  "receiver": "*:event_name",
   // an alias for receiver
-  "condition": {
-    // Condtion to check before sending the event
-  }
+  "listener": "",
 }
 ```
 

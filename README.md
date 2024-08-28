@@ -1,5 +1,7 @@
 # Shappoli
 
+![](https://raw.githubusercontent.com/shap-po/shappoli/main/src/main/resources/assets/shappoli/icon.png)
+
 An [Origins](https://modrinth.com/mod/origins) addon that provides [Trinkets](https://modrinth.com/mod/trinkets) compatibility, event system and more.
 
 See [Test powers](https://github.com/shap-po/shappoli/tree/main/src/test/resources/data/shappoli/powers) for some examples.

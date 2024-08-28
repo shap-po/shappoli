@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "minecraft:cobblestone"
+    "minecraft:cobblestone",
+    "minecraft:iron_boots"
   ]
 }

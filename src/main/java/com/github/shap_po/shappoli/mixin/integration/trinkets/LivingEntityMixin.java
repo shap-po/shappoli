@@ -59,7 +59,15 @@ public abstract class LivingEntityMixin {
                     );
                 }
 
-                newlyEquippedTrinkets.put(getSlotName(slotType, index), newStackCopy);
+                String newRef = getSlotName(slotType, index);
+
+                ItemStack tickedStack = inventory.getStack(index);
+                // Avoid calling equip/unequip on stacks that mutate themselves
+                if (tickedStack.getItem() == newStackCopy.getItem()) {
+                    newlyEquippedTrinkets.put(newRef, tickedStack.copy());
+                } else {
+                    newlyEquippedTrinkets.put(newRef, newStackCopy);
+                }
             });
 
             lastEquippedTrinkets.clear();

@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
-public class ActionOnTrinketUpdate extends Power {
+public class ActionOnTrinketUpdatePower extends Power {
     private final Consumer<Entity> entityActionOnEquip;
     private final Consumer<Pair<World, StackReference>> itemActionOnEquip;
     private final Consumer<Entity> entityActionOnUnequip;
@@ -29,7 +29,7 @@ public class ActionOnTrinketUpdate extends Power {
     private final Predicate<Pair<World, ItemStack>> itemCondition;
     private final List<TrinketSlotData> slots;
 
-    public ActionOnTrinketUpdate(
+    public ActionOnTrinketUpdatePower(
         PowerType<?> type,
         LivingEntity entity,
         Consumer<Entity> entityActionOnEquip,
@@ -68,7 +68,6 @@ public class ActionOnTrinketUpdate extends Power {
             }
             if (itemActionOnUnequip != null) {
                 // FIXME: stack is a copy of an item, not the actual item, IDK how to fix it yet
-                Shappoli.LOGGER.warn("Item action on unequip is not implemented yet!");
                 itemActionOnUnequip.accept(TrinketsUtil.getItemActionPair(actor, slotReference));
             }
         }
@@ -82,19 +81,18 @@ public class ActionOnTrinketUpdate extends Power {
                 .add("entity_action_on_equip", ApoliDataTypes.ENTITY_ACTION, null)
                 .add("item_action_on_equip", ApoliDataTypes.ITEM_ACTION, null)
                 .add("entity_action_on_unequip", ApoliDataTypes.ENTITY_ACTION, null)
-//                .add("item_action_on_unequip", ApoliDataTypes.ITEM_ACTION, null)
+                .add("item_action_on_unequip", ApoliDataTypes.ITEM_ACTION, null)
                 .add("item_condition", ApoliDataTypes.ITEM_CONDITION, null)
                 .add("slot", ShappoliTrinketsDataTypes.TRINKET_SLOT, null)
                 .add("slots", ShappoliTrinketsDataTypes.TRINKET_SLOTS, null)
             ,
-            data -> (type, player) -> new ActionOnTrinketUpdate(
+            data -> (type, player) -> new ActionOnTrinketUpdatePower(
                 type,
                 player,
                 data.get("entity_action_on_equip"),
                 data.get("item_action_on_equip"),
                 data.get("entity_action_on_unequip"),
-//                data.get("item_action_on_unequip"),
-                null,
+                data.get("item_action_on_unequip"),
                 data.get("item_condition"),
                 TrinketSlotData.getSlots(data)
             )

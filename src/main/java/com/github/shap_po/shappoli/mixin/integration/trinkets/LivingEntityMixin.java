@@ -1,6 +1,6 @@
 package com.github.shap_po.shappoli.mixin.integration.trinkets;
 
-import com.github.shap_po.shappoli.integration.trinkets.power.ActionOnTrinketUpdate;
+import com.github.shap_po.shappoli.integration.trinkets.power.ActionOnTrinketUpdatePower;
 import dev.emi.trinkets.api.SlotType;
 import dev.emi.trinkets.api.TrinketInventory;
 import dev.emi.trinkets.api.TrinketsApi;
@@ -48,12 +48,12 @@ public abstract class LivingEntityMixin {
 
                 if (!ItemStack.areEqual(newStack, oldStack)) {
                     // Call unequip powers on old trinket
-                    PowerHolderComponent.withPower(entity, ActionOnTrinketUpdate.class,
+                    PowerHolderComponent.withPower(entity, ActionOnTrinketUpdatePower.class,
                         p -> p.doesApply(entity, ref, oldStack),
                         p -> p.apply(entity, ref, false)
                     );
                     // Call equip powers on new trinket
-                    PowerHolderComponent.withPower(entity, ActionOnTrinketUpdate.class,
+                    PowerHolderComponent.withPower(entity, ActionOnTrinketUpdatePower.class,
                         p -> p.doesApply(entity, ref, newStack),
                         p -> p.apply(entity, ref, true)
                     );

@@ -18,11 +18,14 @@ See [Test powers](https://github.com/shap-po/shappoli/tree/main/src/test/resourc
 
 All fields are optional. If field is not present, it will not be checked.
 
-```jsonc
+```json5
 {
-  "group": "", // Group name, eg "chest"
-  "name": "", // Slot name, eg "necklace"
-  "index: 0 // Slot index, if you have multiple slots
+  // Group name, eg "chest"
+  "group": "",
+  // Slot name, eg "necklace"
+  "name": "",
+  // Slot index, if you have multiple slots
+  "index": 0
 }
 ```
 
@@ -32,11 +35,11 @@ All fields are optional. If field is not present, it will not be checked.
 
 This action is triggered when a trinket is equipped or unequipped. Note that when slot is emptied, this action will be triggered with `minecraft:air` item. Use `inverted` `origins:empty` item condition to trigger action only on non-empty items.
 
-```jsonc
+```json5
 {
   "type": "shappoli:action_on_trinket_update",
   "entity_action_on_equip": {
-  // Entity action
+    // Entity action
   },
   "entity_action_on_unequip": {
     // Entity action
@@ -44,7 +47,7 @@ This action is triggered when a trinket is equipped or unequipped. Note that whe
   "item_action_on_equip": {
     // Item action
   },
-  // entity_action_on_unequip does not exists yet
+  // entity_action_on_unequip does not exist yet
   "item_condition": {
     // Item condition
     "type": "origins:empty",
@@ -65,33 +68,33 @@ This action is triggered when the player receives an event from the [Send event]
 
 All fields are optional.
 
-```jsonc
+```json5
 {
   "type": "shappoli:action_on_event_receive",
   "action": {
     // Generic entity action, triggered when the player receives any event and the condition is met
   },
-  
+
   "bientity_action": {
     // Bi-entity action, triggered when the player receives a bi-entity event and the bi-entity condition is met
   },
   "bientity_condition": {
     // Bi-entity condition
   },
-  
-    "entity_action": {
-        // Entity action, triggered when the player receives an entity event and the entity condition is met
-    },
-    "entity_condition": {
-        // Entity condition
-    },
-    
-    "item_action": {
-        // Item action, triggered when the player receives an item event and the item condition is met
-    },
-    "item_condition": {
-        // Item condition
-    }
+
+  "entity_action": {
+    // Entity action, triggered when the player receives an entity event and the entity condition is met
+  },
+  "entity_condition": {
+    // Entity condition
+  },
+
+  "item_action": {
+    // Item action, triggered when the player receives an item event and the item condition is met
+  },
+  "item_condition": {
+    // Item condition
+  }
 }
 ```
 
@@ -99,9 +102,10 @@ All fields are optional.
 
 This power prevents the player from equipping or unequipping a trinket.
 
-```jsonc
+```json5
 {
-  "type": "shappoli:prevent_trinket_equip", // or shappoli:prevent_trinket_unequip
+  // or shappoli:prevent_trinket_unequip
+  "type": "shappoli:prevent_trinket_equip",
   "slot": {
     // Trinket slot, optional
   },
@@ -114,7 +118,8 @@ This power prevents the player from equipping or unequipping a trinket.
   "entity_condition": {
     // Entity condition, optional
   },
-  "allow_in_creative": true // Allow in creative mode, default true
+  // Allow in creative mode, default true
+  "allow_in_creative": true
 }
 ```
 
@@ -122,7 +127,7 @@ This power prevents the player from equipping or unequipping a trinket.
 
 This power modifies the player's reputation with a villager, which is used to determine the prices of trades.
 
-```jsonc
+```json5
 {
   "type": "shappoli:modify_villager_reputation",
   "bientity_condition": {
@@ -147,28 +152,31 @@ Modifies the items from entity's trinket slots.
 
 Extremely similar to the `origins:modify_inventory` action, but for trinkets.
 
-```jsonc
+```json5
 {
-    "type": "shappoli:modify_trinket",
-    "slot": {
-      // Trinket slot, optional
-    },
-    "slots": [
-      // List of trinket slots, optional
-    ],
-    "item_condition": {
-      // Item condition, optional
-      "type": "origins:empty",
-      "inverted": true
-    },
-    "item_action": {
-      // Item action
-    },
-    "entity_action": {
-      // Entity action, optional
-    },
-    "process_mode": "stacks", // "stacks" or "items", default "stacks"
-    "limit": 0 // Limit of items to process, default 1
+  "type": "shappoli:modify_trinket",
+  "slot": {
+    // Trinket slot, optional
+  },
+  "slots": [
+    // List of trinket slots, optional
+  ],
+  "item_condition": {
+    // Item condition, optional
+    // Checking if not empty is recommended
+    "type": "origins:empty",
+    "inverted": true
+  },
+  "item_action": {
+    // Item action
+  },
+  "entity_action": {
+    // Entity action, optional
+  },
+  // "stacks" or "items", default "stacks"
+  "process_mode": "stacks",
+  // Limit of items to process, default 1, zero or negative for no limit
+  "limit": 1
 }
 ```
 
@@ -178,11 +186,14 @@ Type: `Meta action` (`Bi-entity action`, `Entity action`, `Item action`)
 
 Sends an event with the bi-entity/entity/item payload to an [Action on event receive](#action-on-event-receive) power.
 
-```jsonc
+```json5
 {
-  "type": "shappoli:send_event", // shappoli:emit_event is an alias
-  "receiver": "*:event_name", // name of the power to trigger
-  "listener": "", // an alias for receiver
+  "type": "shappoli:send_event",
+  // shappoli:emit_event is an alias
+  "receiver": "*:event_name",
+  // name of the power to trigger
+  "listener": "",
+  // an alias for receiver
   "condition": {
     // Condtion to check before sending the event
   }
@@ -199,20 +210,21 @@ Use `inverted` `origins:empty` item condition to check if slot is not empty.
 
 If no slots are provided, it will check if any trinket is equipped.
 
-```jsonc
+```json5
 {
   "type": "shappoli:equipped_trinket",
-    "slot": {
-        // Trinket slot, optional
-    },
-    "slots": [
-        // List of trinket slots, optional
-    ]
-    "item_condition": {
-        // Item condition, optional
-        "type": "origins:empty",
-        "inverted": true
-    }
+  "slot": {
+    // Trinket slot, optional
+  },
+  "slots": [
+    // List of trinket slots, optional
+  ],
+  "item_condition": {
+    // Item condition, optional
+    // Checking if not empty is recommended
+    "type": "origins:empty",
+    "inverted": true
+  }
 }
 ```
 
@@ -222,7 +234,7 @@ Type: `Item condition`
 
 Checks if the item can be placed as a block.
 
-```jsonc
+```json5
 {
   "type": "shappoli:is_block"
 }
@@ -234,7 +246,7 @@ Type: `Item condition`
 
 Checks if the condition on the item holder is met.
 
-```jsonc
+```json5
 {
   "type": "shappoli:holder",
   "condition": {

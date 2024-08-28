@@ -1,0 +1,35 @@
+{
+  "type": "apoli:multiple",
+
+  "prevent_equip": {
+    "type": "shappoli:prevent_trinket_equip",
+    "slot": {
+      "group": "feet"
+    },
+    "slots": [
+      {
+        "name": "necklace"
+      }
+    ],
+    "item_condition": {
+      "type": "apoli:empty",
+      "inverted": true
+    }
+  },
+
+  "prevent_unequip": {
+    "type": "shappoli:prevent_trinket_unequip",
+    "slot": {
+      "group": "feet"
+    },
+    "slots": [
+      {
+        "name": "necklace"
+      }
+    ],
+    "item_condition": {
+      "type": "apoli:empty",
+      "inverted": true
+    }
+  }
+}

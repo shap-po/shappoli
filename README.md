@@ -95,6 +95,29 @@ All fields are optional.
 }
 ```
 
+### Prevent trinket equip/unequip
+
+This power prevents the player from equipping or unequipping a trinket.
+
+```jsonc
+{
+  "type": "shappoli:prevent_trinket_equip", // or shappoli:prevent_trinket_unequip
+  "slot": {
+    // Trinket slot, optional
+  },
+  "slots": [
+    // List of trinket slots, optional
+  ],
+  "item_condition": {
+    // Item condition, optional
+  },
+  "entity_condition": {
+    // Entity condition, optional
+  },
+  "allow_in_creative": true // Allow in creative mode, default true
+}
+```
+
 ### Modify villager reputation
 
 This power modifies the player's reputation with a villager, which is used to determine the prices of trades.

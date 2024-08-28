@@ -82,7 +82,7 @@ public class ActionOnTrinketUpdatePower extends Power {
                 .add("item_action_on_equip", ApoliDataTypes.ITEM_ACTION, null)
                 .add("entity_action_on_unequip", ApoliDataTypes.ENTITY_ACTION, null)
                 .add("item_action_on_unequip", ApoliDataTypes.ITEM_ACTION, null)
-                .add("item_condition", ApoliDataTypes.ITEM_CONDITION, null)
+                .add("item_condition", ApoliDataTypes.ITEM_CONDITION)
                 .add("slot", ShappoliTrinketsDataTypes.TRINKET_SLOT, null)
                 .add("slots", ShappoliTrinketsDataTypes.TRINKET_SLOTS, null)
             ,

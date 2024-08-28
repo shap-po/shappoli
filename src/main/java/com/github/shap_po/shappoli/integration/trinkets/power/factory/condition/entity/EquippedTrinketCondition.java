@@ -32,7 +32,7 @@ public class EquippedTrinketCondition {
         return new ConditionFactory<>(
             Shappoli.identifier("equipped_trinket"),
             new SerializableData()
-                .add("item_condition", ApoliDataTypes.ITEM_CONDITION, null)
+                .add("item_condition", ApoliDataTypes.ITEM_CONDITION)
                 .add("slot", ShappoliTrinketsDataTypes.TRINKET_SLOT, null)
                 .add("slots", ShappoliTrinketsDataTypes.TRINKET_SLOTS, null)
             ,

@@ -12,6 +12,7 @@ import io.github.apace100.calio.util.IdentifierAlias;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.Identifier;
 
+import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
@@ -24,9 +25,19 @@ public class SendEventAction {
         Function<T, Entity> actionToEntityFunction,
         BiConsumer<ActionOnEventReceivePower, T> sendFunction
     ) {
-
         Entity entity = actionToEntityFunction.apply(t);
-        PowerHolderComponent component = PowerHolderComponent.KEY.get(entity);
+        if (entity == null) {
+            Shappoli.LOGGER.warn("Tried to send an event to a null entity");
+            return;
+        }
+
+        Optional<PowerHolderComponent> maybeComponent = PowerHolderComponent.KEY.maybeGet(entity);
+        if (maybeComponent.isEmpty()) {
+            Shappoli.LOGGER.warn("Tried to send an event to an entity without a power holder component: {}", entity);
+            return;
+        }
+        PowerHolderComponent component = maybeComponent.get();
+
         PowerType<?> powerType = data.get("receiver");
         Power power = component.getPower(powerType);
 

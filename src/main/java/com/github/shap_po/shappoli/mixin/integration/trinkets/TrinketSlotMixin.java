@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.At;
 
 @Mixin(TrinketSlot.class)
 public interface TrinketSlotMixin {
-    @ModifyReturnValue(method = "canInsert", at = @At("RETURN"), remap = false)
+    @ModifyReturnValue(method = "canInsert", at = @At("RETURN"))
     private static boolean shappoli$preventTrinketEquip(boolean original, ItemStack stack, SlotReference slotRef, LivingEntity entity) {
         return !PowerHolderComponent.hasPower(entity, PreventTrinketEquipPower.class,
             p -> p.doesApply(entity, slotRef, stack)

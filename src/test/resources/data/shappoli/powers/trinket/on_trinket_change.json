@@ -1,5 +1,5 @@
 {
-  "type": "shappoli:action_on_trinket_update",
+  "type": "shappoli:action_on_trinket_change",
   "slot": {
     "group": "feet"
   },

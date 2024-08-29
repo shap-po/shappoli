@@ -8,6 +8,7 @@ import dev.emi.trinkets.api.SlotReference;
 import io.github.apace100.apoli.data.ApoliDataTypes;
 import io.github.apace100.apoli.power.Power;
 import io.github.apace100.apoli.power.PowerType;
+import io.github.apace100.apoli.power.factory.PowerFactories;
 import io.github.apace100.apoli.power.factory.PowerFactory;
 import io.github.apace100.calio.data.SerializableData;
 import net.minecraft.entity.Entity;
@@ -21,7 +22,7 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
-public class ActionOnTrinketUpdatePower extends Power {
+public class ActionOnTrinketChangePower extends Power {
     private final Consumer<Entity> entityActionOnEquip;
     private final Consumer<Pair<World, StackReference>> itemActionOnEquip;
     private final Consumer<Entity> entityActionOnUnequip;
@@ -29,7 +30,7 @@ public class ActionOnTrinketUpdatePower extends Power {
     private final Predicate<Pair<World, ItemStack>> itemCondition;
     private final List<TrinketSlotData> slots;
 
-    public ActionOnTrinketUpdatePower(
+    public ActionOnTrinketChangePower(
         PowerType<?> type,
         LivingEntity entity,
         Consumer<Entity> entityActionOnEquip,
@@ -75,8 +76,8 @@ public class ActionOnTrinketUpdatePower extends Power {
     }
 
     public static PowerFactory createFactory() {
-        return new PowerFactory<>(
-            Shappoli.identifier("action_on_trinket_update"),
+        PowerFactory<Power> factory = new PowerFactory<>(
+            Shappoli.identifier("action_on_trinket_change"),
             new SerializableData()
                 .add("entity_action_on_equip", ApoliDataTypes.ENTITY_ACTION, null)
                 .add("item_action_on_equip", ApoliDataTypes.ITEM_ACTION, null)
@@ -86,7 +87,7 @@ public class ActionOnTrinketUpdatePower extends Power {
                 .add("slot", ShappoliTrinketsDataTypes.TRINKET_SLOT, null)
                 .add("slots", ShappoliTrinketsDataTypes.TRINKET_SLOTS, null)
             ,
-            data -> (type, player) -> new ActionOnTrinketUpdatePower(
+            data -> (type, player) -> new ActionOnTrinketChangePower(
                 type,
                 player,
                 data.get("entity_action_on_equip"),
@@ -97,5 +98,8 @@ public class ActionOnTrinketUpdatePower extends Power {
                 TrinketSlotData.getSlots(data)
             )
         ).allowCondition();
+
+        PowerFactories.ALIASES.addPathAlias("action_on_trinket_update", factory.getSerializerId().getPath());
+        return factory;
     }
 }

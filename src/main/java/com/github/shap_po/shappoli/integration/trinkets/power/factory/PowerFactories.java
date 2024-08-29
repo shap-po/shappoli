@@ -1,6 +1,6 @@
 package com.github.shap_po.shappoli.integration.trinkets.power.factory;
 
-import com.github.shap_po.shappoli.integration.trinkets.power.ActionOnTrinketUpdatePower;
+import com.github.shap_po.shappoli.integration.trinkets.power.ActionOnTrinketChangePower;
 import com.github.shap_po.shappoli.integration.trinkets.power.PreventTrinketEquipPower;
 import com.github.shap_po.shappoli.integration.trinkets.power.PreventTrinketUnequipPower;
 import io.github.apace100.apoli.power.factory.PowerFactory;
@@ -10,7 +10,7 @@ import net.minecraft.registry.Registry;
 
 public class PowerFactories {
     public static void register() {
-        register(ActionOnTrinketUpdatePower::createFactory);
+        register(ActionOnTrinketChangePower::createFactory);
         register(PreventTrinketEquipPower::createFactory);
         register(PreventTrinketUnequipPower::createFactory);
     }

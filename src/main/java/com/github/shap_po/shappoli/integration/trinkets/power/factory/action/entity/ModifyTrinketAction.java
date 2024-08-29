@@ -36,7 +36,7 @@ public class ModifyTrinketAction {
 
         int processedItems = 0;
         modifyingItemsLoop:
-        for (var trinket : TrinketsUtil.getIterable(TrinketsUtil.getTrinkets(livingEntity, slots, itemCondition))) {
+        for (Pair<dev.emi.trinkets.api.SlotReference, ItemStack> trinket : TrinketsUtil.getIterable(TrinketsUtil.getTrinkets(livingEntity, slots, itemCondition))) {
             int amount = processor.apply(trinket.getRight());
 
             for (int i = 0; i < amount; i++) {
@@ -47,7 +47,7 @@ public class ModifyTrinketAction {
                 itemAction.accept(TrinketsUtil.getItemActionPair(livingEntity, trinket.getLeft()));
                 ++processedItems;
 
-                if (processedItems >= limit) {
+                if (limit > 0 && processedItems >= limit) {
                     break modifyingItemsLoop;
                 }
             }

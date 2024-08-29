@@ -2,7 +2,7 @@ package com.github.shap_po.shappoli.power.factory.action;
 
 import com.github.shap_po.shappoli.power.ActionOnEventReceivePower;
 import com.github.shap_po.shappoli.power.factory.action.meta.SendEventAction;
-import io.github.apace100.apoli.access.EntityLinkedItemStack;
+import com.github.shap_po.shappoli.util.InventoryUtil;
 import io.github.apace100.apoli.power.factory.action.ActionFactory;
 import io.github.apace100.apoli.registry.ApoliRegistries;
 import net.minecraft.inventory.StackReference;
@@ -14,7 +14,7 @@ public class ItemActions {
     public static void register() {
         register(
             SendEventAction.getFactory(
-                worldAndStack -> ((EntityLinkedItemStack) (Object) worldAndStack.getRight().get()).apoli$getEntity(),
+                worldAndStack -> InventoryUtil.getHolder(worldAndStack.getRight().get()),
                 ActionOnEventReceivePower::receiveItemEvent
             )
         );

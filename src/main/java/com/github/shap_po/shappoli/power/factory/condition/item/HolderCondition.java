@@ -1,7 +1,7 @@
 package com.github.shap_po.shappoli.power.factory.condition.item;
 
 import com.github.shap_po.shappoli.Shappoli;
-import io.github.apace100.apoli.access.EntityLinkedItemStack;
+import com.github.shap_po.shappoli.util.InventoryUtil;
 import io.github.apace100.apoli.data.ApoliDataTypes;
 import io.github.apace100.apoli.power.factory.condition.ConditionFactory;
 import io.github.apace100.apoli.power.factory.condition.ItemConditions;
@@ -15,7 +15,7 @@ import java.util.function.Predicate;
 
 public class HolderCondition {
     public static boolean condition(SerializableData.Instance data, Pair<World, ItemStack> worldAndStack) {
-        Entity holder = ((EntityLinkedItemStack) (Object) worldAndStack.getRight()).apoli$getEntity();
+        Entity holder = InventoryUtil.getHolder(worldAndStack.getRight());
         Predicate<Entity> entityCondition = data.get("condition");
         return holder != null && entityCondition != null && entityCondition.test(holder);
     }

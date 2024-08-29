@@ -49,27 +49,33 @@ public class ActionOnEventReceivePower extends Power {
 
     public void receiveBientityEvent(Pair<Entity, Entity> entities) {
         if (bientityCondition == null || bientityCondition.test(entities)) {
-            bientityAction.accept(entities);
+            maybeAccept(bientityAction, entities);
             receiveAnyEvent();
         }
     }
 
     public void receiveEntityEvent(Entity entity) {
         if (entityCondition == null || entityCondition.test(entity)) {
-            entityAction.accept(entity);
+            maybeAccept(entityAction, entity);
             receiveAnyEvent();
         }
     }
 
     public void receiveItemEvent(Pair<World, StackReference> worldAndStack) {
         if (itemCondition == null || itemCondition.test(new Pair<>(worldAndStack.getLeft(), worldAndStack.getRight().get()))) {
-            itemAction.accept(worldAndStack);
+            maybeAccept(itemAction, worldAndStack);
             receiveAnyEvent();
         }
     }
 
     public void receiveAnyEvent() {
-        action.accept(this.entity);
+        maybeAccept(action, this.entity);
+    }
+
+    private <T> void maybeAccept(Consumer<T> consumer, T t) {
+        if (consumer != null && t != null) {
+            consumer.accept(t);
+        }
     }
 
     public static PowerFactory createFactory() {

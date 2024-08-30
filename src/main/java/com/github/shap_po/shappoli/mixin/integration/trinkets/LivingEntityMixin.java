@@ -1,7 +1,6 @@
 package com.github.shap_po.shappoli.mixin.integration.trinkets;
 
 import com.github.shap_po.shappoli.integration.trinkets.power.ActionOnTrinketChangePower;
-import com.github.shap_po.shappoli.util.InventoryUtil;
 import dev.emi.trinkets.api.SlotType;
 import dev.emi.trinkets.api.TrinketInventory;
 import dev.emi.trinkets.api.TrinketsApi;
@@ -46,8 +45,6 @@ public abstract class LivingEntityMixin {
                 ItemStack oldStack = getOldStack(slotType, index);
                 ItemStack newStack = inventory.getStack(index);
                 ItemStack newStackCopy = newStack.copy(); // old stack is removed when unequipped
-
-                InventoryUtil.setHolder(newStack, entity); // link the stack to the player, so it can be used in powers
 
                 if (!ItemStack.areEqual(newStack, oldStack)) {
                     // Call unequip powers on old trinket

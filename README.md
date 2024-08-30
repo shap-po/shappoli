@@ -2,7 +2,7 @@
 
 ![](https://raw.githubusercontent.com/shap-po/shappoli/main/src/main/resources/assets/shappoli/icon.png)
 
-An [Origins](https://modrinth.com/mod/origins) addon that provides [Trinkets](https://modrinth.com/mod/trinkets) compatibility, event system and more.
+An [Origins](https://modrinth.com/mod/origins) addon that provides [Trinkets](https://modrinth.com/mod/trinkets) compatibility, an event system and more.
 
 See [Documentation](https://shappoli.readthedocs.io/en/latest/) for more information.
 

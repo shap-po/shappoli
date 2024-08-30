@@ -51,12 +51,12 @@ public abstract class LivingEntityMixin {
 
                 if (!ItemStack.areEqual(newStack, oldStack)) {
                     // Call unequip powers on old trinket
-                    PowerHolderComponent.withPower(entity, ActionOnTrinketChangePower.class,
+                    PowerHolderComponent.withPowers(entity, ActionOnTrinketChangePower.class,
                         p -> p.doesApply(entity, ref, oldStack),
                         p -> p.apply(entity, ref, false)
                     );
                     // Call equip powers on new trinket
-                    PowerHolderComponent.withPower(entity, ActionOnTrinketChangePower.class,
+                    PowerHolderComponent.withPowers(entity, ActionOnTrinketChangePower.class,
                         p -> p.doesApply(entity, ref, newStack),
                         p -> p.apply(entity, ref, true)
                     );

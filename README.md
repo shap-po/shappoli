@@ -4,7 +4,9 @@
 
 An [Origins](https://modrinth.com/mod/origins) addon that provides [Trinkets](https://modrinth.com/mod/trinkets) compatibility, an event system and more.
 
-See [Documentation](https://shappoli.readthedocs.io/en/latest/) for more information.
+You can download the latest version either from the [releases page](https://github.com/shap-po/shappoli/releases) or from [Modrinth](https://modrinth.com/mod/shappoli).
+
+See [Documentation](https://shappoli.readthedocs.io/en/latest/) for power list and usage examples.
 
 ## Requirements
 

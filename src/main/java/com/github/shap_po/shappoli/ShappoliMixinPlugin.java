@@ -22,7 +22,17 @@ public class ShappoliMixinPlugin implements IMixinConfigPlugin {
 
     @Override
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
-        return !mixinClassName.contains(".integration.trinkets.") || FabricLoader.getInstance().isModLoaded("trinkets");
+        return isIntegrationEnabled(mixinClassName);
+    }
+
+    private boolean isIntegrationEnabled(String mixinClassName) {
+        // not an integration mixin
+        if (!mixinClassName.contains(".integration.")) {
+            return true;
+        }
+        // class name: something.something...integration.{modid}.something
+        String modid = mixinClassName.split("\\.integration\\.")[1].split("\\.")[0];
+        return FabricLoader.getInstance().isModLoaded(modid);
     }
 
     @Override

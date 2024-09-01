@@ -14,10 +14,10 @@ import net.minecraft.util.Pair;
 import java.util.List;
 import java.util.function.Predicate;
 
-public class ModifyVillagerReputation extends ValueModifyingPower {
+public class ModifyVillagerReputationPower extends ValueModifyingPower {
     private final Predicate<Pair<Entity, Entity>> bientityCondition;
 
-    public ModifyVillagerReputation(PowerType<?> type, LivingEntity entity, Predicate<Pair<Entity, Entity>> bientityCondition) {
+    public ModifyVillagerReputationPower(PowerType<?> type, LivingEntity entity, Predicate<Pair<Entity, Entity>> bientityCondition) {
         super(type, entity);
         this.bientityCondition = bientityCondition;
     }
@@ -35,7 +35,7 @@ public class ModifyVillagerReputation extends ValueModifyingPower {
                 .add("modifiers", Modifier.LIST_TYPE, null)
             ,
             data -> (type, player) -> {
-                ModifyVillagerReputation power = new ModifyVillagerReputation(type, player, data.get("bientity_condition"));
+                ModifyVillagerReputationPower power = new ModifyVillagerReputationPower(type, player, data.get("bientity_condition"));
                 data.ifPresent("modifier", power::addModifier);
                 data.<List<Modifier>>ifPresent("modifiers", mods -> mods.forEach(power::addModifier));
                 return power;

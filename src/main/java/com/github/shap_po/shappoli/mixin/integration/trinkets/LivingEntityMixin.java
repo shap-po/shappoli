@@ -26,6 +26,8 @@ import java.util.Map;
 public abstract class LivingEntityMixin {
     @Unique
     private final Map<String, ItemStack> lastEquippedTrinkets = new HashMap<>();
+    @Unique
+    private boolean justSpawned = true; // track if entity just spawned or joined world
 
     @Inject(at = @At("TAIL"), method = "tick")
     private void tick(CallbackInfo info) {
@@ -49,12 +51,12 @@ public abstract class LivingEntityMixin {
                 if (!ItemStack.areEqual(newStack, oldStack)) {
                     // Call unequip powers on old trinket
                     PowerHolderComponent.withPowers(entity, ActionOnTrinketChangePower.class,
-                        p -> p.doesApply(entity, ref, oldStack),
+                        p -> p.doesApply(entity, ref, oldStack, justSpawned),
                         p -> p.apply(entity, ref, false)
                     );
                     // Call equip powers on new trinket
                     PowerHolderComponent.withPowers(entity, ActionOnTrinketChangePower.class,
-                        p -> p.doesApply(entity, ref, newStack),
+                        p -> p.doesApply(entity, ref, newStack, justSpawned),
                         p -> p.apply(entity, ref, true)
                     );
                 }
@@ -69,6 +71,7 @@ public abstract class LivingEntityMixin {
                     newlyEquippedTrinkets.put(newRef, newStackCopy);
                 }
             });
+            justSpawned = false;
 
             lastEquippedTrinkets.clear();
             lastEquippedTrinkets.putAll(newlyEquippedTrinkets);

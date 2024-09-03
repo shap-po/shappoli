@@ -4,6 +4,7 @@
   "plugin": "com.github.shap_po.shappoli.ShappoliMixinPlugin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "PowerMixin",
     "VillagerEntityMixin",
     "integration.trinkets.LivingEntityMixin",
     "integration.trinkets.SurvivalTrinketSlotMixin",

@@ -8,6 +8,10 @@ public interface SuppressiblePower {
         return true;
     }
 
+    boolean shappoli$hasConditions();
+
+    void shappoli$setHasConditions(boolean hasConditions);
+
     @SuppressWarnings({"unused"})
     @Nullable
     Entity shappoli$getSupressingEntity();

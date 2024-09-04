@@ -20,6 +20,19 @@ public class PowerMixin implements SuppressiblePower {
     @Unique
     private Entity shappoli$supressingEntity;
 
+    @Unique
+    private boolean shappoli$hasConditions;
+
+    @Override
+    public boolean shappoli$hasConditions() {
+        return shappoli$hasConditions;
+    }
+
+    @Override
+    public void shappoli$setHasConditions(boolean hasConditions) {
+        shappoli$hasConditions = hasConditions;
+    }
+
     @Override
     public Entity shappoli$getSupressingEntity() {
         return shappoli$isSuppressed() ? null : shappoli$supressingEntity;

@@ -33,9 +33,13 @@ public class SuppressPowerAction {
             if (power == null) {
                 continue;
             }
+
             if (!power.shappoli$canBeSuppressed()) {
-                Shappoli.LOGGER.warn("Tried to suppress a power that cannot be suppressed: {}", powerType.getIdentifier());
+                Shappoli.LOGGER.error("Tried to suppress a power that cannot be suppressed: {}", powerType.getIdentifier());
                 continue;
+            }
+            if (!power.shappoli$hasConditions() && !data.getBoolean("ignore_warning")) {
+                Shappoli.LOGGER.warn("Suppressed power that does not support conditions: {}. If you want to ignore this message, set the \"ignore_warning\" parameter to true", powerType.getIdentifier());
             }
 
             boolean result = power.shappoli$suppressFor(duration, actorAndTarget.getLeft());
@@ -52,8 +56,9 @@ public class SuppressPowerAction {
             new SerializableData()
                 .add("power", ApoliDataTypes.POWER_TYPE, null)
                 .add("powers", ShappoliDataTypes.POWER_TYPES, null)
-                .add("duration", SerializableDataTypes.INT)
+                .add("duration", SerializableDataTypes.POSITIVE_INT)
                 .add("bientity_action", ApoliDataTypes.BIENTITY_ACTION, null)
+                .add("ignore_warning", SerializableDataTypes.BOOLEAN, false)
             ,
             SuppressPowerAction::action
         );

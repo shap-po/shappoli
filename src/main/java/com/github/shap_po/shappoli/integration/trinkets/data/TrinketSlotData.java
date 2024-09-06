@@ -63,4 +63,44 @@ public class TrinketSlotData {
         dataInstance.set("index", trinketSlotData.index);
         return dataInstance;
     }
+
+    public static class SlotId extends TrinketSlotData {
+        public static final SerializableData DATA = new SerializableData()
+            .add("name", SerializableDataTypes.STRING)
+            .add("group", SerializableDataTypes.STRING);
+
+        public SlotId(String name, String group) {
+            super(name, group, null);
+        }
+
+        public String getId() {
+            return name + "/" + group;
+        }
+
+        public String getAttributeId() {
+            return "trinkets.slot." + getId().replace("/", ".");
+        }
+
+        public static List<SlotId> getSlotIds(SerializableData.Instance data) {
+            List<SlotId> slots = new ArrayList<>();
+            if (data.isPresent("slot")) {
+                slots.add(data.get("slot"));
+            }
+            if (data.isPresent("slots")) {
+                slots.addAll(data.get("slots"));
+            }
+            return slots;
+        }
+
+        public static SlotId fromData(SerializableData.Instance dataInstance) {
+            return new SlotId(dataInstance.get("name"), dataInstance.get("group"));
+        }
+
+        public static SerializableData.Instance toData(SerializableData data, SlotId slotId) {
+            SerializableData.Instance dataInstance = data.new Instance();
+            dataInstance.set("name", slotId.name);
+            dataInstance.set("group", slotId.group);
+            return dataInstance;
+        }
+    }
 }

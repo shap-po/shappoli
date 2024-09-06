@@ -1,6 +1,7 @@
 package com.github.shap_po.shappoli.integration.trinkets.power.factory;
 
 import com.github.shap_po.shappoli.integration.trinkets.power.ActionOnTrinketChangePower;
+import com.github.shap_po.shappoli.integration.trinkets.power.ModifyTrinketSlotsPower;
 import com.github.shap_po.shappoli.integration.trinkets.power.PreventTrinketEquipPower;
 import com.github.shap_po.shappoli.integration.trinkets.power.PreventTrinketUnequipPower;
 import io.github.apace100.apoli.power.factory.PowerFactory;
@@ -13,6 +14,7 @@ public class PowerFactories {
         register(ActionOnTrinketChangePower::createFactory);
         register(PreventTrinketEquipPower::createFactory);
         register(PreventTrinketUnequipPower::createFactory);
+        register(ModifyTrinketSlotsPower::createFactory);
     }
 
     private static void register(PowerFactory<?> powerFactory) {

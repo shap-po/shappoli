@@ -4,6 +4,8 @@
   ],
   "slots": [
     "feet/shoes",
-    "chest/necklace"
+    "chest/necklace",
+
+    "shappoli/slot"
   ]
 }

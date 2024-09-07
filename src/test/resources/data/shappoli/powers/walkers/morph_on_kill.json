@@ -1,0 +1,24 @@
+{
+  "type": "apoli:action_on_hit",
+
+  "bientity_condition": {
+    "type": "apoli:target_condition",
+    "condition": {
+      "type": "apoli:and",
+      "conditions": [
+        {
+          "type": "apoli:living"
+        },
+        {
+          "type": "apoli:health",
+          "comparison": "<=",
+          "compare_to": 0
+        }
+      ]
+    }
+  },
+
+  "bientity_action": {
+    "type": "shappoli:morph"
+  }
+}

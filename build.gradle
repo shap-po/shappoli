@@ -104,6 +104,8 @@ dependencies {
     modCompileOnly("maven.modrinth:female-gender:${project.wildfire_gender_version}") {
         transitive = false
     }
+    modCompileOnly("maven.modrinth:woodwalkers:${project.woodwalkers_version}")
+    modCompileOnly("maven.modrinth:crafted-core:${project.crafted_core_version}")
 }
 
 processResources {

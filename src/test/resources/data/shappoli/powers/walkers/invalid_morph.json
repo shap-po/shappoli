@@ -1,0 +1,9 @@
+{
+  "type": "apoli:active_self",
+  "key": "key.attack",
+
+  "entity_action": {
+    "type": "shappoli:morph",
+    "shape": "invalid_entity"
+  }
+}

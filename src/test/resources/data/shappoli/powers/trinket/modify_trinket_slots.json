@@ -1,11 +1,8 @@
 {
   "type": "shappoli:modify_trinket_slots",
-  "slot": {
-    "group": "shappoli",
-    "name": "slot"
-  },
   "modifier": {
+    "slot": "shappoli/slot",
     "operation": "addition",
-    "value": 2
+    "value": 4
   }
 }

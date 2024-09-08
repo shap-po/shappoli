@@ -4,11 +4,12 @@
   "plugin": "com.github.shap_po.shappoli.ShappoliMixinPlugin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "PowerFactoryInstanceMixin",
     "PowerFactoryAccessor",
+    "PowerFactoryInstanceMixin",
     "PowerMixin",
     "VillagerEntityMixin",
     "integration.trinkets.LivingEntityMixin",
+    "integration.trinkets.SlotEntityAttributeAccessor",
     "integration.trinkets.SurvivalTrinketSlotMixin",
     "integration.trinkets.TrinketInventoryMixin",
     "integration.trinkets.TrinketSlotMixin",

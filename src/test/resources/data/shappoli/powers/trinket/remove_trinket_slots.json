@@ -1,0 +1,15 @@
+{
+  "type": "shappoli:modify_trinket_slots",
+  "modifiers": [
+    {
+      "slot": "chest/necklace",
+      "operation": "addition",
+      "value": -1
+    },
+    {
+      "slot": "feet/shoes",
+      "operation": "addition",
+      "value": -1
+    }
+  ]
+}

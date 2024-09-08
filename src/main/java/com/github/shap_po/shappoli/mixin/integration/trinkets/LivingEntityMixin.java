@@ -1,6 +1,7 @@
 package com.github.shap_po.shappoli.mixin.integration.trinkets;
 
 import com.github.shap_po.shappoli.integration.trinkets.power.ActionOnTrinketChangePower;
+import com.github.shap_po.shappoli.integration.trinkets.util.TrinketsUtil;
 import dev.emi.trinkets.api.SlotType;
 import dev.emi.trinkets.api.TrinketInventory;
 import dev.emi.trinkets.api.TrinketsApi;
@@ -61,7 +62,7 @@ public abstract class LivingEntityMixin {
                     );
                 }
 
-                String newRef = getSlotName(slotType, index);
+                String newRef = TrinketsUtil.getSlotId(slotType, index);
 
                 ItemStack tickedStack = inventory.getStack(index);
                 // Avoid calling equip/unequip on stacks that mutate themselves
@@ -78,13 +79,9 @@ public abstract class LivingEntityMixin {
         });
     }
 
-    @Unique
-    String getSlotName(SlotType slotType, int index) {
-        return slotType.getGroup() + "/" + slotType.getName() + "/" + index;
-    }
 
     @Unique
     private ItemStack getOldStack(SlotType type, int index) {
-        return lastEquippedTrinkets.getOrDefault(getSlotName(type, index), ItemStack.EMPTY);
+        return lastEquippedTrinkets.getOrDefault(TrinketsUtil.getSlotId(type, index), ItemStack.EMPTY);
     }
 }

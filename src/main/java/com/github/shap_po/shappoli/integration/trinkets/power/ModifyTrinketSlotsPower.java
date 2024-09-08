@@ -3,6 +3,7 @@ package com.github.shap_po.shappoli.integration.trinkets.power;
 import com.github.shap_po.shappoli.Shappoli;
 import com.github.shap_po.shappoli.integration.trinkets.data.ShappoliTrinketsDataTypes;
 import com.github.shap_po.shappoli.integration.trinkets.data.SlotEntityAttributeModifier;
+import com.github.shap_po.shappoli.integration.trinkets.util.TrinketsUtil;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import dev.emi.trinkets.TrinketPlayerScreenHandler;
@@ -15,7 +16,6 @@ import io.github.apace100.apoli.power.PowerType;
 import io.github.apace100.apoli.power.factory.PowerFactory;
 import io.github.apace100.calio.data.SerializableData;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
-import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
@@ -27,10 +27,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-/**
- * A power that modifies the count of trinket slots for the entity.
- * Code is almost 1 to 1 with ${@link io.github.apace100.apoli.power.AttributePower}.
- */
 public class ModifyTrinketSlotsPower extends Power {
     protected final List<SlotEntityAttributeModifier> modifiers = new LinkedList<>();
 
@@ -61,6 +57,7 @@ public class ModifyTrinketSlotsPower extends Power {
 
         TrinketsApi.getTrinketComponent(entity).ifPresent(trinket -> {
             trinket.addTemporaryModifiers(getModifiersMap());
+            updateInventories(trinket);
         });
     }
 
@@ -86,16 +83,14 @@ public class ModifyTrinketSlotsPower extends Power {
 
             NbtCompound tag = new NbtCompound();
             for (TrinketInventory trinketInventory : inventoriesToSend) {
-                tag.put(trinketInventory.getSlotType().getGroup() + "/" + trinketInventory.getSlotType().getName(), trinketInventory.getSyncTag());
+                trinketInventory.update(); // Manually update the inventory to ensure the state is correct
+                tag.put(TrinketsUtil.getSlotId(trinketInventory.getSlotType()), trinketInventory.getSyncTag());
             }
             buf.writeNbt(tag);
             buf.writeNbt(new NbtCompound()); // Empty tag for the trinket stacks
 
-            for (ServerPlayerEntity player : PlayerLookup.tracking(entity)) {
-                ServerPlayNetworking.send(player, TrinketsNetwork.SYNC_INVENTORY, buf);
-            }
-
-            if (entity instanceof ServerPlayerEntity serverPlayer) {
+            // network handler might be null on server start
+            if (entity instanceof ServerPlayerEntity serverPlayer && serverPlayer.networkHandler != null) {
                 ServerPlayNetworking.send(serverPlayer, TrinketsNetwork.SYNC_INVENTORY, buf);
                 ((TrinketPlayerScreenHandler) serverPlayer.playerScreenHandler).trinkets$updateTrinketSlots(false);
             }

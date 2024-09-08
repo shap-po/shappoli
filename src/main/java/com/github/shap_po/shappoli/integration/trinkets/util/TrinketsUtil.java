@@ -2,6 +2,7 @@ package com.github.shap_po.shappoli.integration.trinkets.util;
 
 import com.github.shap_po.shappoli.integration.trinkets.data.TrinketSlotData;
 import dev.emi.trinkets.api.SlotReference;
+import dev.emi.trinkets.api.SlotType;
 import dev.emi.trinkets.api.TrinketsApi;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.inventory.StackReference;
@@ -52,5 +53,13 @@ public class TrinketsUtil {
 
     public static <T> Iterable<T> getIterable(Stream<T> stream) {
         return stream::iterator;
+    }
+
+    public static String getSlotId(SlotType slotType) {
+        return slotType.getGroup() + "/" + slotType.getName();
+    }
+
+    public static String getSlotId(SlotType slotType, int index) {
+        return getSlotId(slotType) + "/" + index;
     }
 }

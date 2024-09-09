@@ -38,11 +38,9 @@ public class SuppressPowerAction {
             suppressed = suppressed || result;
         }
 
-        for (Identifier powerId : powerIds) {
-            for (Iterator<Power> iterator = PowerHolderComponentUtil.getPowers(component, powerId).iterator(); iterator.hasNext(); ) {
-                boolean result = suppressPower(data, actorAndTarget, ignoredPowers, iterator.next(), duration);
-                suppressed = suppressed || result;
-            }
+        for (Iterator<Power> iterator = PowerHolderComponentUtil.getPowers(component, powerIds).iterator(); iterator.hasNext(); ) {
+            boolean result = suppressPower(data, actorAndTarget, ignoredPowers, iterator.next(), duration);
+            suppressed = suppressed || result;
         }
 
         if (suppressed && bientity_action != null) {

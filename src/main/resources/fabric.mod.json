@@ -3,14 +3,14 @@
   "id": "shappoli",
   "version": "${version}",
   "name": "Shappoli",
-  "description": "An Origins addon",
+  "description": "An Origins addon that provides Trinkets compatibility",
   "authors": [
     "Shap"
   ],
   "contact": {
     "homepage": "https://github.com/shap-po/shappoli"
   },
-  "license": "CC0-1.0",
+  "license": "MIT",
   "icon": "assets/shappoli/icon.png",
   "environment": "*",
   "entrypoints": {

@@ -4,6 +4,7 @@ import com.github.shap_po.shappoli.Shappoli;
 import com.github.shap_po.shappoli.integration.trinkets.data.ShappoliTrinketsDataTypes;
 import com.github.shap_po.shappoli.integration.trinkets.data.TrinketSlotData;
 import com.github.shap_po.shappoli.integration.trinkets.util.TrinketsUtil;
+import dev.emi.trinkets.api.SlotReference;
 import io.github.apace100.apoli.data.ApoliDataTypes;
 import io.github.apace100.apoli.power.factory.action.ActionFactory;
 import io.github.apace100.apoli.power.factory.action.EntityActions;
@@ -17,6 +18,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Pair;
 import net.minecraft.world.World;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -37,9 +39,10 @@ public class ModifyTrinketAction {
 
         int processedItems = 0;
         modifyingItemsLoop:
-        for (Pair<dev.emi.trinkets.api.SlotReference, ItemStack> trinket : TrinketsUtil.getIterable(TrinketsUtil.getTrinkets(livingEntity, slots, itemCondition))) {
-            int amount = processor.apply(trinket.getRight());
+        for (Iterator<Pair<SlotReference, ItemStack>> iter = TrinketsUtil.getTrinkets(livingEntity, slots, itemCondition).iterator(); iter.hasNext(); ) {
+            Pair<SlotReference, ItemStack> trinket = iter.next();
 
+            int amount = processor.apply(trinket.getRight());
             for (int i = 0; i < amount; i++) {
                 if (entityAction != null) {
                     entityAction.accept(entity);

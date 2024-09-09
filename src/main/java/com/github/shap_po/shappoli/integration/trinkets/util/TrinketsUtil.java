@@ -51,10 +51,6 @@ public class TrinketsUtil {
         return TrinketsUtil.getTrinkets(entity, slots).filter(trinket -> itemCondition == null || itemCondition.test(TrinketsUtil.getItemConditionPair(entity, trinket.getRight())));
     }
 
-    public static <T> Iterable<T> getIterable(Stream<T> stream) {
-        return stream::iterator;
-    }
-
     public static String getSlotId(SlotType slotType) {
         return slotType.getGroup() + "/" + slotType.getName();
     }

@@ -55,11 +55,11 @@ public class TrinketSlotData {
         );
     }
 
-    public static SerializableData.Instance toData(SerializableData data, TrinketSlotData trinketSlotData) {
+    public static SerializableData.Instance toData(SerializableData data, TrinketSlotData slot) {
         SerializableData.Instance dataInstance = data.new Instance();
-        dataInstance.set("name", trinketSlotData.name);
-        dataInstance.set("group", trinketSlotData.group);
-        dataInstance.set("index", trinketSlotData.index);
+        dataInstance.set("name", slot.name);
+        dataInstance.set("group", slot.group);
+        dataInstance.set("index", slot.index);
         return dataInstance;
     }
 }

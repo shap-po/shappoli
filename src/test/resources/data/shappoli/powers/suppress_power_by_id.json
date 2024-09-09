@@ -1,0 +1,60 @@
+{
+  "type": "apoli:multiple",
+
+  "suppressor": {
+    "type": "apoli:action_on_block_place",
+    "entity_action": {
+      "type": "apoli:selector_action",
+      "selector": "@s",
+      "bientity_action": {
+        "type": "shappoli:suppress_power",
+        "power_id": "apoli:active_self",
+        "power_ids": [
+          "shappoli:action_on_trinket_update",
+          "test:nonexistent_power"
+        ],
+        "power_ids_denylist": [
+          "*:*_power_active2"
+        ],
+        "duration": 40,
+        "bientity_action": {
+          "type": "apoli:actor_action",
+          "action": {
+            "type": "apoli:execute_command",
+            "command": "say Suppressed"
+          }
+        }
+      }
+    }
+  },
+
+  "power_active1": {
+    "type": "apoli:active_self",
+    "key": "key.attack",
+    "entity_action": {
+      "type": "apoli:execute_command",
+      "command": "say Active 1"
+    }
+  },
+
+  "power_active2": {
+    "type": "apoli:active_self",
+    "key": "key.attack",
+    "entity_action": {
+      "type": "apoli:execute_command",
+      "command": "say Active 2"
+    }
+  },
+
+  "power_trinket": {
+    "type": "shappoli:action_on_trinket_update",
+    "entity_action_on_equip": {
+      "type": "apoli:execute_command",
+      "command": "say Equipped"
+    },
+    "item_condition": {
+      "type": "apoli:empty",
+      "inverted": true
+    }
+  }
+}

@@ -1,12 +1,12 @@
 package com.github.shap_po.shappoli.integration.trinkets.data;
 
+import com.github.shap_po.shappoli.util.MiscUtil;
 import dev.emi.trinkets.api.SlotReference;
 import dev.emi.trinkets.api.SlotType;
 import io.github.apace100.calio.data.SerializableData;
 import io.github.apace100.calio.data.SerializableDataTypes;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class TrinketSlotData {
@@ -37,14 +37,7 @@ public class TrinketSlotData {
      * @return A list of trinket slot data from the given data.
      */
     public static List<TrinketSlotData> getSlots(SerializableData.Instance data) {
-        List<TrinketSlotData> slots = new ArrayList<>();
-        if (data.isPresent("slot")) {
-            slots.add(data.get("slot"));
-        }
-        if (data.isPresent("slots")) {
-            slots.addAll(data.get("slots"));
-        }
-        return slots;
+        return MiscUtil.listFromData(data, "slot", "slots");
     }
 
     /**

@@ -22,13 +22,13 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.Predicate;
 
-public abstract class BasePreventTrinketPower extends Power {
+public abstract class BasePreventTrinketChangePower extends Power {
     protected final Predicate<Entity> entityCondition;
     protected final Predicate<Pair<World, ItemStack>> itemCondition;
     protected final List<TrinketSlotData> slots;
     protected final boolean allowCreative;
 
-    public BasePreventTrinketPower(
+    public BasePreventTrinketChangePower(
         PowerType<?> type,
         LivingEntity entity,
         Predicate<Entity> entityCondition,
@@ -56,7 +56,7 @@ public abstract class BasePreventTrinketPower extends Power {
 
     @FunctionalInterface
     public interface Factory {
-        BasePreventTrinketPower create(
+        BasePreventTrinketChangePower create(
             PowerType<?> type,
             LivingEntity entity,
             Predicate<Entity> entityCondition,

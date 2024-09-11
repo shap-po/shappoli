@@ -12,7 +12,7 @@ import net.minecraft.world.World;
 import java.util.List;
 import java.util.function.Predicate;
 
-public class PreventTrinketUnequipPower extends BasePreventTrinketPower {
+public class PreventTrinketUnequipPower extends BasePreventTrinketChangePower {
     public PreventTrinketUnequipPower(
         PowerType<?> type,
         LivingEntity entity,

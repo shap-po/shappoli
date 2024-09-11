@@ -1,0 +1,22 @@
+{
+  "type": "shappoli:conditioned_modify_trinket_slots",
+  "modifiers": [
+    {
+      "slot": "chest/necklace",
+      "operation": "addition",
+      "value": -1
+    },
+    {
+      "slot": "feet/shoes",
+      "operation": "addition",
+      "value": -1
+    }
+  ],
+  "condition": {
+    "type": "apoli:on_block",
+    "block_condition": {
+      "type": "apoli:block",
+      "block": "minecraft:stone"
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "type": "shappoli:conditioned_modify_trinket_slots",
+  "modifier": {
+    "slot": "shappoli/slot",
+    "operation": "addition",
+    "value": 4
+  },
+  "condition": {
+    "type": "apoli:on_block",
+    "block_condition": {
+      "type": "apoli:block",
+      "block": "minecraft:stone"
+    }
+  }
+}

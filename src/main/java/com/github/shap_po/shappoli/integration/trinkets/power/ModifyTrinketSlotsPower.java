@@ -27,8 +27,12 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * Based on the {@link io.github.apace100.apoli.power.AttributePower}
+ */
 public class ModifyTrinketSlotsPower extends Power {
     protected final List<SlotEntityAttributeModifier> modifiers = new LinkedList<>();
+    private boolean applied = false;
 
     public ModifyTrinketSlotsPower(PowerType<?> type, LivingEntity entity) {
         super(type, entity);
@@ -42,18 +46,19 @@ public class ModifyTrinketSlotsPower extends Power {
 
     @Override
     public void onAdded() {
-        this.applyTempMods();
+        this.applyTempMods(true);
     }
 
     @Override
     public void onRemoved() {
-        this.removeTempMods();
+        this.removeTempMods(true);
     }
 
-    protected void applyTempMods() {
-        if (entity.getWorld().isClient) {
+    protected void applyTempMods(boolean force) {
+        if (entity.getWorld().isClient || (applied && !force)) {
             return;
         }
+        applied = true;
 
         TrinketsApi.getTrinketComponent(entity).ifPresent(trinket -> {
             trinket.addTemporaryModifiers(getModifiersMap());
@@ -61,15 +66,24 @@ public class ModifyTrinketSlotsPower extends Power {
         });
     }
 
-    protected void removeTempMods() {
-        if (entity.getWorld().isClient) {
+    protected void applyTempMods() {
+        applyTempMods(false);
+    }
+
+    protected void removeTempMods(boolean force) {
+        if (entity.getWorld().isClient || (!applied && !force)) {
             return;
         }
+        applied = false;
 
         TrinketsApi.getTrinketComponent(entity).ifPresent(trinket -> {
             trinket.removeModifiers(getModifiersMap());
             updateInventories(trinket);
         });
+    }
+
+    protected void removeTempMods() {
+        removeTempMods(false);
     }
 
     /**

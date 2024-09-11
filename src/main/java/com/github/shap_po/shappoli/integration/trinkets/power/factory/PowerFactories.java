@@ -1,9 +1,6 @@
 package com.github.shap_po.shappoli.integration.trinkets.power.factory;
 
-import com.github.shap_po.shappoli.integration.trinkets.power.ActionOnTrinketChangePower;
-import com.github.shap_po.shappoli.integration.trinkets.power.ModifyTrinketSlotsPower;
-import com.github.shap_po.shappoli.integration.trinkets.power.PreventTrinketEquipPower;
-import com.github.shap_po.shappoli.integration.trinkets.power.PreventTrinketUnequipPower;
+import com.github.shap_po.shappoli.integration.trinkets.power.*;
 import io.github.apace100.apoli.power.factory.PowerFactory;
 import io.github.apace100.apoli.power.factory.PowerFactorySupplier;
 import io.github.apace100.apoli.registry.ApoliRegistries;
@@ -12,9 +9,10 @@ import net.minecraft.registry.Registry;
 public class PowerFactories {
     public static void register() {
         register(ActionOnTrinketChangePower::createFactory);
+        register(ConditionedModifyTrinketSlotsPower::createFactory);
+        register(ModifyTrinketSlotsPower::createFactory);
         register(PreventTrinketEquipPower::createFactory);
         register(PreventTrinketUnequipPower::createFactory);
-        register(ModifyTrinketSlotsPower::createFactory);
     }
 
     private static void register(PowerFactory<?> powerFactory) {

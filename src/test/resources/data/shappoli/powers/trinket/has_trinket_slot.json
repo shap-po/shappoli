@@ -1,0 +1,22 @@
+{
+  "type": "apoli:active_self",
+  "key": "key.attack",
+
+  "entity_action": {
+    "type": "apoli:if_else",
+    "condition": {
+      "type": "shappoli:has_trinket_slot",
+      "slot": {
+        "group": "shappoli"
+      }
+    },
+    "if_action": {
+      "type": "apoli:execute_command",
+      "command": "say Has trinket slot"
+    },
+    "else_action": {
+      "type": "apoli:execute_command",
+      "command": "say Does not have trinket slot"
+    }
+  }
+}

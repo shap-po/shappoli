@@ -1,6 +1,7 @@
 package com.github.shap_po.shappoli.integration.trinkets.power.factory.condition;
 
 import com.github.shap_po.shappoli.integration.trinkets.power.factory.condition.entity.EquippedTrinketCondition;
+import com.github.shap_po.shappoli.integration.trinkets.power.factory.condition.entity.HasTrinketSlotCondition;
 import io.github.apace100.apoli.power.factory.condition.ConditionFactory;
 import io.github.apace100.apoli.registry.ApoliRegistries;
 import net.minecraft.entity.Entity;
@@ -9,6 +10,7 @@ import net.minecraft.registry.Registry;
 public class EntityConditions {
     public static void register() {
         register(EquippedTrinketCondition.getFactory());
+        register(HasTrinketSlotCondition.getFactory());
     }
 
     private static void register(ConditionFactory<Entity> conditionFactory) {

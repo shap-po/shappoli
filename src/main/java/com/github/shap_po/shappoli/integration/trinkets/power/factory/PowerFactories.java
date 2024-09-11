@@ -9,8 +9,8 @@ import net.minecraft.registry.Registry;
 public class PowerFactories {
     public static void register() {
         register(ActionOnTrinketChangePower::createFactory);
-        register(ConditionedModifyTrinketSlotsPower::createFactory);
-        register(ModifyTrinketSlotsPower::createFactory);
+        register(ConditionedModifyTrinketSlotPower::createFactory);
+        register(ModifyTrinketSlotPower::createFactory);
         register(PreventTrinketEquipPower::createFactory);
         register(PreventTrinketUnequipPower::createFactory);
     }

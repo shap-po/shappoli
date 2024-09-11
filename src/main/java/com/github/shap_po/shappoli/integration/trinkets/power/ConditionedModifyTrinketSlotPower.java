@@ -5,6 +5,7 @@ import com.github.shap_po.shappoli.integration.trinkets.data.ShappoliTrinketsDat
 import com.github.shap_po.shappoli.integration.trinkets.data.SlotEntityAttributeModifier;
 import io.github.apace100.apoli.power.Power;
 import io.github.apace100.apoli.power.PowerType;
+import io.github.apace100.apoli.power.factory.PowerFactories;
 import io.github.apace100.apoli.power.factory.PowerFactory;
 import io.github.apace100.calio.data.SerializableData;
 import io.github.apace100.calio.data.SerializableDataTypes;
@@ -15,10 +16,10 @@ import java.util.List;
 /**
  * Based on the {@link io.github.apace100.apoli.power.ConditionedAttributePower}
  */
-public class ConditionedModifyTrinketSlotsPower extends ModifyTrinketSlotsPower {
+public class ConditionedModifyTrinketSlotPower extends ModifyTrinketSlotPower {
     private final int tickRate;
 
-    public ConditionedModifyTrinketSlotsPower(PowerType<?> type, LivingEntity entity, int tickRate) {
+    public ConditionedModifyTrinketSlotPower(PowerType<?> type, LivingEntity entity, int tickRate) {
         super(type, entity);
         this.tickRate = tickRate;
         this.setTicking(true);
@@ -45,18 +46,21 @@ public class ConditionedModifyTrinketSlotsPower extends ModifyTrinketSlotsPower 
     }
 
     public static PowerFactory<Power> createFactory() {
-        return new PowerFactory<>(Shappoli.identifier("conditioned_modify_trinket_slots"),
+        PowerFactory<Power> factory = new PowerFactory<>(Shappoli.identifier("conditioned_modify_trinket_slots"),
             new SerializableData()
                 .add("modifier", ShappoliTrinketsDataTypes.SLOT_ENTITY_ATTRIBUTE_MODIFIER, null)
                 .add("modifiers", ShappoliTrinketsDataTypes.SLOT_ENTITY_ATTRIBUTE_MODIFIERS, null)
                 .add("tick_rate", SerializableDataTypes.POSITIVE_INT, 20)
             ,
             data -> (type, player) -> {
-                ConditionedModifyTrinketSlotsPower power = new ConditionedModifyTrinketSlotsPower(type, player, data.getInt("tick_rate"));
+                ConditionedModifyTrinketSlotPower power = new ConditionedModifyTrinketSlotPower(type, player, data.getInt("tick_rate"));
                 data.ifPresent("modifier", power::addModifier);
                 data.<List<SlotEntityAttributeModifier>>ifPresent("modifiers", mods -> mods.forEach(power::addModifier));
                 return power;
             }
         ).allowCondition();
+
+        PowerFactories.ALIASES.addPathAlias("conditioned_modify_trinket_slots", factory.getSerializerId().getPath());
+        return factory;
     }
 }

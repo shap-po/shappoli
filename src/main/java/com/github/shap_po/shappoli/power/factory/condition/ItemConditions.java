@@ -1,7 +1,7 @@
 package com.github.shap_po.shappoli.power.factory.condition;
 
 import com.github.shap_po.shappoli.power.factory.condition.item.HolderCondition;
-import com.github.shap_po.shappoli.power.factory.condition.item.IsBlockCondition;
+import com.github.shap_po.shappoli.power.factory.condition.item.BlockCondition;
 import io.github.apace100.apoli.power.factory.condition.ConditionFactory;
 import io.github.apace100.apoli.registry.ApoliRegistries;
 import net.minecraft.item.ItemStack;
@@ -12,7 +12,7 @@ import net.minecraft.world.World;
 public class ItemConditions {
     public static void register() {
         register(HolderCondition.getFactory());
-        register(IsBlockCondition.getFactory());
+        register(BlockCondition.getFactory());
     }
 
     private static void register(ConditionFactory<Pair<World, ItemStack>> conditionFactory) {

@@ -58,4 +58,32 @@ public class TrinketsUtil {
     public static String getSlotId(SlotType slotType, int index) {
         return getSlotId(slotType) + "/" + index;
     }
+
+    /**
+     * Get all slot references of the given entity.
+     *
+     * @param entity The entity to get the slots from.
+     * @return A stream of slot references.
+     */
+    public static Stream<SlotReference> getSlots(LivingEntity entity) {
+        return TrinketsApi.getTrinketComponent(entity)
+            .map(trinketComponent -> trinketComponent.getInventory().entrySet().stream()
+                .flatMap(group -> group.getValue().values().stream()
+                    .flatMap(trinketInventory -> Stream.iterate(0, i -> i < trinketInventory.size(), i -> i + 1)
+                        .map(i -> new SlotReference(trinketInventory, i))
+                    )
+                )
+            ).orElse(Stream.empty());
+    }
+
+    /**
+     * Get all slot references of the given entity that match the given slot data.
+     *
+     * @param entity The entity to get the slots from.
+     * @param slots  List of slot data to filter the slots.
+     * @return A stream of slot references.
+     */
+    public static Stream<SlotReference> getSlots(LivingEntity entity, List<TrinketSlotData> slots) {
+        return getSlots(entity).filter(slot -> slots.stream().anyMatch(trinketSlotData -> trinketSlotData.test(slot)));
+    }
 }

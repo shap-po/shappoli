@@ -1,0 +1,27 @@
+{
+  "type": "apoli:active_self",
+  "key": "key.attack",
+
+  "entity_action": {
+    "type": "apoli:if_else",
+    "condition": {
+      "type": "apoli:inventory",
+      "slot": "weapon.mainhand",
+      "item_condition": {
+        "type": "shappoli:is_equippable_trinket",
+        "slot": {
+
+        },
+        "only_empty": true
+      }
+    },
+    "if_action": {
+      "type": "apoli:execute_command",
+      "command": "say Item can be equipped as a trinket"
+    },
+    "else_action": {
+      "type": "apoli:execute_command",
+      "command": "say Item cannot be equipped as a trinket"
+    }
+  }
+}

@@ -37,5 +37,4 @@ public class SurvivalTrinketSlotMixin extends Slot {
             p -> p.doesApply(player, slotRef, stack)
         ) && original;
     }
-
 }

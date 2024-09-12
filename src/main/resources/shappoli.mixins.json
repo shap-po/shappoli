@@ -9,7 +9,7 @@
     "PowerFactoryInstanceMixin",
     "PowerMixin",
     "VillagerEntityMixin",
-    "integration.trinkets.LivingEntityMixin",
+    "integration.trinkets.PlayerScreenHandlerMixin",
     "integration.trinkets.SlotEntityAttributeAccessor",
     "integration.trinkets.SurvivalTrinketSlotMixin",
     "integration.trinkets.TrinketInventoryMixin",

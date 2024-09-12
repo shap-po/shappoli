@@ -5,13 +5,14 @@ import com.github.shap_po.shappoli.integration.trinkets.data.ShappoliTrinketsDat
 import com.github.shap_po.shappoli.integration.trinkets.data.TrinketSlotData;
 import com.github.shap_po.shappoli.integration.trinkets.util.TrinketsUtil;
 import dev.emi.trinkets.api.SlotReference;
+import dev.emi.trinkets.api.TrinketInventory;
+import io.github.apace100.apoli.component.PowerHolderComponent;
 import io.github.apace100.apoli.data.ApoliDataTypes;
 import io.github.apace100.apoli.power.Power;
 import io.github.apace100.apoli.power.PowerType;
 import io.github.apace100.apoli.power.factory.PowerFactories;
 import io.github.apace100.apoli.power.factory.PowerFactory;
 import io.github.apace100.calio.data.SerializableData;
-import io.github.apace100.calio.data.SerializableDataTypes;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.inventory.StackReference;
@@ -30,7 +31,6 @@ public class ActionOnTrinketChangePower extends Power {
     private final Consumer<Pair<World, StackReference>> itemActionOnUnequip;
     private final Predicate<Pair<World, ItemStack>> itemCondition;
     private final List<TrinketSlotData> slots;
-    private final boolean executeWhenSpawned;
 
     public ActionOnTrinketChangePower(
         PowerType<?> type,
@@ -40,8 +40,7 @@ public class ActionOnTrinketChangePower extends Power {
         Consumer<Entity> entityActionOnUnequip,
         Consumer<Pair<World, StackReference>> itemActionOnUnequip,
         Predicate<Pair<World, ItemStack>> itemCondition,
-        List<TrinketSlotData> slots,
-        boolean executeWhenSpawned
+        List<TrinketSlotData> slots
     ) {
         super(type, entity);
         this.entityActionOnEquip = entityActionOnEquip;
@@ -50,36 +49,39 @@ public class ActionOnTrinketChangePower extends Power {
         this.itemActionOnUnequip = itemActionOnUnequip;
         this.itemCondition = itemCondition;
         this.slots = slots;
-        this.executeWhenSpawned = executeWhenSpawned;
     }
 
-
-    public boolean doesApply(LivingEntity actor, SlotReference slotReference, ItemStack item, boolean justSpawned) {
-        return (
-            (executeWhenSpawned || !justSpawned) &&
-                (slots.isEmpty() || slots.stream().anyMatch(slot -> slot.test(slotReference))) &&
-                (itemCondition == null || itemCondition.test(TrinketsUtil.getItemConditionPair(actor, item)))
+    public boolean doesApply(SlotReference slotReference, ItemStack item) {
+        return (entity.age > 0 && // Prevents the power from being applied during entity initialization
+            (slots.isEmpty() || slots.stream().anyMatch(slot -> slot.test(slotReference))) &&
+            (itemCondition == null || itemCondition.test(TrinketsUtil.getItemConditionPair(entity, item)))
         );
     }
 
-    public void apply(LivingEntity actor, SlotReference slotReference, boolean isEquipping) {
+    public void apply(SlotReference slotReference, boolean isEquipping) {
         if (isEquipping) {
             if (entityActionOnEquip != null) {
-                entityActionOnEquip.accept(actor);
+                entityActionOnEquip.accept(entity);
             }
             if (itemActionOnEquip != null) {
-                itemActionOnEquip.accept(TrinketsUtil.getItemActionPair(actor, slotReference));
+                itemActionOnEquip.accept(TrinketsUtil.getItemActionPair(entity, slotReference));
             }
         } else {
             if (entityActionOnUnequip != null) {
-                entityActionOnUnequip.accept(actor);
+                entityActionOnUnequip.accept(entity);
             }
             if (itemActionOnUnequip != null) {
-                // FIXME: stack is a copy of an item, not the actual item, IDK how to fix it yet
-                itemActionOnUnequip.accept(TrinketsUtil.getItemActionPair(actor, slotReference));
+                itemActionOnUnequip.accept(TrinketsUtil.getItemActionPair(entity, slotReference));
             }
         }
+    }
 
+    public static void handleTrinketChange(LivingEntity entity, TrinketInventory inventory, ItemStack stack, int slot, boolean isEquipping) {
+        SlotReference ref = new SlotReference(inventory, slot);
+        PowerHolderComponent.withPowers(entity, ActionOnTrinketChangePower.class,
+            p -> p.doesApply(ref, stack),
+            p -> p.apply(ref, isEquipping)
+        );
     }
 
     public static PowerFactory createFactory() {
@@ -93,7 +95,6 @@ public class ActionOnTrinketChangePower extends Power {
                 .add("item_condition", ApoliDataTypes.ITEM_CONDITION)
                 .add("slot", ShappoliTrinketsDataTypes.TRINKET_SLOT, null)
                 .add("slots", ShappoliTrinketsDataTypes.TRINKET_SLOTS, null)
-                .add("execute_when_spawned", SerializableDataTypes.BOOLEAN, false)
             ,
             data -> (type, player) -> new ActionOnTrinketChangePower(
                 type,
@@ -103,8 +104,7 @@ public class ActionOnTrinketChangePower extends Power {
                 data.get("entity_action_on_unequip"),
                 data.get("item_action_on_unequip"),
                 data.get("item_condition"),
-                TrinketSlotData.getSlots(data),
-                data.getBoolean("execute_when_spawned")
+                TrinketSlotData.getSlots(data)
             )
         ).allowCondition();
 

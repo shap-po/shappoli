@@ -7,6 +7,7 @@ import com.github.shap_po.shappoli.util.MiscUtil;
 import com.github.shap_po.shappoli.util.PowerHolderComponentUtil;
 import io.github.apace100.apoli.component.PowerHolderComponent;
 import io.github.apace100.apoli.data.ApoliDataTypes;
+import io.github.apace100.apoli.power.MultiplePowerType;
 import io.github.apace100.apoli.power.Power;
 import io.github.apace100.apoli.power.PowerTypeReference;
 import io.github.apace100.apoli.power.factory.action.ActionFactory;
@@ -34,12 +35,12 @@ public class SuppressPowerAction {
         boolean suppressed = false;
 
         for (PowerTypeReference<?> powerRef : powerRefs) {
-            boolean result = suppressPower(data, actorAndTarget, ignoredPowers, component.getPower(powerRef), duration);
+            boolean result = suppressPower(data, actorAndTarget, component, ignoredPowers, component.getPower(powerRef), duration);
             suppressed = suppressed || result;
         }
 
         for (Iterator<Power> iterator = PowerHolderComponentUtil.getPowers(component, powerIds).iterator(); iterator.hasNext(); ) {
-            boolean result = suppressPower(data, actorAndTarget, ignoredPowers, iterator.next(), duration);
+            boolean result = suppressPower(data, actorAndTarget, component, ignoredPowers, iterator.next(), duration);
             suppressed = suppressed || result;
         }
 
@@ -48,22 +49,39 @@ public class SuppressPowerAction {
         }
     }
 
-    private static boolean suppressPower(
-        SerializableData.Instance data, Pair<Entity, Entity> actorAndTarget, List<PowerTypeReference<?>> ignoredPowers,
-        @Nullable Power power, int duration
+    private static <P extends Power> boolean suppressPower(
+        SerializableData.Instance data, Pair<Entity, Entity> actorAndTarget, PowerHolderComponent component,
+        List<PowerTypeReference<?>> ignoredPowers, @Nullable P power, int duration
     ) {
         SuppressiblePower suppressiblePower = (SuppressiblePower) power;
         if (power == null || ignoredPowers.stream().anyMatch(denied -> power.getType().equals(denied))) {
             return false;
         }
 
-
         if (!suppressiblePower.shappoli$canBeSuppressed()) {
             Shappoli.LOGGER.error("Tried to suppress a power that cannot be suppressed: {}", power.getType().getIdentifier());
             return false;
         }
-        if (!suppressiblePower.shappoli$hasConditions() && !data.getBoolean("ignore_warning")) {
-            Shappoli.LOGGER.warn("Suppressed power that does not support conditions: {}. If you want to ignore this message, set the \"ignore_warning\" parameter to true", power.getType().getIdentifier());
+
+        if (power.getType() instanceof MultiplePowerType<?> multiplePowerType) {
+            if (!data.getBoolean("ignore_multiple_power_warning")) {
+                Shappoli.LOGGER.warn(
+                    "Suppressed power \"{}\" of type \"apoli:multiple\". This is generally not recommended. If you want to ignore this message, set the \"ignore_multiple_power_warning\" parameter to \"true\"",
+                    power.getType().getIdentifier()
+                );
+            }
+            // loop over all sub powers and try to suppress them
+            return multiplePowerType.getSubPowers().stream()
+                .<Power>map(subPowerId -> component.getPower(new PowerTypeReference<>(subPowerId)))
+                .map(subPower -> suppressPower(data, actorAndTarget, component, ignoredPowers, subPower, duration))
+                .reduce(false, Boolean::logicalOr);
+        }
+
+        if (!suppressiblePower.shappoli$hasConditions() && !data.getBoolean("ignore_no_condition_warning")) {
+            Shappoli.LOGGER.warn(
+                "Suppressed power \"{}\" of type \"{}\" that does not support conditions. This probably would not work. If you want to ignore this message, set the \"ignore_no_condition_warning\" parameter to \"true\"",
+                power.getType().getIdentifier(), PowerHolderComponentUtil.getPowerId(power)
+            );
         }
 
         return suppressiblePower.shappoli$suppressFor(duration, actorAndTarget.getLeft());
@@ -79,7 +97,9 @@ public class SuppressPowerAction {
                 .add("ignored_powers", ShappoliDataTypes.POWER_TYPES, null) // power type references to ignore
                 .add("duration", SerializableDataTypes.POSITIVE_INT)
                 .add("bientity_action", ApoliDataTypes.BIENTITY_ACTION, null)
-                .add("ignore_warning", SerializableDataTypes.BOOLEAN, false)
+
+                .add("ignore_no_condition_warning", SerializableDataTypes.BOOLEAN, false)
+                .add("ignore_multiple_power_warning", SerializableDataTypes.BOOLEAN, false)
             ,
             SuppressPowerAction::action
         );

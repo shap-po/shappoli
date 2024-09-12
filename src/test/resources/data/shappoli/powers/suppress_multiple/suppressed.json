@@ -1,0 +1,33 @@
+{
+  "type": "apoli:multiple",
+
+  "power_hit": {
+    "type": "apoli:action_on_hit",
+    "bientity_action": {
+      "type": "apoli:actor_action",
+      "action": {
+        "type": "apoli:execute_command",
+        "command": "say Hit"
+      }
+    }
+  },
+
+  "power_active": {
+    "type": "apoli:active_self",
+    "key": "key.attack",
+    "entity_action": {
+      "type": "apoli:execute_command",
+      "command": "say Active"
+    }
+  },
+
+  "attribute": {
+    "type": "apoli:attribute",
+    "modifier": {
+      "attribute": "minecraft:generic.max_health",
+      "operation": "addition",
+      "value": 4
+    },
+    "update_health": true
+  }
+}

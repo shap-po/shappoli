@@ -10,7 +10,7 @@
         "type": "shappoli:suppress_power",
         "power": "*:*_power_hit",
         "powers": [
-          "*:*_power_active"
+          "*:*_power_active1"
         ],
         "duration": 40,
         "bientity_action": {
@@ -35,12 +35,21 @@
     }
   },
 
-  "power_active": {
+  "power_active1": {
     "type": "apoli:active_self",
     "key": "key.attack",
     "entity_action": {
       "type": "apoli:execute_command",
-      "command": "say Active"
+      "command": "say Active 1"
+    }
+  },
+
+  "power_active2": {
+    "type": "apoli:active_self",
+    "key": "key.attack",
+    "entity_action": {
+      "type": "apoli:execute_command",
+      "command": "say Active 2"
     }
   }
 }

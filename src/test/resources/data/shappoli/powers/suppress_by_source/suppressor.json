@@ -1,0 +1,19 @@
+{
+  "type": "apoli:action_on_block_place",
+  "entity_action": {
+    "type": "apoli:selector_action",
+    "selector": "@s",
+    "bientity_action": {
+      "type": "shappoli:suppress_power",
+      "power_source": "apoli:command",
+      "duration": 40,
+      "bientity_action": {
+        "type": "apoli:actor_action",
+        "action": {
+          "type": "apoli:execute_command",
+          "command": "say Suppressed"
+        }
+      }
+    }
+  }
+}

@@ -5,10 +5,12 @@ import com.github.shap_po.shappoli.access.SuppressiblePower;
 import com.github.shap_po.shappoli.data.ShappoliDataTypes;
 import com.github.shap_po.shappoli.util.MiscUtil;
 import com.github.shap_po.shappoli.util.PowerHolderComponentUtil;
+import com.google.common.collect.Streams;
 import io.github.apace100.apoli.component.PowerHolderComponent;
 import io.github.apace100.apoli.data.ApoliDataTypes;
 import io.github.apace100.apoli.power.MultiplePowerType;
 import io.github.apace100.apoli.power.Power;
+import io.github.apace100.apoli.power.PowerType;
 import io.github.apace100.apoli.power.PowerTypeReference;
 import io.github.apace100.apoli.power.factory.action.ActionFactory;
 import io.github.apace100.calio.data.SerializableData;
@@ -21,40 +23,55 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 public class SuppressPowerAction {
     public static void action(SerializableData.Instance data, Pair<Entity, Entity> actorAndTarget) {
-        List<PowerTypeReference<?>> powerRefs = MiscUtil.listFromData(data, "power", "powers");
-        List<Identifier> powerIds = MiscUtil.listFromData(data, "power_id", "power_ids");
         List<PowerTypeReference<?>> ignoredPowers = MiscUtil.listFromData(data, null, "ignored_powers");
-        int duration = data.getInt("duration");
-        Consumer<Pair<Entity, Entity>> bientity_action = data.get("bientity_action");
-
         PowerHolderComponent component = PowerHolderComponent.KEY.get(actorAndTarget.getRight());
 
+        Iterator<Power> powers = getPowers(data, component).iterator();
+
         boolean suppressed = false;
-
-        for (PowerTypeReference<?> powerRef : powerRefs) {
-            boolean result = suppressPower(data, actorAndTarget, component, ignoredPowers, component.getPower(powerRef), duration);
+        while (powers.hasNext()) {
+            boolean result = suppressPower(
+                data, actorAndTarget, component,
+                ignoredPowers, powers.next()
+            );
             suppressed = suppressed || result;
         }
 
-        for (Iterator<Power> iterator = PowerHolderComponentUtil.getPowers(component, powerIds).iterator(); iterator.hasNext(); ) {
-            boolean result = suppressPower(data, actorAndTarget, component, ignoredPowers, iterator.next(), duration);
-            suppressed = suppressed || result;
-        }
-
+        Consumer<Pair<Entity, Entity>> bientity_action = data.get("bientity_action");
         if (suppressed && bientity_action != null) {
             bientity_action.accept(actorAndTarget);
         }
     }
 
+    private static Stream<Power> getPowers(SerializableData.Instance data, PowerHolderComponent component) {
+        List<PowerTypeReference<?>> powerRefs = MiscUtil.listFromData(data, "power", "powers");
+        Stream<Power> powersFromRefs = powerRefs.stream().map(component::getPower);
+
+        List<Identifier> powerIds = MiscUtil.listFromData(data, "power_id", "power_ids");
+        Stream<Power> powersFromIds = PowerHolderComponentUtil.getPowers(component, powerIds);
+
+        List<Identifier> powerSources = MiscUtil.listFromData(data, "power_source", "power_sources");
+        Stream<Power> powersFromSources = powerSources.stream()
+            .flatMap(source -> component.getPowersFromSource(source)
+                .stream()
+                .filter(Predicate.not(PowerType::isSubPower))
+            )
+            .map(component::getPower);
+
+        return Streams.concat(powersFromRefs, powersFromIds, powersFromSources);
+    }
+
     private static <P extends Power> boolean suppressPower(
         SerializableData.Instance data, Pair<Entity, Entity> actorAndTarget, PowerHolderComponent component,
-        List<PowerTypeReference<?>> ignoredPowers, @Nullable P power, int duration
+        List<PowerTypeReference<?>> ignoredPowers, @Nullable P power
     ) {
         SuppressiblePower suppressiblePower = (SuppressiblePower) power;
-        if (power == null || ignoredPowers.stream().anyMatch(denied -> power.getType().equals(denied))) {
+        if (power == null || ignoredPowers.stream().anyMatch(ignored -> power.getType().equals(ignored))) {
             return false;
         }
 
@@ -71,9 +88,11 @@ public class SuppressPowerAction {
                 );
             }
             // loop over all sub powers and try to suppress them
-            return multiplePowerType.getSubPowers().stream()
+            return multiplePowerType
+                .getSubPowers()
+                .stream()
                 .<Power>map(subPowerId -> component.getPower(new PowerTypeReference<>(subPowerId)))
-                .map(subPower -> suppressPower(data, actorAndTarget, component, ignoredPowers, subPower, duration))
+                .map(subPower -> suppressPower(data, actorAndTarget, component, ignoredPowers, subPower))
                 .reduce(false, Boolean::logicalOr);
         }
 
@@ -84,7 +103,7 @@ public class SuppressPowerAction {
             );
         }
 
-        return suppressiblePower.shappoli$suppressFor(duration, actorAndTarget.getLeft());
+        return suppressiblePower.shappoli$suppressFor(data.getInt("duration"), actorAndTarget.getLeft());
     }
 
     public static ActionFactory<Pair<Entity, Entity>> getFactory() {
@@ -92,8 +111,13 @@ public class SuppressPowerAction {
             new SerializableData()
                 .add("power", ApoliDataTypes.POWER_TYPE, null) // power type reference, example: my_namespace:my_power
                 .add("powers", ShappoliDataTypes.POWER_TYPES, null)
+
                 .add("power_id", SerializableDataTypes.IDENTIFIER, null) // power identifier, example: apoli:action_on_hit
                 .add("power_ids", SerializableDataTypes.IDENTIFIERS, null)
+
+                .add("power_source", SerializableDataTypes.IDENTIFIER, null) // power source identifier, example: apoli:command
+                .add("power_sources", SerializableDataTypes.IDENTIFIERS, null)
+
                 .add("ignored_powers", ShappoliDataTypes.POWER_TYPES, null) // power type references to ignore
                 .add("duration", SerializableDataTypes.POSITIVE_INT)
                 .add("bientity_action", ApoliDataTypes.BIENTITY_ACTION, null)

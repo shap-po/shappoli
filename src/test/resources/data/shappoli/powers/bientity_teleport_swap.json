@@ -1,0 +1,8 @@
+{
+  "type": "apoli:action_on_hit",
+  "bientity_action": {
+    "type": "shappoli:teleport",
+    "teleport_target": true,
+    "teleport_actor": true
+  }
+}

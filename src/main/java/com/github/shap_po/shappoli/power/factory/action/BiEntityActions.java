@@ -1,9 +1,9 @@
 package com.github.shap_po.shappoli.power.factory.action;
 
-import com.github.shap_po.shappoli.power.ActionOnEventReceivePower;
+import com.github.shap_po.shappoli.power.ReceiveActionPower;
 import com.github.shap_po.shappoli.power.factory.action.bientity.SuppressPowerAction;
 import com.github.shap_po.shappoli.power.factory.action.bientity.TeleportAction;
-import com.github.shap_po.shappoli.power.factory.action.meta.SendEventAction;
+import com.github.shap_po.shappoli.power.factory.action.meta.SendActionAction;
 import io.github.apace100.apoli.power.factory.action.ActionFactory;
 import io.github.apace100.apoli.registry.ApoliRegistries;
 import net.minecraft.entity.Entity;
@@ -16,12 +16,12 @@ public class BiEntityActions {
         register(TeleportAction.getFactory());
 
         register(
-            SendEventAction.getFactory(
+            SendActionAction.getFactory(
                 Pair::getLeft,
-                ActionOnEventReceivePower::receiveBientityEvent
+                ReceiveActionPower::receiveBientityEvent,
+                io.github.apace100.apoli.power.factory.action.BiEntityActions.ALIASES
             )
         );
-        SendEventAction.addAlias(io.github.apace100.apoli.power.factory.action.BiEntityActions.ALIASES);
     }
 
     private static void register(ActionFactory<Pair<Entity, Entity>> actionFactory) {

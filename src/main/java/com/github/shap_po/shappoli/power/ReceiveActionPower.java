@@ -4,6 +4,7 @@ import com.github.shap_po.shappoli.Shappoli;
 import io.github.apace100.apoli.data.ApoliDataTypes;
 import io.github.apace100.apoli.power.Power;
 import io.github.apace100.apoli.power.PowerType;
+import io.github.apace100.apoli.power.factory.PowerFactories;
 import io.github.apace100.apoli.power.factory.PowerFactory;
 import io.github.apace100.calio.data.SerializableData;
 import net.minecraft.entity.Entity;
@@ -16,7 +17,7 @@ import net.minecraft.world.World;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
-public class ActionOnEventReceivePower extends Power {
+public class ReceiveActionPower extends Power {
     private final Consumer<Entity> action;
     private final Consumer<Pair<Entity, Entity>> bientityAction;
     private final Predicate<Pair<Entity, Entity>> bientityCondition;
@@ -25,7 +26,7 @@ public class ActionOnEventReceivePower extends Power {
     private final Consumer<Pair<World, StackReference>> itemAction;
     private final Predicate<Pair<World, ItemStack>> itemCondition;
 
-    public ActionOnEventReceivePower(
+    public ReceiveActionPower(
         PowerType<?> type,
         LivingEntity entity,
         Consumer<Entity> action,
@@ -79,7 +80,7 @@ public class ActionOnEventReceivePower extends Power {
     }
 
     public static PowerFactory createFactory() {
-        return new PowerFactory<>(Shappoli.identifier("action_on_event_receive"),
+        PowerFactory<Power> factory = new PowerFactory<>(Shappoli.identifier("receive_action"),
             new SerializableData()
                 .add("action", ApoliDataTypes.ENTITY_ACTION, null)
                 .add("bientity_action", ApoliDataTypes.BIENTITY_ACTION, null)
@@ -89,7 +90,7 @@ public class ActionOnEventReceivePower extends Power {
                 .add("item_action", ApoliDataTypes.ITEM_ACTION, null)
                 .add("item_condition", ApoliDataTypes.ITEM_CONDITION, null)
             ,
-            data -> (type, player) -> new ActionOnEventReceivePower(type, player,
+            data -> (type, player) -> new ReceiveActionPower(type, player,
                 data.get("action"),
                 data.get("bientity_action"),
                 data.get("bientity_condition"),
@@ -99,5 +100,8 @@ public class ActionOnEventReceivePower extends Power {
                 data.get("item_condition")
             )
         ).allowCondition();
+
+        PowerFactories.ALIASES.addPathAlias("action_on_event_receive", factory.getSerializerId().getPath());
+        return factory;
     }
 }

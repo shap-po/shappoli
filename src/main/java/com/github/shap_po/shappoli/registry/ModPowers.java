@@ -5,12 +5,16 @@ import com.github.shap_po.shappoli.power.factory.action.BiEntityActions;
 import com.github.shap_po.shappoli.power.factory.action.BlockActions;
 import com.github.shap_po.shappoli.power.factory.action.EntityActions;
 import com.github.shap_po.shappoli.power.factory.action.ItemActions;
+import com.github.shap_po.shappoli.power.factory.condition.BiEntityConditions;
+import com.github.shap_po.shappoli.power.factory.condition.EntityConditions;
 import com.github.shap_po.shappoli.power.factory.condition.ItemConditions;
 
 public class ModPowers {
     public static void register() {
         PowerFactories.register();
 
+        BiEntityConditions.register();
+        EntityConditions.register();
         ItemConditions.register();
 
         BiEntityActions.register();

@@ -1,0 +1,22 @@
+{
+  "type": "apoli:multiple",
+
+  "receiver": {
+    "type": "shappoli:receive_condition",
+
+    "condition": {
+      "type": "apoli:resource",
+      "resource": "*:communication/condition/multiple/requester_resource",
+      "comparison": "<=",
+      "compare_to": 3
+    },
+
+    "entity_condition": {
+      "type": "apoli:inventory",
+      "slot": "weapon.mainhand",
+      "item_condition": {
+        "type": "shappoli:is_block"
+      }
+    }
+  }
+}

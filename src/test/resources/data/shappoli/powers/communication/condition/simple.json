@@ -1,0 +1,32 @@
+{
+  "type": "apoli:multiple",
+
+  "requester": {
+    "type": "apoli:active_self",
+    "key": "key.attack",
+
+    "entity_action": {
+      "type": "apoli:if_else",
+      "condition": {
+        "type": "shappoli:send_condition",
+        "receiver": "*:*_receiver"
+      },
+      "if_action": {
+        "type": "apoli:execute_command",
+        "command": "say Condition is true"
+      },
+      "else_action": {
+        "type": "apoli:execute_command",
+        "command": "say Condition is false"
+      }
+    }
+  },
+
+  "receiver": {
+    "type": "shappoli:receive_condition",
+
+    "entity_condition": {
+      "type": "apoli:sneaking"
+    }
+  }
+}

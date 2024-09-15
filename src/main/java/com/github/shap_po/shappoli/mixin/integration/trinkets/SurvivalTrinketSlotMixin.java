@@ -29,7 +29,7 @@ public class SurvivalTrinketSlotMixin extends Slot {
     }
 
     @ModifyReturnValue(method = "canTakeItems", at = @At("RETURN"))
-    public boolean shappoli$preventTrinketUnequip(boolean original, PlayerEntity player) {
+    private boolean shappoli$preventTrinketUnequip(boolean original, PlayerEntity player) {
         ItemStack stack = this.getStack();
         SlotReference slotRef = new SlotReference(trinketInventory, slotOffset);
 

@@ -14,8 +14,8 @@ import net.minecraft.world.World;
 
 public class ItemConditions {
     public static void register() {
-        register(HolderCondition.getFactory());
         register(BlockCondition.getFactory());
+        register(HolderCondition.getFactory());
 
         register(
             SendConditionCondition.getFactory(

@@ -60,8 +60,8 @@ public class ActionOnEntityCollisionPower extends CooldownPower {
                 .add("cooldown", SerializableDataTypes.INT, 1)
                 .add("hud_render", ApoliDataTypes.HUD_RENDER, HudRender.DONT_RENDER)
             ,
-            data -> (powerType, entity) -> new ActionOnEntityCollisionPower(
-                powerType,
+            data -> (type, entity) -> new ActionOnEntityCollisionPower(
+                type,
                 entity,
                 data.getInt("cooldown"),
                 data.get("hud_render"),

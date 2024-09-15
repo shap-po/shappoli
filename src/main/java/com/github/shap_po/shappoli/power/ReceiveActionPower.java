@@ -90,7 +90,7 @@ public class ReceiveActionPower extends Power {
                 .add("item_action", ApoliDataTypes.ITEM_ACTION, null)
                 .add("item_condition", ApoliDataTypes.ITEM_CONDITION, null)
             ,
-            data -> (type, player) -> new ReceiveActionPower(type, player,
+            data -> (type, entity) -> new ReceiveActionPower(type, entity,
                 data.get("action"),
                 data.get("bientity_action"),
                 data.get("bientity_condition"),

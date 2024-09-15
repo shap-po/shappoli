@@ -26,16 +26,20 @@ public class ReceiveConditionPower extends Power {
         this.itemCondition = itemCondition;
     }
 
+    public <T> boolean checkCondition(T payload, Predicate<T> predicate) {
+        return predicate == null || predicate.test(payload);
+    }
+
     public boolean receiveBientity(Pair<Entity, Entity> bientity) {
-        return bientityCondition != null && bientityCondition.test(bientity);
+        return checkCondition(bientity, bientityCondition);
     }
 
     public boolean receiveEntity(Entity entity) {
-        return entityCondition != null && entityCondition.test(entity);
+        return checkCondition(entity, entityCondition);
     }
 
     public boolean receiveItem(Pair<World, ItemStack> item) {
-        return itemCondition != null && itemCondition.test(item);
+        return checkCondition(item, itemCondition);
     }
 
     public static PowerFactory createFactory() {

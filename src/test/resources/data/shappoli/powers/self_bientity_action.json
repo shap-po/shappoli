@@ -1,0 +1,27 @@
+{
+  "type": "apoli:active_self",
+  "key": "key.attack",
+
+  "entity_action": {
+    "type": "shappoli:self_bientity_action",
+    "action": {
+      "type": "apoli:and",
+      "actions": [
+        {
+          "type": "apoli:actor_action",
+          "action": {
+            "type": "apoli:execute_command",
+            "command": "say I am an actor"
+          }
+        },
+        {
+          "type": "apoli:target_action",
+          "action": {
+            "type": "apoli:execute_command",
+            "command": "say I am also a target"
+          }
+        }
+      ]
+    }
+  }
+}

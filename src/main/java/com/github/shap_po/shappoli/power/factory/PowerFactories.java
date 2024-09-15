@@ -1,5 +1,6 @@
 package com.github.shap_po.shappoli.power.factory;
 
+import com.github.shap_po.shappoli.power.ActionOnEntityCollisionPower;
 import com.github.shap_po.shappoli.power.ModifyVillagerReputationPower;
 import com.github.shap_po.shappoli.power.ReceiveActionPower;
 import com.github.shap_po.shappoli.power.ReceiveConditionPower;
@@ -10,6 +11,7 @@ import net.minecraft.registry.Registry;
 
 public class PowerFactories {
     public static void register() {
+        register(ActionOnEntityCollisionPower::createFactory);
         register(ModifyVillagerReputationPower::createFactory);
         register(ReceiveActionPower::createFactory);
         register(ReceiveConditionPower::createFactory);

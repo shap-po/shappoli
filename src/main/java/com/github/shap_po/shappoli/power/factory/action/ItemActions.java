@@ -15,7 +15,7 @@ public class ItemActions {
         register(
             SendActionAction.getFactory(
                 worldAndStack -> InventoryUtil.getHolder(worldAndStack.getRight().get()),
-                ReceiveActionPower::receiveItemEvent,
+                ReceiveActionPower::receiveItemAction,
                 io.github.apace100.apoli.power.factory.action.ItemActions.ALIASES
             )
         );

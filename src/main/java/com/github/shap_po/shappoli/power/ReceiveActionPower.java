@@ -48,28 +48,28 @@ public class ReceiveActionPower extends Power {
     }
 
 
-    public void receiveBientityEvent(Pair<Entity, Entity> entities) {
+    public void receiveBientityAction(Pair<Entity, Entity> entities) {
         if (bientityCondition == null || bientityCondition.test(entities)) {
             maybeAccept(bientityAction, entities);
-            receiveAnyEvent();
+            receiveAnyAction();
         }
     }
 
-    public void receiveEntityEvent(Entity entity) {
+    public void receiveEntityAction(Entity entity) {
         if (entityCondition == null || entityCondition.test(entity)) {
             maybeAccept(entityAction, entity);
-            receiveAnyEvent();
+            receiveAnyAction();
         }
     }
 
-    public void receiveItemEvent(Pair<World, StackReference> worldAndStack) {
+    public void receiveItemAction(Pair<World, StackReference> worldAndStack) {
         if (itemCondition == null || itemCondition.test(new Pair<>(worldAndStack.getLeft(), worldAndStack.getRight().get()))) {
             maybeAccept(itemAction, worldAndStack);
-            receiveAnyEvent();
+            receiveAnyAction();
         }
     }
 
-    public void receiveAnyEvent() {
+    public void receiveAnyAction() {
         maybeAccept(action, this.entity);
     }
 

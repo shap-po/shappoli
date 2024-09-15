@@ -28,7 +28,7 @@ import java.util.stream.Stream;
 
 public class SuppressPowerAction {
     public static void action(SerializableData.Instance data, Pair<Entity, Entity> actorAndTarget) {
-        List<PowerTypeReference<?>> ignoredPowers = MiscUtil.listFromData(data, null, "ignored_powers");
+        List<PowerTypeReference<?>> ignoredPowers = MiscUtil.listFromData(data, "ignored_power", "ignored_powers");
         PowerHolderComponent component = PowerHolderComponent.KEY.get(actorAndTarget.getRight());
 
         Iterator<Power> powers = getPowers(data, component).iterator();
@@ -52,7 +52,7 @@ public class SuppressPowerAction {
         List<PowerTypeReference<?>> powerRefs = MiscUtil.listFromData(data, "power", "powers");
         Stream<Power> powersFromRefs = powerRefs.stream().map(component::getPower);
 
-        List<Identifier> powerIds = MiscUtil.listFromData(data, "power_id", "power_ids");
+        List<Identifier> powerIds = MiscUtil.listFromData(data, "power_type", "power_types");
         Stream<Power> powersFromIds = PowerHolderComponentUtil.getPowers(component, powerIds);
 
         List<Identifier> powerSources = MiscUtil.listFromData(data, "power_source", "power_sources");
@@ -109,16 +109,20 @@ public class SuppressPowerAction {
     public static ActionFactory<Pair<Entity, Entity>> getFactory() {
         return new ActionFactory<>(Shappoli.identifier("suppress_power"),
             new SerializableData()
-                .add("power", ApoliDataTypes.POWER_TYPE, null) // power type reference, example: my_namespace:my_power
+                .add("power", ApoliDataTypes.POWER_TYPE, null) // power reference, example: my_namespace:my_power
                 .add("powers", ShappoliDataTypes.POWER_TYPES, null)
 
-                .add("power_id", SerializableDataTypes.IDENTIFIER, null) // power identifier, example: apoli:action_on_hit
+                .add("power_id", SerializableDataTypes.IDENTIFIER, null) // power type, example: apoli:action_on_hit
                 .add("power_ids", SerializableDataTypes.IDENTIFIERS, null)
+                .addFunctionedDefault("power_type", SerializableDataTypes.IDENTIFIER, data -> data.get("power_id"))
+                .addFunctionedDefault("power_types", SerializableDataTypes.IDENTIFIERS, data -> data.get("power_ids"))
 
                 .add("power_source", SerializableDataTypes.IDENTIFIER, null) // power source identifier, example: apoli:command
                 .add("power_sources", SerializableDataTypes.IDENTIFIERS, null)
 
-                .add("ignored_powers", ShappoliDataTypes.POWER_TYPES, null) // power type references to ignore
+                .add("ignored_power", ApoliDataTypes.POWER_TYPE, null) // power reference to ignore
+                .add("ignored_powers", ShappoliDataTypes.POWER_TYPES, null)
+
                 .add("duration", SerializableDataTypes.POSITIVE_INT)
                 .add("bientity_action", ApoliDataTypes.BIENTITY_ACTION, null)
 

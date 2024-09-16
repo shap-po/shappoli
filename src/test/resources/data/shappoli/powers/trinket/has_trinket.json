@@ -17,7 +17,9 @@
       "item_condition": {
         "type": "apoli:empty",
         "inverted": true
-      }
+      },
+      "comparison": ">=",
+      "compare_to": 2
     },
     "if_action": {
       "type": "apoli:execute_command",

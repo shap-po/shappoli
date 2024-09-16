@@ -1,0 +1,6 @@
+{
+  "type": "shappoli:prevent_trinket_equip",
+  "item_condition": {
+    "type": "shappoli:equipped_trinket"
+  }
+}

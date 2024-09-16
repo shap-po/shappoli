@@ -1,0 +1,25 @@
+{
+  "type": "apoli:active_self",
+  "key": "key.attack",
+
+  "entity_action": {
+    "type": "apoli:if_else",
+    "condition": {
+      "type": "apoli:inventory",
+      "slot": "weapon.mainhand",
+      "item_condition": {
+        "type": "shappoli:equipped_trinket_count",
+        "comparison": ">=",
+        "compare_to": 2
+      }
+    },
+    "if_action": {
+      "type": "apoli:execute_command",
+      "command": "say Trinket is equipped"
+    },
+    "else_action": {
+      "type": "apoli:execute_command",
+      "command": "say Trinket is not equipped"
+    }
+  }
+}

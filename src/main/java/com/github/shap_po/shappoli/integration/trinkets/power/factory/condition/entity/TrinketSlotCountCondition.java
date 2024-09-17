@@ -13,7 +13,7 @@ import io.github.apace100.calio.data.SerializableDataTypes;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 
-public class HasTrinketSlotCondition {
+public class TrinketSlotCountCondition {
     public static boolean condition(SerializableData.Instance data, Entity entity) {
         if (!(entity instanceof LivingEntity livingEntity)) {
             return false;
@@ -25,17 +25,17 @@ public class HasTrinketSlotCondition {
 
     public static ConditionFactory<Entity> getFactory() {
         ConditionFactory<Entity> factory = new ConditionFactory<>(
-            Shappoli.identifier("has_trinket_slot"),
+            Shappoli.identifier("trinket_slot_count"),
             new SerializableData()
                 .add("slot", ShappoliTrinketsDataTypes.TRINKET_SLOT, null)
                 .add("slots", ShappoliTrinketsDataTypes.TRINKET_SLOTS, null)
                 .add("comparison", ApoliDataTypes.COMPARISON, Comparison.GREATER_THAN)
                 .add("compare_to", SerializableDataTypes.INT, 0)
             ,
-            HasTrinketSlotCondition::condition
+            TrinketSlotCountCondition::condition
         );
 
-        EntityConditions.ALIASES.addPathAlias("has_trinket_slots", factory.getSerializerId().getPath());
+        EntityConditions.ALIASES.addPathAlias("trinket_slots_count", factory.getSerializerId().getPath());
         return factory;
     }
 }

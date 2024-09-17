@@ -5,7 +5,7 @@
   "entity_action": {
     "type": "apoli:if_else",
     "condition": {
-      "type": "shappoli:has_trinket_slot",
+      "type": "shappoli:trinket_slot_count",
       "slot": {
         "group": "shappoli"
       }

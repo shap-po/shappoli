@@ -10,7 +10,7 @@ import net.minecraft.util.Pair;
 
 import java.util.function.Consumer;
 
-public class SelfBientityAction {
+public class SelfBientityActionAction {
     public static void action(SerializableData.Instance data, Entity entity) {
         Consumer<Pair<Entity, Entity>> biEntityAction = data.get("action");
         if (biEntityAction != null) {
@@ -25,9 +25,10 @@ public class SelfBientityAction {
                 .add("bientity_action", ApoliDataTypes.BIENTITY_ACTION, null)
                 .addFunctionedDefault("action", ApoliDataTypes.BIENTITY_ACTION, data -> data.get("bientity_action"))
             ,
-            SelfBientityAction::action
+            SelfBientityActionAction::action
         );
 
+        EntityActions.ALIASES.addPathAlias("self_bientity", factory.getSerializerId().getPath());
         EntityActions.ALIASES.addPathAlias("bientity_action", factory.getSerializerId().getPath());
         return factory;
     }

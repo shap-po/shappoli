@@ -15,7 +15,7 @@ public abstract class EntityMixin {
         PowerHolderComponent.withPowers(
             (Entity) (Object) this,
             ActionOnEntityCollisionPower.class,
-            ActionOnEntityCollisionPower::doesApply,
+            null,
             ActionOnEntityCollisionPower::apply
         );
     }

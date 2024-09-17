@@ -32,14 +32,11 @@ public class ActionOnEntityCollisionPower extends CooldownPower {
         this.bientityCondition = bientityCondition;
     }
 
-    public boolean doesApply() {
-        return this.canUse();
-    }
-
     public void apply() {
         List<Entity> collidingEntities = getCollidingEntities();
         for (Entity other : collidingEntities) {
-            if (!PreventEntityCollisionPower.doesApply(entity, other) &&
+            if (this.canUse() &&
+                !PreventEntityCollisionPower.doesApply(entity, other) &&
                 (bientityCondition == null || bientityCondition.test(new Pair<>(entity, other)))
             ) {
                 bientityAction.accept(new Pair<>(entity, other));

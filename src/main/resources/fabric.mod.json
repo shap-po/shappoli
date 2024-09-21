@@ -8,7 +8,16 @@
     "Shap"
   ],
   "contact": {
-    "homepage": "https://github.com/shap-po/shappoli"
+    "homepage": "https://modrinth.com/mod/shappoli",
+    "sources": "https://github.com/shap-po/shappoli",
+    "issues": "https://github.com/shap-po/shappoli/issues"
+  },
+  "custom": {
+    "modmenu": {
+      "links": {
+        "modmenu.wiki": "https://shappoli.readthedocs.io/en/latest"
+      }
+    }
   },
   "license": "MIT",
   "icon": "assets/shappoli/icon.png",
@@ -27,8 +36,5 @@
     "java": ">=17",
     "fabric-api": "*",
     "apoli": "*"
-  },
-  "suggests": {
-    "trinkets": "*"
   }
 }

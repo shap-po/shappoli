@@ -1,0 +1,48 @@
+{
+  "type": "apoli:multiple",
+
+  "suppressor": {
+    "type": "shappoli:suppress_power",
+    "power": "*:*_power_active1",
+    "powers": [
+      "*:*_power_hit",
+      "*:suppress_power_multiple_suppressed"
+    ],
+    "condition": {
+      "type": "apoli:on_block",
+      "block_condition": {
+        "type": "apoli:block",
+        "block": "minecraft:stone"
+      }
+    }
+  },
+
+  "power_hit": {
+    "type": "apoli:action_on_hit",
+    "bientity_action": {
+      "type": "apoli:actor_action",
+      "action": {
+        "type": "apoli:execute_command",
+        "command": "say Hit"
+      }
+    }
+  },
+
+  "power_active1": {
+    "type": "apoli:active_self",
+    "key": "key.attack",
+    "entity_action": {
+      "type": "apoli:execute_command",
+      "command": "say Active 1"
+    }
+  },
+
+  "power_active2": {
+    "type": "apoli:active_self",
+    "key": "key.attack",
+    "entity_action": {
+      "type": "apoli:execute_command",
+      "command": "say Active 2"
+    }
+  }
+}

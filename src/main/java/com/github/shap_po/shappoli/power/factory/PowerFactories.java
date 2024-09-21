@@ -1,9 +1,6 @@
 package com.github.shap_po.shappoli.power.factory;
 
-import com.github.shap_po.shappoli.power.ActionOnEntityCollisionPower;
-import com.github.shap_po.shappoli.power.ModifyVillagerReputationPower;
-import com.github.shap_po.shappoli.power.ReceiveActionPower;
-import com.github.shap_po.shappoli.power.ReceiveConditionPower;
+import com.github.shap_po.shappoli.power.*;
 import io.github.apace100.apoli.power.factory.PowerFactory;
 import io.github.apace100.apoli.power.factory.PowerFactorySupplier;
 import io.github.apace100.apoli.registry.ApoliRegistries;
@@ -15,6 +12,7 @@ public class PowerFactories {
         register(ModifyVillagerReputationPower::createFactory);
         register(ReceiveActionPower::createFactory);
         register(ReceiveConditionPower::createFactory);
+        register(SuppressPowerPower::createFactory);
     }
 
     private static void register(PowerFactory<?> powerFactory) {

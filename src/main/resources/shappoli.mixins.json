@@ -13,7 +13,9 @@
     "integration.trinkets.SlotEntityAttributeAccessor",
     "integration.trinkets.SurvivalTrinketSlotMixin",
     "integration.trinkets.TrinketInventoryMixin",
-    "integration.trinkets.TrinketSlotMixin",
+    "integration.trinkets.TrinketSlotMixin"
+  ],
+  "client": [
     "integration.wildfire_gender.GenderLayerMixin"
   ],
   "injectors": {

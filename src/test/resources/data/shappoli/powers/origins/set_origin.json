@@ -1,0 +1,23 @@
+{
+  "type": "apoli:multiple",
+
+  "set": {
+    "type": "apoli:active_self",
+    "key": "key.attack",
+
+    "entity_action": {
+      "type": "shappoli:set_origin",
+      "layer": "origins:origin",
+      "origin": "origins:avian"
+    }
+  },
+
+  "reset": {
+    "type": "apoli:action_on_block_place",
+    "entity_action": {
+      "type": "shappoli:set_origin",
+      "layer": "origins:origin",
+      "origin": "origins:human"
+    }
+  }
+}

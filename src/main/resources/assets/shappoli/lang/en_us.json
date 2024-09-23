@@ -1,0 +1,14 @@
+{
+  "commands.shappoli.shappoli.trinkets.fail.not_living_entity": "%s is not a living entity.",
+  "commands.shappoli.shappoli.trinkets.fail.no_trinket_component": "%s doesn't have a TrinketComponent.",
+  "commands.shappoli.shappoli.trinkets.fail.no_group": "%s doesn't have a group named %s.",
+  "commands.shappoli.shappoli.trinkets.fail.no_slot": "%s doesn't have a slot %s/%s.",
+
+  "commands.shappoli.shappoli.trinkets.modify_slot_count": "Modified slot count for %s in %s/%s to %s.",
+  "commands.shappoli.shappoli.trinkets.set_slot_count": "Set slot count modifier for %s in %s/%s to %s. Total slots: %s.",
+  "commands.shappoli.shappoli.trinkets.reset_slot_count": "Reset slot count for %s in %s/%s to %s.",
+  "commands.shappoli.shappoli.trinkets.get_slot_count": "%s has %s trinket slots in %s/%s.",
+
+  "commands.shappoli.shappoli.trinkets.clear_slot_modifiers.all": "Cleared all slot modifiers for %s.",
+  "commands.shappoli.shappoli.trinkets.clear_slot_modifiers.slot": "Cleared slot modifiers for %s in %s/%s."
+}

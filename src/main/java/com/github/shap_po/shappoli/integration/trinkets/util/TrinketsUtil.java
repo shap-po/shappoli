@@ -1,16 +1,23 @@
 package com.github.shap_po.shappoli.integration.trinkets.util;
 
 import com.github.shap_po.shappoli.integration.trinkets.data.TrinketSlotData;
-import dev.emi.trinkets.api.SlotReference;
-import dev.emi.trinkets.api.SlotType;
-import dev.emi.trinkets.api.TrinketsApi;
+import dev.emi.trinkets.TrinketPlayerScreenHandler;
+import dev.emi.trinkets.TrinketsNetwork;
+import dev.emi.trinkets.api.*;
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.inventory.StackReference;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.network.PacketByteBuf;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Pair;
 import net.minecraft.world.World;
 
 import java.util.List;
+import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
@@ -85,5 +92,37 @@ public class TrinketsUtil {
      */
     public static Stream<SlotReference> getSlots(LivingEntity entity, List<TrinketSlotData> slots) {
         return getSlots(entity).filter(slot -> slots.stream().anyMatch(trinketSlotData -> trinketSlotData.test(slot)));
+    }
+
+    /**
+     * Based on the ${@link dev.emi.trinkets.mixin.LivingEntityMixin#tick()} method.
+     */
+    public static void updateInventories(TrinketComponent trinket) {
+        LivingEntity entity = trinket.getEntity();
+        Set<TrinketInventory> inventoriesToSend = trinket.getTrackingUpdates();
+        if (!inventoriesToSend.isEmpty()) {
+            PacketByteBuf buf = PacketByteBufs.create();
+            buf.writeInt(entity.getId());
+
+            NbtCompound tag = new NbtCompound();
+            for (TrinketInventory trinketInventory : inventoriesToSend) {
+                trinketInventory.update(); // Manually update the inventory to ensure the state is correct
+                tag.put(getSlotId(trinketInventory.getSlotType()), trinketInventory.getSyncTag());
+            }
+            buf.writeNbt(tag);
+            buf.writeNbt(new NbtCompound()); // Empty tag for the trinket stacks
+
+            for (ServerPlayerEntity player : PlayerLookup.tracking(entity)) {
+                ServerPlayNetworking.send(player, TrinketsNetwork.SYNC_INVENTORY, buf);
+            }
+
+            // network handler might be null on server start
+            if (entity instanceof ServerPlayerEntity serverPlayer && serverPlayer.networkHandler != null) {
+                ServerPlayNetworking.send(serverPlayer, TrinketsNetwork.SYNC_INVENTORY, buf);
+                ((TrinketPlayerScreenHandler) serverPlayer.playerScreenHandler).trinkets$updateTrinketSlots(false);
+            }
+
+            inventoriesToSend.clear();
+        }
     }
 }

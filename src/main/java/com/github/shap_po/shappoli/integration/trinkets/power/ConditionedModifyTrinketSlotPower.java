@@ -18,16 +18,18 @@ import java.util.List;
  */
 public class ConditionedModifyTrinketSlotPower extends ModifyTrinketSlotPower {
     private final int tickRate;
+    private final boolean applyOnAdded;
 
-    public ConditionedModifyTrinketSlotPower(PowerType<?> type, LivingEntity entity, int tickRate) {
+    public ConditionedModifyTrinketSlotPower(PowerType<?> type, LivingEntity entity, int tickRate, boolean applyOnAdded) {
         super(type, entity);
         this.tickRate = tickRate;
         this.setTicking(true);
+        this.applyOnAdded = applyOnAdded;
     }
 
     @Override
     public void onAdded() {
-        if (this.isActive()) {
+        if (this.applyOnAdded && this.isActive()) {
             super.onAdded();
         }
     }
@@ -51,9 +53,10 @@ public class ConditionedModifyTrinketSlotPower extends ModifyTrinketSlotPower {
                 .add("modifier", ShappoliTrinketsDataTypes.SLOT_ENTITY_ATTRIBUTE_MODIFIER, null)
                 .add("modifiers", ShappoliTrinketsDataTypes.SLOT_ENTITY_ATTRIBUTE_MODIFIERS, null)
                 .add("tick_rate", SerializableDataTypes.POSITIVE_INT, 20)
+                .add("apply_on_added", SerializableDataTypes.BOOLEAN, true)
             ,
             data -> (type, player) -> {
-                ConditionedModifyTrinketSlotPower power = new ConditionedModifyTrinketSlotPower(type, player, data.getInt("tick_rate"));
+                ConditionedModifyTrinketSlotPower power = new ConditionedModifyTrinketSlotPower(type, player, data.getInt("tick_rate"), data.getBoolean("apply_on_added"));
                 data.ifPresent("modifier", power::addModifier);
                 data.<List<SlotEntityAttributeModifier>>ifPresent("modifiers", mods -> mods.forEach(power::addModifier));
                 return power;

@@ -3,27 +3,21 @@ package com.github.shap_po.shappoli.integration.trinkets.power.type;
 import com.github.shap_po.shappoli.Shappoli;
 import com.github.shap_po.shappoli.integration.trinkets.data.ShappoliTrinketsDataTypes;
 import com.github.shap_po.shappoli.integration.trinkets.data.SlotEntityAttributeModifier;
+import com.github.shap_po.shappoli.integration.trinkets.util.TrinketsUtil;
 import com.github.shap_po.shappoli.util.MiscUtil;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
-import dev.emi.trinkets.TrinketPlayerScreenHandler;
-import dev.emi.trinkets.api.TrinketComponent;
-import dev.emi.trinkets.api.TrinketInventory;
 import dev.emi.trinkets.api.TrinketsApi;
-import dev.emi.trinkets.payload.SyncInventoryPayload;
 import io.github.apace100.apoli.power.Power;
 import io.github.apace100.apoli.power.factory.PowerTypeFactory;
 import io.github.apace100.apoli.power.factory.PowerTypes;
 import io.github.apace100.apoli.power.type.PowerType;
 import io.github.apace100.calio.data.SerializableData;
-import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.server.network.ServerPlayerEntity;
 
-import java.util.*;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Based on the {@link io.github.apace100.apoli.power.type.AttributePowerType}
@@ -60,7 +54,7 @@ public class ModifyTrinketSlotPowerType extends PowerType {
 
         TrinketsApi.getTrinketComponent(entity).ifPresent(trinket -> {
             trinket.addTemporaryModifiers(getModifiersMap());
-            updateInventories(trinket);
+            TrinketsUtil.updateInventories(trinket);
         });
     }
 
@@ -76,7 +70,7 @@ public class ModifyTrinketSlotPowerType extends PowerType {
 
         TrinketsApi.getTrinketComponent(entity).ifPresent(trinket -> {
             trinket.removeModifiers(getModifiersMap());
-            updateInventories(trinket);
+            TrinketsUtil.updateInventories(trinket);
         });
     }
 
@@ -84,31 +78,6 @@ public class ModifyTrinketSlotPowerType extends PowerType {
         removeTempMods(false);
     }
 
-    /**
-     * Based on the ${@link dev.emi.trinkets.mixin.LivingEntityMixin#tick()} method.
-     */
-    private void updateInventories(TrinketComponent trinket) {
-        Set<TrinketInventory> inventoriesToSend = trinket.getTrackingUpdates();
-        if (!inventoriesToSend.isEmpty()) {
-            Map<String, NbtCompound> map = new HashMap<>();
-            for (TrinketInventory trinketInventory : inventoriesToSend) {
-                map.put(trinketInventory.getSlotType().getId(), trinketInventory.getSyncTag());
-            }
-            SyncInventoryPayload packet = new SyncInventoryPayload(entity.getId(), new HashMap<>(), map);
-            for (ServerPlayerEntity player : PlayerLookup.tracking(entity)) {
-                ServerPlayNetworking.send(player, packet);
-            }
-
-            if (entity instanceof ServerPlayerEntity serverPlayer) {
-                ServerPlayNetworking.send(serverPlayer, packet);
-
-                if (!inventoriesToSend.isEmpty()) {
-                    ((TrinketPlayerScreenHandler) serverPlayer.playerScreenHandler).trinkets$updateTrinketSlots(false);
-                }
-            }
-            inventoriesToSend.clear();
-        }
-    }
 
     private Multimap<String, EntityAttributeModifier> getModifiersMap() {
         Multimap<String, EntityAttributeModifier> modifiersMap = HashMultimap.create();

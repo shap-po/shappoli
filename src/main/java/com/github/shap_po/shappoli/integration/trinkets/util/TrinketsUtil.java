@@ -1,16 +1,23 @@
 package com.github.shap_po.shappoli.integration.trinkets.util;
 
 import com.github.shap_po.shappoli.integration.trinkets.data.TrinketSlotData;
-import dev.emi.trinkets.api.SlotReference;
-import dev.emi.trinkets.api.SlotType;
-import dev.emi.trinkets.api.TrinketsApi;
+import dev.emi.trinkets.TrinketPlayerScreenHandler;
+import dev.emi.trinkets.api.*;
+import dev.emi.trinkets.payload.SyncInventoryPayload;
+import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.inventory.StackReference;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Pair;
 import net.minecraft.world.World;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
@@ -85,5 +92,33 @@ public class TrinketsUtil {
      */
     public static Stream<SlotReference> getSlots(LivingEntity entity, List<TrinketSlotData> slots) {
         return getSlots(entity).filter(slot -> slots.stream().anyMatch(trinketSlotData -> trinketSlotData.test(slot)));
+    }
+
+    /**
+     * Based on the ${@link dev.emi.trinkets.mixin.LivingEntityMixin#tick()} method.
+     */
+    public static void updateInventories(TrinketComponent trinket) {
+        LivingEntity entity = trinket.getEntity();
+
+        Set<TrinketInventory> inventoriesToSend = trinket.getTrackingUpdates();
+        if (!inventoriesToSend.isEmpty()) {
+            Map<String, NbtCompound> map = new HashMap<>();
+            for (TrinketInventory trinketInventory : inventoriesToSend) {
+                map.put(trinketInventory.getSlotType().getId(), trinketInventory.getSyncTag());
+            }
+            SyncInventoryPayload packet = new SyncInventoryPayload(entity.getId(), new HashMap<>(), map);
+            for (ServerPlayerEntity player : PlayerLookup.tracking(entity)) {
+                ServerPlayNetworking.send(player, packet);
+            }
+
+            if (entity instanceof ServerPlayerEntity serverPlayer) {
+                ServerPlayNetworking.send(serverPlayer, packet);
+
+                if (!inventoriesToSend.isEmpty()) {
+                    ((TrinketPlayerScreenHandler) serverPlayer.playerScreenHandler).trinkets$updateTrinketSlots(false);
+                }
+            }
+            inventoriesToSend.clear();
+        }
     }
 }

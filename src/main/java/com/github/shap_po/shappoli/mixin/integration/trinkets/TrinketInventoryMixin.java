@@ -1,5 +1,6 @@
 package com.github.shap_po.shappoli.mixin.integration.trinkets;
 
+import com.github.shap_po.shappoli.integration.trinkets.access.SyncingTrinketInventory;
 import com.github.shap_po.shappoli.integration.trinkets.power.ActionOnTrinketChangePower;
 import com.github.shap_po.shappoli.util.InventoryUtil;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
@@ -17,7 +18,20 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(TrinketInventory.class)
-public class TrinketInventoryMixin {
+public class TrinketInventoryMixin implements SyncingTrinketInventory {
+    @Unique
+    private boolean shappoli$isSyncing = false;
+
+    @Override
+    public void shappoli$setSyncing(boolean syncing) {
+        shappoli$isSyncing = syncing;
+    }
+
+    @Override
+    public boolean shappoli$isSyncing() {
+        return shappoli$isSyncing;
+    }
+
     @ModifyReturnValue(method = "getStack", at = @At("RETURN"))
     private ItemStack shappoli$setHolder(ItemStack stack) {
         InventoryUtil.setHolder(stack, shappoli$getEntity());

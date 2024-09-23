@@ -1,6 +1,7 @@
 package com.github.shap_po.shappoli.integration.trinkets.power;
 
 import com.github.shap_po.shappoli.Shappoli;
+import com.github.shap_po.shappoli.integration.trinkets.access.SyncingTrinketInventory;
 import com.github.shap_po.shappoli.integration.trinkets.data.ShappoliTrinketsDataTypes;
 import com.github.shap_po.shappoli.integration.trinkets.data.TrinketSlotData;
 import com.github.shap_po.shappoli.integration.trinkets.util.TrinketsUtil;
@@ -52,8 +53,7 @@ public class ActionOnTrinketChangePower extends Power {
     }
 
     public boolean doesApply(SlotReference slotReference, ItemStack item) {
-        return (entity.age > 0 && // Prevents the power from being applied during entity initialization
-            (slots.isEmpty() || slots.stream().anyMatch(slot -> slot.test(slotReference))) &&
+        return ((slots.isEmpty() || slots.stream().anyMatch(slot -> slot.test(slotReference))) &&
             (itemCondition == null || itemCondition.test(TrinketsUtil.getItemConditionPair(entity, item)))
         );
     }
@@ -77,6 +77,10 @@ public class ActionOnTrinketChangePower extends Power {
     }
 
     public static void handleTrinketChange(LivingEntity entity, TrinketInventory inventory, ItemStack stack, int slot, boolean isEquipping) {
+        if (entity.getWorld().isClient || ((SyncingTrinketInventory) inventory).shappoli$isSyncing()) {
+            return;
+        }
+
         SlotReference ref = new SlotReference(inventory, slot);
         PowerHolderComponent.withPowers(entity, ActionOnTrinketChangePower.class,
             p -> p.doesApply(ref, stack),

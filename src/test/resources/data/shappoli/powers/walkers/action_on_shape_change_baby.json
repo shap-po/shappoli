@@ -1,5 +1,5 @@
 {
-  "type": "shappoli:action_on_morph",
+  "type": "shappoli:action_on_shape_change",
   "bientity_action": {
     "type": "apoli:target_action",
     "action": {

@@ -1,6 +1,6 @@
 {
   "type": "apoli:action_on_block_place",
   "entity_action": {
-    "type": "shappoli:morph"
+    "type": "shappoli:change_shape"
   }
 }

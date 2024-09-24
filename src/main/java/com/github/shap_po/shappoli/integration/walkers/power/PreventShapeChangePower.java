@@ -13,10 +13,10 @@ import net.minecraft.util.Pair;
 
 import java.util.function.Predicate;
 
-public class PreventMorphPower extends Power {
+public class PreventShapeChangePower extends Power {
     private final Predicate<Pair<Entity, Entity>> bientityCondition;
 
-    public PreventMorphPower(
+    public PreventShapeChangePower(
         PowerType<?> type,
         LivingEntity entity,
         Predicate<Pair<Entity, Entity>> bientityCondition
@@ -30,16 +30,16 @@ public class PreventMorphPower extends Power {
     }
 
     public static PowerFactory createFactory() {
-        PowerFactory<Power> factory = new PowerFactory<>(Shappoli.identifier("prevent_morph"),
+        PowerFactory<Power> factory = new PowerFactory<>(Shappoli.identifier("prevent_shape_change"),
             new SerializableData()
                 .add("bientity_condition", ApoliDataTypes.BIENTITY_CONDITION, null)
             ,
-            data -> (type, player) -> new PreventMorphPower(type, player,
+            data -> (type, player) -> new PreventShapeChangePower(type, player,
                 data.get("bientity_condition")
             )
         ).allowCondition();
 
-        PowerFactories.ALIASES.addPathAlias("prevent_shape_change", factory.getSerializerId().getPath());
+        PowerFactories.ALIASES.addPathAlias("prevent_morph", factory.getSerializerId().getPath());
         return factory;
     }
 }

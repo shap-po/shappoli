@@ -19,6 +19,6 @@
   },
 
   "bientity_action": {
-    "type": "shappoli:morph"
+    "type": "shappoli:change_shape"
   }
 }

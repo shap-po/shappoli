@@ -1,5 +1,5 @@
 {
-  "type": "shappoli:action_on_morph",
+  "type": "shappoli:action_on_shape_change",
   "bientity_action": {
     "type": "apoli:and",
     "actions": [
@@ -7,14 +7,14 @@
         "type": "apoli:actor_action",
         "action": {
           "type": "apoli:execute_command",
-          "command": "say I just morphed!"
+          "command": "say I just changed shape!"
         }
       },
       {
         "type": "apoli:target_action",
         "action": {
           "type": "apoli:execute_command",
-          "command": "say I was morphed into!"
+          "command": "say I was changed shape into!"
         }
       }
     ]

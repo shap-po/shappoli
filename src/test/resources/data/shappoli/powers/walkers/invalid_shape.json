@@ -3,7 +3,7 @@
   "key": "key.attack",
 
   "entity_action": {
-    "type": "shappoli:morph",
-    "shape": "minecraft:pig"
+    "type": "shappoli:change_shape",
+    "shape": "invalid_entity"
   }
 }

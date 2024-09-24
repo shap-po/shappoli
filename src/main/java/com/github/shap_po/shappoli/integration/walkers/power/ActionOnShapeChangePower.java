@@ -14,11 +14,11 @@ import net.minecraft.util.Pair;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
-public class ActionOnMorphPower extends Power {
+public class ActionOnShapeChangePower extends Power {
     private final Consumer<Pair<Entity, Entity>> bientityAction;
     private final Predicate<Pair<Entity, Entity>> bientityCondition;
 
-    public ActionOnMorphPower(
+    public ActionOnShapeChangePower(
         PowerType<?> type,
         LivingEntity entity,
         Consumer<Pair<Entity, Entity>> bientityAction,
@@ -39,12 +39,12 @@ public class ActionOnMorphPower extends Power {
 
     public static PowerFactory createFactory() {
         PowerFactory<Power> factory = new PowerFactory<>(
-            Shappoli.identifier("action_on_morph"),
+            Shappoli.identifier("action_on_shape_change"),
             new SerializableData()
                 .add("bientity_action", ApoliDataTypes.BIENTITY_ACTION)
                 .add("bientity_condition", ApoliDataTypes.BIENTITY_CONDITION, null)
             ,
-            data -> (type, player) -> new ActionOnMorphPower(
+            data -> (type, player) -> new ActionOnShapeChangePower(
                 type,
                 player,
                 data.get("bientity_action"),
@@ -52,7 +52,7 @@ public class ActionOnMorphPower extends Power {
             )
         ).allowCondition();
 
-        PowerFactories.ALIASES.addPathAlias("action_on_shape_change", factory.getSerializerId().getPath());
+        PowerFactories.ALIASES.addPathAlias("action_on_morph", factory.getSerializerId().getPath());
         return factory;
     }
 }

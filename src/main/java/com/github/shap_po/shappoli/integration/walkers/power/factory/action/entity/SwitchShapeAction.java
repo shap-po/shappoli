@@ -14,7 +14,7 @@ import net.minecraft.util.Identifier;
 
 import java.util.function.Consumer;
 
-public class MorphAction {
+public class SwitchShapeAction {
     public static void action(SerializableData.Instance data, Entity entity) {
         if (!(entity instanceof ServerPlayerEntity player)) {
             return;
@@ -32,16 +32,17 @@ public class MorphAction {
     }
 
     public static ActionFactory<Entity> getFactory() {
-        ActionFactory<Entity> factory = new ActionFactory<>(Shappoli.identifier("morph"),
+        ActionFactory<Entity> factory = new ActionFactory<>(Shappoli.identifier("switch_shape"),
             new SerializableData()
                 .add("shape", SerializableDataTypes.IDENTIFIER, null)
                 .add("nbt", SerializableDataTypes.NBT, null)
                 .add("action_on_success", ApoliDataTypes.ENTITY_ACTION, null)
             ,
-            MorphAction::action
+            SwitchShapeAction::action
         );
 
-        EntityActions.ALIASES.addPathAlias("switch_shape", factory.getSerializerId().getPath());
+        EntityActions.ALIASES.addPathAlias("change_shape", factory.getSerializerId().getPath());
+        EntityActions.ALIASES.addPathAlias("morph", factory.getSerializerId().getPath());
         return factory;
     }
 }

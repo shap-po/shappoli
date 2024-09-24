@@ -1,7 +1,7 @@
 package com.github.shap_po.shappoli.mixin.integration.walkers;
 
-import com.github.shap_po.shappoli.integration.walkers.power.ActionOnMorphPower;
-import com.github.shap_po.shappoli.integration.walkers.power.PreventMorphPower;
+import com.github.shap_po.shappoli.integration.walkers.power.ActionOnShapeChangePower;
+import com.github.shap_po.shappoli.integration.walkers.power.PreventShapeChangePower;
 import io.github.apace100.apoli.component.PowerHolderComponent;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -16,7 +16,7 @@ public class PlayerShapeMixin {
     @Inject(method = "updateShapes", at = @At(value = "HEAD"), cancellable = true)
     private static void shappoli$preventShapeChange(ServerPlayerEntity player, LivingEntity entity, CallbackInfoReturnable<Boolean> cir) {
         LivingEntity shape = entity == null ? player : entity;
-        if (PowerHolderComponent.hasPower(player, PreventMorphPower.class, p -> p.doesApply(shape))) {
+        if (PowerHolderComponent.hasPower(player, PreventShapeChangePower.class, p -> p.doesApply(shape))) {
             cir.setReturnValue(false);
         }
     }
@@ -25,7 +25,7 @@ public class PlayerShapeMixin {
     private static void shappoli$onShapeChange(ServerPlayerEntity player, LivingEntity entity, CallbackInfoReturnable<Boolean> cir) {
         LivingEntity shape = entity == null ? player : entity;
         if (cir.getReturnValue()) {
-            PowerHolderComponent.withPowers(player, ActionOnMorphPower.class, p -> p.doesApply(shape), p -> p.apply(shape));
+            PowerHolderComponent.withPowers(player, ActionOnShapeChangePower.class, p -> p.doesApply(shape), p -> p.apply(shape));
         }
     }
 }

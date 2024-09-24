@@ -1,5 +1,5 @@
 {
-  "type": "shappoli:prevent_morph",
+  "type": "shappoli:prevent_shape_change",
   "bientity_condition": {
     "type": "apoli:target_condition",
     "condition": {

@@ -1,6 +1,6 @@
 package com.github.shap_po.shappoli.integration.walkers.util;
 
-import com.github.shap_po.shappoli.integration.walkers.power.ActionOnMorphPower;
+import com.github.shap_po.shappoli.integration.walkers.power.ActionOnShapeChangePower;
 import io.github.apace100.apoli.component.PowerHolderComponent;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -34,7 +34,7 @@ public class WalkersUtil {
         }
 
         ((PlayerDataProvider) player).walkers$updateShapes(entityCopy);
-        PowerHolderComponent.withPowers(player, ActionOnMorphPower.class, p -> p.doesApply(entityCopy), p -> p.apply(entityCopy));
+        PowerHolderComponent.withPowers(player, ActionOnShapeChangePower.class, p -> p.doesApply(entityCopy), p -> p.apply(entityCopy));
         return true;
     }
 
@@ -57,7 +57,7 @@ public class WalkersUtil {
 
     public static boolean switchShape(ServerPlayerEntity player) {
         ((PlayerDataProvider) player).walkers$updateShapes(null);
-        PowerHolderComponent.withPowers(player, ActionOnMorphPower.class, p -> p.doesApply(player), p -> p.apply(player));
+        PowerHolderComponent.withPowers(player, ActionOnShapeChangePower.class, p -> p.doesApply(player), p -> p.apply(player));
         return true;
     }
 }

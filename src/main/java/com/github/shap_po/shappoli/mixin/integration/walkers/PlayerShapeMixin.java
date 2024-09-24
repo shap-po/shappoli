@@ -1,7 +1,7 @@
 package com.github.shap_po.shappoli.mixin.integration.walkers;
 
 import com.github.shap_po.shappoli.integration.walkers.power.ActionOnMorphPower;
-import com.github.shap_po.shappoli.integration.walkers.power.PreventMorphingPower;
+import com.github.shap_po.shappoli.integration.walkers.power.PreventMorphPower;
 import io.github.apace100.apoli.component.PowerHolderComponent;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -16,7 +16,7 @@ public class PlayerShapeMixin {
     @Inject(method = "updateShapes", at = @At(value = "HEAD"), cancellable = true)
     private static void shappoli$preventShapeChange(ServerPlayerEntity player, LivingEntity entity, CallbackInfoReturnable<Boolean> cir) {
         LivingEntity shape = entity == null ? player : entity;
-        if (PowerHolderComponent.hasPower(player, PreventMorphingPower.class, p -> p.doesApply(shape))) {
+        if (PowerHolderComponent.hasPower(player, PreventMorphPower.class, p -> p.doesApply(shape))) {
             cir.setReturnValue(false);
         }
     }

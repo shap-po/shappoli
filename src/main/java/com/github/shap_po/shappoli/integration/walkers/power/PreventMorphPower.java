@@ -13,10 +13,10 @@ import net.minecraft.util.Pair;
 
 import java.util.function.Predicate;
 
-public class PreventMorphingPower extends Power {
+public class PreventMorphPower extends Power {
     private final Predicate<Pair<Entity, Entity>> bientityCondition;
 
-    public PreventMorphingPower(
+    public PreventMorphPower(
         PowerType<?> type,
         LivingEntity entity,
         Predicate<Pair<Entity, Entity>> bientityCondition
@@ -30,11 +30,11 @@ public class PreventMorphingPower extends Power {
     }
 
     public static PowerFactory createFactory() {
-        PowerFactory<Power> factory = new PowerFactory<>(Shappoli.identifier("prevent_morphing"),
+        PowerFactory<Power> factory = new PowerFactory<>(Shappoli.identifier("prevent_morph"),
             new SerializableData()
                 .add("bientity_condition", ApoliDataTypes.BIENTITY_CONDITION, null)
             ,
-            data -> (type, player) -> new PreventMorphingPower(type, player,
+            data -> (type, player) -> new PreventMorphPower(type, player,
                 data.get("bientity_condition")
             )
         ).allowCondition();

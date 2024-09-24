@@ -1,5 +1,6 @@
 package com.github.shap_po.shappoli.mixin.integration.walkers;
 
+import com.github.shap_po.shappoli.integration.walkers.power.ActionOnMorphPower;
 import com.github.shap_po.shappoli.integration.walkers.power.PreventMorphingPower;
 import io.github.apace100.apoli.component.PowerHolderComponent;
 import net.minecraft.entity.LivingEntity;
@@ -14,8 +15,17 @@ import tocraft.walkers.api.PlayerShape;
 public class PlayerShapeMixin {
     @Inject(method = "updateShapes", at = @At(value = "HEAD"), cancellable = true)
     private static void shappoli$preventShapeChange(ServerPlayerEntity player, LivingEntity entity, CallbackInfoReturnable<Boolean> cir) {
-        if (PowerHolderComponent.hasPower(player, PreventMorphingPower.class, p -> p.doesApply(entity))) {
+        LivingEntity shape = entity == null ? player : entity;
+        if (PowerHolderComponent.hasPower(player, PreventMorphingPower.class, p -> p.doesApply(shape))) {
             cir.setReturnValue(false);
+        }
+    }
+
+    @Inject(method = "updateShapes", at = @At(value = "RETURN"))
+    private static void shappoli$onShapeChange(ServerPlayerEntity player, LivingEntity entity, CallbackInfoReturnable<Boolean> cir) {
+        LivingEntity shape = entity == null ? player : entity;
+        if (cir.getReturnValue()) {
+            PowerHolderComponent.withPowers(player, ActionOnMorphPower.class, p -> p.doesApply(shape), p -> p.apply(shape));
         }
     }
 }

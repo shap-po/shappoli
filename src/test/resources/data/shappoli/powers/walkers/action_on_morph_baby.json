@@ -1,0 +1,10 @@
+{
+  "type": "shappoli:action_on_morph",
+  "bientity_action": {
+    "type": "apoli:target_action",
+    "action": {
+      "type": "apoli:execute_command",
+      "command": "data modify entity @s Age set value -20"
+    }
+  }
+}

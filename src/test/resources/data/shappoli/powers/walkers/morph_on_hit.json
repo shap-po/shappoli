@@ -1,0 +1,14 @@
+{
+  "type": "apoli:action_on_hit",
+
+  "bientity_condition": {
+    "type": "apoli:target_condition",
+    "condition": {
+      "type": "apoli:living"
+    }
+  },
+
+  "bientity_action": {
+    "type": "shappoli:morph"
+  }
+}

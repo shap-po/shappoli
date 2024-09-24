@@ -1,0 +1,26 @@
+{
+  "type": "apoli:active_self",
+  "key": "key.attack",
+
+  "entity_action": {
+    "type": "apoli:if_else",
+    "condition": {
+      "type": "shappoli:shape_condition",
+      "bientity_condition": {
+        "type": "apoli:target_condition",
+        "condition": {
+          "type": "apoli:entity_type",
+          "entity_type": "minecraft:villager"
+        }
+      }
+    },
+    "if_action": {
+      "type": "apoli:execute_command",
+      "command": "say I am a villager"
+    },
+    "else_action": {
+      "type": "apoli:execute_command",
+      "command": "say I am not a villager"
+    }
+  }
+}

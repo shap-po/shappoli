@@ -16,7 +16,8 @@
     "integration.trinkets.TrinketInventoryMixin",
     "integration.trinkets.TrinketSlotMixin",
     "integration.walkers.PlayerAbilitiesMixin",
-    "integration.walkers.PlayerShapeMixin"
+    "integration.walkers.PlayerShapeMixin",
+    "integration.walkers.ServerNetworkingMixin"
   ],
   "client": [
     "integration.wildfire_gender.GenderLayerMixin"

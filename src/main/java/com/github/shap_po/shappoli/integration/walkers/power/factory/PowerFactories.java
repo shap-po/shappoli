@@ -1,5 +1,6 @@
 package com.github.shap_po.shappoli.integration.walkers.power.factory;
 
+import com.github.shap_po.shappoli.integration.walkers.power.ActionOnShapeAbilityUsePower;
 import com.github.shap_po.shappoli.integration.walkers.power.ActionOnShapeChangePower;
 import com.github.shap_po.shappoli.integration.walkers.power.PreventShapeAbilityUsePower;
 import com.github.shap_po.shappoli.integration.walkers.power.PreventShapeChangePower;
@@ -10,6 +11,7 @@ import net.minecraft.registry.Registry;
 
 public class PowerFactories {
     public static void register() {
+        register(ActionOnShapeAbilityUsePower::createFactory);
         register(ActionOnShapeChangePower::createFactory);
         register(PreventShapeAbilityUsePower::createFactory);
         register(PreventShapeChangePower::createFactory);

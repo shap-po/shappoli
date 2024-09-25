@@ -1,0 +1,22 @@
+{
+  "type": "shappoli:action_on_shape_ability_use",
+  "bientity_action": {
+    "type": "apoli:and",
+    "actions": [
+      {
+        "type": "apoli:actor_action",
+        "action": {
+          "type": "apoli:execute_command",
+          "command": "say I just used a shape ability!"
+        }
+      },
+      {
+        "type": "apoli:target_action",
+        "action": {
+          "type": "apoli:execute_command",
+          "command": "say I am a shape that provides an ability!"
+        }
+      }
+    ]
+  }
+}

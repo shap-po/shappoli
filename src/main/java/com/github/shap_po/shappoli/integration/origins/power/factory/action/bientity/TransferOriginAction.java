@@ -35,7 +35,7 @@ public class TransferOriginAction {
     public static ActionFactory<Pair<Entity, Entity>> getFactory() {
         return new ActionFactory<>(Shappoli.identifier("transfer_origin"),
             new SerializableData()
-                .add("layer", SerializableDataTypes.IDENTIFIER)
+                .add("layer", SerializableDataTypes.IDENTIFIER, OriginsUtil.ORIGIN_LAYER_ID)
                 .add("modify_actor", SerializableDataTypes.BOOLEAN, false)
                 .add("modify_target", SerializableDataTypes.BOOLEAN, true)
             ,

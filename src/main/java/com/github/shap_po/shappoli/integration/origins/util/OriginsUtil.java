@@ -1,5 +1,6 @@
 package com.github.shap_po.shappoli.integration.origins.util;
 
+import io.github.apace100.origins.Origins;
 import io.github.apace100.origins.component.OriginComponent;
 import io.github.apace100.origins.origin.Origin;
 import io.github.apace100.origins.origin.OriginLayer;
@@ -12,6 +13,8 @@ import org.jetbrains.annotations.Nullable;
 
 @SuppressWarnings({"UnusedReturnValue"})
 public class OriginsUtil {
+    public static Identifier ORIGIN_LAYER_ID = Origins.identifier("origin");
+
     public static boolean setOrigin(@Nullable OriginComponent originComponent, @Nullable OriginLayer layer, @Nullable Origin origin) {
         if (originComponent == null || layer == null || origin == null) {
             return false;

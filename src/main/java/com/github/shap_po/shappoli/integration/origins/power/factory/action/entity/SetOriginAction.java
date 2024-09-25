@@ -24,7 +24,7 @@ public class SetOriginAction {
     public static ActionFactory<Entity> getFactory() {
         return new ActionFactory<>(Shappoli.identifier("set_origin"),
             new SerializableData()
-                .add("layer", SerializableDataTypes.IDENTIFIER)
+                .add("layer", SerializableDataTypes.IDENTIFIER, OriginsUtil.ORIGIN_LAYER_ID)
                 .add("origin", SerializableDataTypes.IDENTIFIER)
             ,
             SetOriginAction::action

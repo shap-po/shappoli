@@ -3,6 +3,7 @@ package com.github.shap_po.shappoli.integration.origins.power.factory.action.bie
 import com.github.shap_po.shappoli.Shappoli;
 import com.github.shap_po.shappoli.integration.origins.util.OriginsUtil;
 import io.github.apace100.apoli.power.factory.action.ActionFactory;
+import io.github.apace100.apoli.power.factory.action.BiEntityActions;
 import io.github.apace100.calio.data.SerializableData;
 import io.github.apace100.calio.data.SerializableDataTypes;
 import io.github.apace100.origins.origin.Origin;
@@ -10,7 +11,7 @@ import io.github.apace100.origins.origin.OriginLayer;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.Pair;
 
-public class TransferOriginAction {
+public class CopyOriginAction {
     public static void action(SerializableData.Instance data, Pair<Entity, Entity> actorAndTarget) {
         Entity actor = actorAndTarget.getLeft();
         Entity target = actorAndTarget.getRight();
@@ -33,13 +34,16 @@ public class TransferOriginAction {
     }
 
     public static ActionFactory<Pair<Entity, Entity>> getFactory() {
-        return new ActionFactory<>(Shappoli.identifier("transfer_origin"),
+        ActionFactory<Pair<Entity, Entity>> factory = new ActionFactory<>(Shappoli.identifier("copy_origin"),
             new SerializableData()
                 .add("layer", SerializableDataTypes.IDENTIFIER, OriginsUtil.ORIGIN_LAYER_ID)
                 .add("modify_actor", SerializableDataTypes.BOOLEAN, false)
                 .add("modify_target", SerializableDataTypes.BOOLEAN, true)
             ,
-            TransferOriginAction::action
+            CopyOriginAction::action
         );
+
+        BiEntityActions.ALIASES.addPathAlias("transfer_origin", factory.getSerializerId().getPath());
+        return factory;
     }
 }

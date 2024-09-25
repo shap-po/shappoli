@@ -1,0 +1,31 @@
+{
+  "type": "apoli:active_self",
+  "key": "key.attack",
+
+  "entity_action": {
+    "type": "shappoli:shape_action",
+    "bientity_action": {
+      "type": "apoli:if_else",
+      "condition": {
+        "type": "apoli:actor_condition",
+        "condition": {
+          "type": "apoli:sneaking"
+        }
+      },
+      "if_action": {
+        "type": "apoli:target_action",
+        "action": {
+          "type": "apoli:execute_command",
+          "command": "data modify entity @s Age set value -20"
+        }
+      },
+      "else_action": {
+        "type": "apoli:target_action",
+        "action": {
+          "type": "apoli:execute_command",
+          "command": "data modify entity @s Age set value 20"
+        }
+      }
+    }
+  }
+}

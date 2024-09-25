@@ -1,0 +1,21 @@
+{
+  "type": "apoli:active_self",
+  "key": "key.attack",
+
+  "entity_action": {
+    "type": "apoli:if_else",
+    "condition": {
+      "type": "shappoli:shape_ability_cooldown",
+      "comparison": ">=",
+      "compare_to": 10
+    },
+    "if_action": {
+      "type": "apoli:execute_command",
+      "command": "say Shape ability cooldown >= 10 ticks!"
+    },
+    "else_action": {
+      "type": "apoli:execute_command",
+      "command": "say Shape ability cooldown < 10 ticks!"
+    }
+  }
+}

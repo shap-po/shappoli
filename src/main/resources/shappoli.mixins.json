@@ -15,6 +15,7 @@
     "integration.trinkets.SurvivalTrinketSlotMixin",
     "integration.trinkets.TrinketInventoryMixin",
     "integration.trinkets.TrinketSlotMixin",
+    "integration.walkers.PlayerAbilitiesMixin",
     "integration.walkers.PlayerShapeMixin"
   ],
   "client": [

@@ -1,15 +1,14 @@
 package com.github.shap_po.shappoli.integration.walkers.power.factory.condition.entity;
 
 import com.github.shap_po.shappoli.Shappoli;
+import com.github.shap_po.shappoli.integration.walkers.util.WalkersUtil;
 import io.github.apace100.apoli.data.ApoliDataTypes;
 import io.github.apace100.apoli.power.factory.condition.ConditionFactory;
 import io.github.apace100.apoli.power.factory.condition.EntityConditions;
 import io.github.apace100.calio.data.SerializableData;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Pair;
-import tocraft.walkers.api.PlayerShape;
 
 import java.util.function.Predicate;
 
@@ -18,9 +17,7 @@ public class ShapeCondition {
         if (!(entity instanceof PlayerEntity player)) {
             return false;
         }
-        LivingEntity shape = PlayerShape.getCurrentShape(player);
-        shape = shape == null ? player : shape; // Shape is null if the player is not transformed, default to player
-        return data.<Predicate<Pair<Entity, Entity>>>get("bientity_condition").test(new Pair<>(player, shape));
+        return data.<Predicate<Pair<Entity, Entity>>>get("bientity_condition").test(new Pair<>(player, WalkersUtil.getShape(player)));
     }
 
     public static ConditionFactory<Entity> getFactory() {

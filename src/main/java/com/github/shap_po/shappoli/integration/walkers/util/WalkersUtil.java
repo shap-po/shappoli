@@ -5,10 +5,12 @@ import io.github.apace100.apoli.component.PowerHolderComponent;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
+import tocraft.walkers.api.PlayerShape;
 import tocraft.walkers.impl.PlayerDataProvider;
 
 public class WalkersUtil {
@@ -59,5 +61,13 @@ public class WalkersUtil {
         ((PlayerDataProvider) player).walkers$updateShapes(null);
         PowerHolderComponent.withPowers(player, ActionOnShapeChangePower.class, p -> p.doesApply(player), p -> p.apply(player));
         return true;
+    }
+
+    /**
+     * Gets the player's shape, defaulting to the player if the player is not transformed.
+     */
+    public static LivingEntity getShape(PlayerEntity player) {
+        LivingEntity shape = PlayerShape.getCurrentShape(player);
+        return shape == null ? player : shape;
     }
 }

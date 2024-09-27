@@ -5,38 +5,38 @@ import com.github.shap_po.shappoli.data.ShappoliDataTypes;
 import com.github.shap_po.shappoli.util.MiscUtil;
 import io.github.apace100.apoli.data.ApoliDataTypes;
 import io.github.apace100.apoli.power.Power;
-import io.github.apace100.apoli.power.PowerType;
-import io.github.apace100.apoli.power.PowerTypeReference;
-import io.github.apace100.apoli.power.factory.PowerFactory;
+import io.github.apace100.apoli.power.PowerReference;
+import io.github.apace100.apoli.power.factory.PowerTypeFactory;
+import io.github.apace100.apoli.power.type.PowerType;
 import io.github.apace100.calio.data.SerializableData;
 import net.minecraft.entity.LivingEntity;
 
 import java.util.List;
 
-public class SuppressPowerPower extends Power {
-    List<PowerTypeReference<?>> powerRefs;
+public class SuppressPowerPower extends PowerType {
+    List<PowerReference> powerRefs;
 
     public SuppressPowerPower(
-        PowerType<?> type, LivingEntity entity,
-        List<PowerTypeReference<?>> powerRefs
+        Power type, LivingEntity entity,
+        List<PowerReference> powerRefs
     ) {
         super(type, entity);
         this.powerRefs = powerRefs;
     }
 
-    public boolean doesApply(Power power) {
-        return doesApply(power.getType());
+    public boolean doesApply(PowerType power) {
+        return doesApply(power.getPower());
     }
 
-    public boolean doesApply(PowerType power) {
+    public boolean doesApply(Power power) {
         return powerRefs.stream().anyMatch(ref -> ref.equals(power));
     }
 
-    public static PowerFactory createFactory() {
-        return new PowerFactory<>(Shappoli.identifier("suppress_power"),
+    public static PowerTypeFactory createFactory() {
+        return new PowerTypeFactory<>(Shappoli.identifier("suppress_power"),
             new SerializableData()
-                .add("power", ApoliDataTypes.POWER_TYPE, null)
-                .add("powers", ShappoliDataTypes.POWER_TYPES, null)
+                .add("power", ApoliDataTypes.POWER_REFERENCE, null)
+                .add("powers", ShappoliDataTypes.POWER_REFERENCES, null)
             ,
             data -> (type, entity) -> new SuppressPowerPower(
                 type, entity,

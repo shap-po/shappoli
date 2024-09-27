@@ -5,9 +5,9 @@ import com.github.shap_po.shappoli.integration.trinkets.data.ShappoliTrinketsDat
 import com.github.shap_po.shappoli.integration.trinkets.data.TrinketSlotData;
 import com.github.shap_po.shappoli.integration.trinkets.util.TrinketsUtil;
 import dev.emi.trinkets.api.SlotReference;
+import io.github.apace100.apoli.action.factory.ActionTypeFactory;
+import io.github.apace100.apoli.action.factory.EntityActions;
 import io.github.apace100.apoli.data.ApoliDataTypes;
-import io.github.apace100.apoli.power.factory.action.ActionFactory;
-import io.github.apace100.apoli.power.factory.action.EntityActions;
 import io.github.apace100.apoli.util.InventoryUtil;
 import io.github.apace100.calio.data.SerializableData;
 import io.github.apace100.calio.data.SerializableDataTypes;
@@ -58,8 +58,8 @@ public class ModifyTrinketAction {
         }
     }
 
-    public static ActionFactory<Entity> getFactory() {
-        ActionFactory<Entity> factory = new ActionFactory<>(Shappoli.identifier("modify_trinket"),
+    public static ActionTypeFactory<Entity> getFactory() {
+        ActionTypeFactory<Entity> factory = new ActionTypeFactory<>(Shappoli.identifier("modify_trinket"),
             new SerializableData()
                 .add("slot", ShappoliTrinketsDataTypes.TRINKET_SLOT, null)
                 .add("slots", ShappoliTrinketsDataTypes.TRINKET_SLOTS, null)

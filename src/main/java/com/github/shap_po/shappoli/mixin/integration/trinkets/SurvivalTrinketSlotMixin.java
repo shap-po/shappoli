@@ -33,7 +33,7 @@ public class SurvivalTrinketSlotMixin extends Slot {
         ItemStack stack = this.getStack();
         SlotReference slotRef = new SlotReference(trinketInventory, slotOffset);
 
-        return !PowerHolderComponent.hasPower(player, PreventTrinketUnequipPower.class,
+        return !PowerHolderComponent.hasPowerType(player, PreventTrinketUnequipPower.class,
             p -> p.doesApply(player, slotRef, stack)
         ) && original;
     }

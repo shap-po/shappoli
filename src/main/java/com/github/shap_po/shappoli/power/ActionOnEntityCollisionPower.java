@@ -2,10 +2,10 @@ package com.github.shap_po.shappoli.power;
 
 import com.github.shap_po.shappoli.Shappoli;
 import io.github.apace100.apoli.data.ApoliDataTypes;
-import io.github.apace100.apoli.power.CooldownPower;
-import io.github.apace100.apoli.power.PowerType;
-import io.github.apace100.apoli.power.PreventEntityCollisionPower;
-import io.github.apace100.apoli.power.factory.PowerFactory;
+import io.github.apace100.apoli.power.Power;
+import io.github.apace100.apoli.power.factory.PowerTypeFactory;
+import io.github.apace100.apoli.power.type.CooldownPowerType;
+import io.github.apace100.apoli.power.type.PreventEntityCollisionPowerType;
 import io.github.apace100.apoli.util.HudRender;
 import io.github.apace100.calio.data.SerializableData;
 import io.github.apace100.calio.data.SerializableDataTypes;
@@ -17,17 +17,17 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
-public class ActionOnEntityCollisionPower extends CooldownPower {
+public class ActionOnEntityCollisionPower extends CooldownPowerType {
     private final Consumer<Pair<Entity, Entity>> bientityAction;
     private final Predicate<Pair<Entity, Entity>> bientityCondition;
 
     public ActionOnEntityCollisionPower(
-        PowerType<?> type, LivingEntity entity,
+        Power power, LivingEntity entity,
         int cooldownDuration, HudRender hudRender,
         Consumer<Pair<Entity, Entity>> bientityAction,
         Predicate<Pair<Entity, Entity>> bientityCondition
     ) {
-        super(type, entity, cooldownDuration, hudRender);
+        super(power, entity, cooldownDuration, hudRender);
         this.bientityAction = bientityAction;
         this.bientityCondition = bientityCondition;
     }
@@ -36,7 +36,7 @@ public class ActionOnEntityCollisionPower extends CooldownPower {
         List<Entity> collidingEntities = getCollidingEntities();
         for (Entity other : collidingEntities) {
             if (this.canUse() &&
-                !PreventEntityCollisionPower.doesApply(entity, other) &&
+                !PreventEntityCollisionPowerType.doesApply(entity, other) &&
                 (bientityCondition == null || bientityCondition.test(new Pair<>(entity, other)))
             ) {
                 bientityAction.accept(new Pair<>(entity, other));
@@ -49,8 +49,8 @@ public class ActionOnEntityCollisionPower extends CooldownPower {
         return entity.getWorld().getOtherEntities(entity, entity.getBoundingBox());
     }
 
-    public static PowerFactory createFactory() {
-        return new PowerFactory<>(Shappoli.identifier("action_on_entity_collision"),
+    public static PowerTypeFactory createFactory() {
+        return new PowerTypeFactory<>(Shappoli.identifier("action_on_entity_collision"),
             new SerializableData()
                 .add("bientity_action", ApoliDataTypes.BIENTITY_ACTION)
                 .add("bientity_condition", ApoliDataTypes.BIENTITY_CONDITION, null)

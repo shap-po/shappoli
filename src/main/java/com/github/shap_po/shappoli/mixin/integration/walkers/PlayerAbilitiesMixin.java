@@ -12,6 +12,6 @@ import tocraft.walkers.api.PlayerAbilities;
 public class PlayerAbilitiesMixin {
     @ModifyReturnValue(method = "canUseAbility", at = @At("RETURN"))
     private static boolean shappoli$preventAbilityUse(boolean original, PlayerEntity player) {
-        return original && !PowerHolderComponent.hasPower(player, PreventShapeAbilityUsePower.class, PreventShapeAbilityUsePower::doesApply);
+        return original && !PowerHolderComponent.hasPowerType(player, PreventShapeAbilityUsePower.class, PreventShapeAbilityUsePower::doesApply);
     }
 }

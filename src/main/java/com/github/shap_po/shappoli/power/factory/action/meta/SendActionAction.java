@@ -2,11 +2,11 @@ package com.github.shap_po.shappoli.power.factory.action.meta;
 
 import com.github.shap_po.shappoli.Shappoli;
 import com.github.shap_po.shappoli.power.ReceiveActionPower;
+import io.github.apace100.apoli.action.factory.ActionTypeFactory;
 import io.github.apace100.apoli.component.PowerHolderComponent;
 import io.github.apace100.apoli.data.ApoliDataTypes;
 import io.github.apace100.apoli.power.Power;
-import io.github.apace100.apoli.power.PowerType;
-import io.github.apace100.apoli.power.factory.action.ActionFactory;
+import io.github.apace100.apoli.power.type.PowerType;
 import io.github.apace100.calio.data.SerializableData;
 import io.github.apace100.calio.util.IdentifierAlias;
 import net.minecraft.entity.Entity;
@@ -27,25 +27,25 @@ public class SendActionAction {
             return;
         }
 
-        PowerType<?> powerType = data.get("receiver");
-        Power power = PowerHolderComponent.KEY.get(entity).getPower(powerType);
+        Power receiver = data.get("receiver");
+        PowerType power = PowerHolderComponent.KEY.get(entity).getPowerType(receiver);
 
         if (power instanceof ReceiveActionPower listener) {
             sendFunction.accept(listener, t);
         } else {
-            Shappoli.LOGGER.warn("Tried to send an action to a power that does not exist or is not an action receiver: {}", powerType.getIdentifier());
+            Shappoli.LOGGER.warn("Tried to send an action to a power that does not exist or is not an action receiver: {}", receiver.getId());
         }
     }
 
-    public static <T> ActionFactory<T> getFactory(
+    public static <T> ActionTypeFactory<T> getFactory(
         Function<T, Entity> actionToEntityFunction,
         BiConsumer<ReceiveActionPower, T> sendFunction,
         IdentifierAlias aliasProvider
     ) {
-        ActionFactory<T> factory = new ActionFactory<>(Shappoli.identifier("send_action"),
+        ActionTypeFactory<T> factory = new ActionTypeFactory<>(Shappoli.identifier("send_action"),
             new SerializableData()
-                .add("listener", ApoliDataTypes.POWER_TYPE, null) // alias
-                .addFunctionedDefault("receiver", ApoliDataTypes.POWER_TYPE, data -> data.get("listener"))
+                .add("listener", ApoliDataTypes.POWER_REFERENCE, null) // alias
+                .addFunctionedDefault("receiver", ApoliDataTypes.POWER_REFERENCE, data -> data.get("listener"))
             ,
             (instance, pair) -> action(
                 instance,

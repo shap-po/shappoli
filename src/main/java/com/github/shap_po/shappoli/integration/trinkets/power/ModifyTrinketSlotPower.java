@@ -3,40 +3,36 @@ package com.github.shap_po.shappoli.integration.trinkets.power;
 import com.github.shap_po.shappoli.Shappoli;
 import com.github.shap_po.shappoli.integration.trinkets.data.ShappoliTrinketsDataTypes;
 import com.github.shap_po.shappoli.integration.trinkets.data.SlotEntityAttributeModifier;
-import com.github.shap_po.shappoli.integration.trinkets.util.TrinketsUtil;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import dev.emi.trinkets.TrinketPlayerScreenHandler;
-import dev.emi.trinkets.TrinketsNetwork;
 import dev.emi.trinkets.api.TrinketComponent;
 import dev.emi.trinkets.api.TrinketInventory;
 import dev.emi.trinkets.api.TrinketsApi;
+import dev.emi.trinkets.payload.SyncInventoryPayload;
 import io.github.apace100.apoli.power.Power;
-import io.github.apace100.apoli.power.PowerType;
-import io.github.apace100.apoli.power.factory.PowerFactories;
-import io.github.apace100.apoli.power.factory.PowerFactory;
+import io.github.apace100.apoli.power.factory.PowerTypeFactory;
+import io.github.apace100.apoli.power.factory.PowerTypes;
+import io.github.apace100.apoli.power.type.PowerType;
 import io.github.apace100.calio.data.SerializableData;
-import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.network.ServerPlayerEntity;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
- * Based on the {@link io.github.apace100.apoli.power.AttributePower}
+ * Based on the {@link io.github.apace100.apoli.power.type.AttributePowerType}
  */
-public class ModifyTrinketSlotPower extends Power {
+public class ModifyTrinketSlotPower extends PowerType {
     protected final List<SlotEntityAttributeModifier> modifiers = new LinkedList<>();
     private boolean applied = false;
 
-    public ModifyTrinketSlotPower(PowerType<?> type, LivingEntity entity) {
-        super(type, entity);
+    public ModifyTrinketSlotPower(Power power, LivingEntity entity) {
+        super(power, entity);
     }
 
     @SuppressWarnings({"UnusedReturnValue"})
@@ -93,22 +89,23 @@ public class ModifyTrinketSlotPower extends Power {
     private void updateInventories(TrinketComponent trinket) {
         Set<TrinketInventory> inventoriesToSend = trinket.getTrackingUpdates();
         if (!inventoriesToSend.isEmpty()) {
-            PacketByteBuf buf = PacketByteBufs.create();
-            buf.writeInt(entity.getId());
-
-            NbtCompound tag = new NbtCompound();
+            Map<String, NbtCompound> map = new HashMap<>();
             for (TrinketInventory trinketInventory : inventoriesToSend) {
-                trinketInventory.update(); // Manually update the inventory to ensure the state is correct
-                tag.put(TrinketsUtil.getSlotId(trinketInventory.getSlotType()), trinketInventory.getSyncTag());
+                map.put(trinketInventory.getSlotType().getId(), trinketInventory.getSyncTag());
             }
-            buf.writeNbt(tag);
-            buf.writeNbt(new NbtCompound()); // Empty tag for the trinket stacks
+            SyncInventoryPayload packet = new SyncInventoryPayload(entity.getId(), new HashMap<>(), map);
+            for (ServerPlayerEntity player : PlayerLookup.tracking(entity)) {
+                ServerPlayNetworking.send(player, packet);
+            }
 
-            // network handler might be null on server start
-            if (entity instanceof ServerPlayerEntity serverPlayer && serverPlayer.networkHandler != null) {
-                ServerPlayNetworking.send(serverPlayer, TrinketsNetwork.SYNC_INVENTORY, buf);
-                ((TrinketPlayerScreenHandler) serverPlayer.playerScreenHandler).trinkets$updateTrinketSlots(false);
+            if (entity instanceof ServerPlayerEntity serverPlayer) {
+                ServerPlayNetworking.send(serverPlayer, packet);
+
+                if (!inventoriesToSend.isEmpty()) {
+                    ((TrinketPlayerScreenHandler) serverPlayer.playerScreenHandler).trinkets$updateTrinketSlots(false);
+                }
             }
+            inventoriesToSend.clear();
         }
     }
 
@@ -120,8 +117,8 @@ public class ModifyTrinketSlotPower extends Power {
         return modifiersMap;
     }
 
-    public static PowerFactory<Power> createFactory() {
-        PowerFactory<Power> factory = new PowerFactory<>(Shappoli.identifier("modify_trinket_slot"),
+    public static PowerTypeFactory createFactory() {
+        PowerTypeFactory<?> factory = new PowerTypeFactory<>(Shappoli.identifier("modify_trinket_slot"),
             new SerializableData()
                 .add("modifier", ShappoliTrinketsDataTypes.SLOT_ENTITY_ATTRIBUTE_MODIFIER, null)
                 .add("modifiers", ShappoliTrinketsDataTypes.SLOT_ENTITY_ATTRIBUTE_MODIFIERS, null)
@@ -134,7 +131,7 @@ public class ModifyTrinketSlotPower extends Power {
             }
         );
 
-        PowerFactories.ALIASES.addPathAlias("modify_trinket_slots", factory.getSerializerId().getPath());
+        PowerTypes.ALIASES.addPathAlias("modify_trinket_slots", factory.getSerializerId().getPath());
         return factory;
     }
 }

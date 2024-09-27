@@ -2,9 +2,9 @@ package com.github.shap_po.shappoli.integration.walkers.power.factory.condition.
 
 import com.github.shap_po.shappoli.Shappoli;
 import com.github.shap_po.shappoli.integration.walkers.util.WalkersUtil;
+import io.github.apace100.apoli.condition.factory.ConditionTypeFactory;
+import io.github.apace100.apoli.condition.factory.EntityConditions;
 import io.github.apace100.apoli.data.ApoliDataTypes;
-import io.github.apace100.apoli.power.factory.condition.ConditionFactory;
-import io.github.apace100.apoli.power.factory.condition.EntityConditions;
 import io.github.apace100.calio.data.SerializableData;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -20,8 +20,8 @@ public class ShapeCondition {
         return data.<Predicate<Pair<Entity, Entity>>>get("bientity_condition").test(new Pair<>(player, WalkersUtil.getShape(player)));
     }
 
-    public static ConditionFactory<Entity> getFactory() {
-        ConditionFactory<Entity> factory = new ConditionFactory<>(
+    public static ConditionTypeFactory<Entity> getFactory() {
+        ConditionTypeFactory<Entity> factory = new ConditionTypeFactory<>(
             Shappoli.identifier("shape_condition"),
             new SerializableData()
                 .add("bientity_condition", ApoliDataTypes.BIENTITY_CONDITION)

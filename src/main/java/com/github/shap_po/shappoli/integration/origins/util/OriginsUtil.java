@@ -4,7 +4,7 @@ import io.github.apace100.origins.Origins;
 import io.github.apace100.origins.component.OriginComponent;
 import io.github.apace100.origins.origin.Origin;
 import io.github.apace100.origins.origin.OriginLayer;
-import io.github.apace100.origins.origin.OriginLayers;
+import io.github.apace100.origins.origin.OriginLayerManager;
 import io.github.apace100.origins.origin.OriginRegistry;
 import io.github.apace100.origins.registry.ModComponents;
 import net.minecraft.entity.Entity;
@@ -48,7 +48,7 @@ public class OriginsUtil {
     }
 
     public static @Nullable OriginLayer getLayer(Identifier layerId) {
-        return OriginLayers.getNullableLayer(layerId);
+        return OriginLayerManager.getNullable(layerId);
     }
 
     public static @Nullable OriginComponent getOriginComponent(Entity entity) {

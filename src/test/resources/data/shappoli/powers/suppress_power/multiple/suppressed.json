@@ -24,9 +24,10 @@
   "attribute": {
     "type": "apoli:attribute",
     "modifier": {
+      "id": "shappoli:suppress_power/multiple/suppressed/attribute/health",
       "attribute": "minecraft:generic.max_health",
-      "operation": "addition",
-      "value": 4
+      "operation": "add_value",
+      "amount": 4
     },
     "update_health": true
   }

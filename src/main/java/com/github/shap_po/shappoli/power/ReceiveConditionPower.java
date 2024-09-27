@@ -3,8 +3,8 @@ package com.github.shap_po.shappoli.power;
 import com.github.shap_po.shappoli.Shappoli;
 import io.github.apace100.apoli.data.ApoliDataTypes;
 import io.github.apace100.apoli.power.Power;
-import io.github.apace100.apoli.power.PowerType;
-import io.github.apace100.apoli.power.factory.PowerFactory;
+import io.github.apace100.apoli.power.type.PowerType;
+import io.github.apace100.apoli.power.factory.PowerTypeFactory;
 import io.github.apace100.calio.data.SerializableData;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -14,12 +14,12 @@ import net.minecraft.world.World;
 
 import java.util.function.Predicate;
 
-public class ReceiveConditionPower extends Power {
+public class ReceiveConditionPower extends PowerType {
     private final Predicate<Pair<Entity, Entity>> bientityCondition;
     private final Predicate<Entity> entityCondition;
     private final Predicate<Pair<World, ItemStack>> itemCondition;
 
-    public ReceiveConditionPower(PowerType<?> type, LivingEntity entity, Predicate<Pair<Entity, Entity>> bientityCondition, Predicate<Entity> entityCondition, Predicate<Pair<World, ItemStack>> itemCondition) {
+    public ReceiveConditionPower(Power type, LivingEntity entity, Predicate<Pair<Entity, Entity>> bientityCondition, Predicate<Entity> entityCondition, Predicate<Pair<World, ItemStack>> itemCondition) {
         super(type, entity);
         this.bientityCondition = bientityCondition;
         this.entityCondition = entityCondition;
@@ -42,8 +42,8 @@ public class ReceiveConditionPower extends Power {
         return checkCondition(item, itemCondition);
     }
 
-    public static PowerFactory createFactory() {
-        return new PowerFactory<>(
+    public static PowerTypeFactory createFactory() {
+        return new PowerTypeFactory<>(
             Shappoli.identifier("receive_condition"),
             new SerializableData()
                 .add("bientity_condition", ApoliDataTypes.BIENTITY_CONDITION, null)

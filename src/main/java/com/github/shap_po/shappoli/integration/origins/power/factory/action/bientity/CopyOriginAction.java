@@ -2,8 +2,8 @@ package com.github.shap_po.shappoli.integration.origins.power.factory.action.bie
 
 import com.github.shap_po.shappoli.Shappoli;
 import com.github.shap_po.shappoli.integration.origins.util.OriginsUtil;
-import io.github.apace100.apoli.power.factory.action.ActionFactory;
-import io.github.apace100.apoli.power.factory.action.BiEntityActions;
+import io.github.apace100.apoli.action.factory.ActionTypeFactory;
+import io.github.apace100.apoli.action.factory.BiEntityActions;
 import io.github.apace100.calio.data.SerializableData;
 import io.github.apace100.calio.data.SerializableDataTypes;
 import io.github.apace100.origins.origin.Origin;
@@ -33,8 +33,8 @@ public class CopyOriginAction {
         }
     }
 
-    public static ActionFactory<Pair<Entity, Entity>> getFactory() {
-        ActionFactory<Pair<Entity, Entity>> factory = new ActionFactory<>(Shappoli.identifier("copy_origin"),
+    public static ActionTypeFactory<Pair<Entity, Entity>> getFactory() {
+        ActionTypeFactory<Pair<Entity, Entity>> factory = new ActionTypeFactory<>(Shappoli.identifier("copy_origin"),
             new SerializableData()
                 .add("layer", SerializableDataTypes.IDENTIFIER, OriginsUtil.ORIGIN_LAYER_ID)
                 .add("modify_actor", SerializableDataTypes.BOOLEAN, false)

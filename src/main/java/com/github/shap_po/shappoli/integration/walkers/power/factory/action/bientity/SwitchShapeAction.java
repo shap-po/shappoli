@@ -2,9 +2,9 @@ package com.github.shap_po.shappoli.integration.walkers.power.factory.action.bie
 
 import com.github.shap_po.shappoli.Shappoli;
 import com.github.shap_po.shappoli.integration.walkers.util.WalkersUtil;
+import io.github.apace100.apoli.action.factory.ActionTypeFactory;
+import io.github.apace100.apoli.action.factory.BiEntityActions;
 import io.github.apace100.apoli.data.ApoliDataTypes;
-import io.github.apace100.apoli.power.factory.action.ActionFactory;
-import io.github.apace100.apoli.power.factory.action.BiEntityActions;
 import io.github.apace100.calio.data.SerializableData;
 import io.github.apace100.calio.data.SerializableDataTypes;
 import net.minecraft.entity.Entity;
@@ -31,8 +31,8 @@ public class SwitchShapeAction {
         }
     }
 
-    public static ActionFactory<Pair<Entity, Entity>> getFactory() {
-        ActionFactory<Pair<Entity, Entity>> factory = new ActionFactory<>(Shappoli.identifier("switch_shape"),
+    public static ActionTypeFactory<Pair<Entity, Entity>> getFactory() {
+        ActionTypeFactory<Pair<Entity, Entity>> factory = new ActionTypeFactory<>(Shappoli.identifier("switch_shape"),
             new SerializableData()
                 .add("ignore_nbt", SerializableDataTypes.BOOLEAN, false)
                 .add("action_on_success", ApoliDataTypes.BIENTITY_ACTION, null)

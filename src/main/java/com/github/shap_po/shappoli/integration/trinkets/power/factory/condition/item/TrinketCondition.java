@@ -2,8 +2,8 @@ package com.github.shap_po.shappoli.integration.trinkets.power.factory.condition
 
 import com.github.shap_po.shappoli.Shappoli;
 import dev.emi.trinkets.api.TrinketsApi;
-import io.github.apace100.apoli.power.factory.condition.ConditionFactory;
-import io.github.apace100.apoli.power.factory.condition.ItemConditions;
+import io.github.apace100.apoli.condition.factory.ConditionTypeFactory;
+import io.github.apace100.apoli.condition.factory.ItemConditions;
 import io.github.apace100.calio.data.SerializableData;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Pair;
@@ -14,8 +14,8 @@ public class TrinketCondition {
         return TrinketsApi.getTrinket(worldAndStack.getRight().getItem()) != TrinketsApi.getDefaultTrinket();
     }
 
-    public static ConditionFactory<Pair<World, ItemStack>> getFactory() {
-        ConditionFactory<Pair<World, ItemStack>> factory = new ConditionFactory<>(
+    public static ConditionTypeFactory<Pair<World, ItemStack>> getFactory() {
+        ConditionTypeFactory<Pair<World, ItemStack>> factory = new ConditionTypeFactory<>(
             Shappoli.identifier("trinket"),
             new SerializableData(),
             TrinketCondition::condition

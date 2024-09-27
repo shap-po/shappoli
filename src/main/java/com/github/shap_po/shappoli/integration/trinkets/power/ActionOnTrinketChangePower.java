@@ -10,9 +10,9 @@ import dev.emi.trinkets.api.TrinketInventory;
 import io.github.apace100.apoli.component.PowerHolderComponent;
 import io.github.apace100.apoli.data.ApoliDataTypes;
 import io.github.apace100.apoli.power.Power;
-import io.github.apace100.apoli.power.PowerType;
-import io.github.apace100.apoli.power.factory.PowerFactories;
-import io.github.apace100.apoli.power.factory.PowerFactory;
+import io.github.apace100.apoli.power.factory.PowerTypeFactory;
+import io.github.apace100.apoli.power.factory.PowerTypes;
+import io.github.apace100.apoli.power.type.PowerType;
 import io.github.apace100.calio.data.SerializableData;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
-public class ActionOnTrinketChangePower extends Power {
+public class ActionOnTrinketChangePower extends PowerType {
     private final Consumer<Entity> entityActionOnEquip;
     private final Consumer<Pair<World, StackReference>> itemActionOnEquip;
     private final Consumer<Entity> entityActionOnUnequip;
@@ -34,7 +34,7 @@ public class ActionOnTrinketChangePower extends Power {
     private final List<TrinketSlotData> slots;
 
     public ActionOnTrinketChangePower(
-        PowerType<?> type,
+        Power power,
         LivingEntity entity,
         Consumer<Entity> entityActionOnEquip,
         Consumer<Pair<World, StackReference>> itemActionOnEquip,
@@ -43,7 +43,7 @@ public class ActionOnTrinketChangePower extends Power {
         Predicate<Pair<World, ItemStack>> itemCondition,
         List<TrinketSlotData> slots
     ) {
-        super(type, entity);
+        super(power, entity);
         this.entityActionOnEquip = entityActionOnEquip;
         this.itemActionOnEquip = itemActionOnEquip;
         this.entityActionOnUnequip = entityActionOnUnequip;
@@ -82,14 +82,14 @@ public class ActionOnTrinketChangePower extends Power {
         }
 
         SlotReference ref = new SlotReference(inventory, slot);
-        PowerHolderComponent.withPowers(entity, ActionOnTrinketChangePower.class,
+        PowerHolderComponent.withPowerTypes(entity, ActionOnTrinketChangePower.class,
             p -> p.doesApply(ref, stack),
             p -> p.apply(ref, isEquipping)
         );
     }
 
-    public static PowerFactory createFactory() {
-        PowerFactory<Power> factory = new PowerFactory<>(
+    public static PowerTypeFactory createFactory() {
+        PowerTypeFactory<?> factory = new PowerTypeFactory<>(
             Shappoli.identifier("action_on_trinket_change"),
             new SerializableData()
                 .add("entity_action_on_equip", ApoliDataTypes.ENTITY_ACTION, null)
@@ -112,7 +112,7 @@ public class ActionOnTrinketChangePower extends Power {
             )
         ).allowCondition();
 
-        PowerFactories.ALIASES.addPathAlias("action_on_trinket_update", factory.getSerializerId().getPath());
+        PowerTypes.ALIASES.addPathAlias("action_on_trinket_update", factory.getSerializerId().getPath());
         return factory;
     }
 }

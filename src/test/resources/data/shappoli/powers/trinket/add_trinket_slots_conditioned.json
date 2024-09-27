@@ -1,9 +1,10 @@
 {
   "type": "shappoli:conditioned_modify_trinket_slots",
   "modifier": {
+    "id": "shappoli:add_trinket_slots_conditioned/shappoli/slot",
     "slot": "shappoli/slot",
-    "operation": "addition",
-    "value": 4
+    "operation": "add_value",
+    "amount": 4
   },
   "condition": {
     "type": "apoli:on_block",

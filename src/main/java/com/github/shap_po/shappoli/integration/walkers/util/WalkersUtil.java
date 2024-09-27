@@ -36,7 +36,7 @@ public class WalkersUtil {
         }
 
         ((PlayerDataProvider) player).walkers$updateShapes(entityCopy);
-        PowerHolderComponent.withPowers(player, ActionOnShapeChangePower.class, p -> p.doesApply(entityCopy), p -> p.apply(entityCopy));
+        PowerHolderComponent.withPowerTypes(player, ActionOnShapeChangePower.class, p -> p.doesApply(entityCopy), p -> p.apply(entityCopy));
         return true;
     }
 
@@ -59,7 +59,7 @@ public class WalkersUtil {
 
     public static boolean switchShape(ServerPlayerEntity player) {
         ((PlayerDataProvider) player).walkers$updateShapes(null);
-        PowerHolderComponent.withPowers(player, ActionOnShapeChangePower.class, p -> p.doesApply(player), p -> p.apply(player));
+        PowerHolderComponent.withPowerTypes(player, ActionOnShapeChangePower.class, p -> p.doesApply(player), p -> p.apply(player));
         return true;
     }
 

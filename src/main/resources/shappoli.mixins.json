@@ -5,9 +5,9 @@
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "EntityMixin",
-    "PowerFactoryAccessor",
-    "PowerFactoryInstanceMixin",
-    "PowerMixin",
+    "PowerTypeFactoryAccessor",
+    "PowerTypeFactoryInstanceMixin",
+    "PowerTypeMixin",
     "VillagerEntityMixin",
     "integration.trinkets.LivingEntityTrinketComponentMixin",
     "integration.trinkets.PlayerScreenHandlerMixin",

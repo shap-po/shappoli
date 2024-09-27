@@ -5,7 +5,7 @@
     "selector": "@s",
     "bientity_action": {
       "type": "shappoli:suppress_power",
-      "power": "*:suppress_multiple/suppressed",
+      "power": "*:suppress_power/multiple/suppressed",
       "duration": 40,
       "bientity_action": {
         "type": "apoli:actor_action",

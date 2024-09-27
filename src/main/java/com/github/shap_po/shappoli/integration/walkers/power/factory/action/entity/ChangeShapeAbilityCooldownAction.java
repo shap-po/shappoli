@@ -2,7 +2,7 @@ package com.github.shap_po.shappoli.integration.walkers.power.factory.action.ent
 
 import com.github.shap_po.shappoli.Shappoli;
 import io.github.apace100.apoli.data.ApoliDataTypes;
-import io.github.apace100.apoli.power.factory.action.ActionFactory;
+import io.github.apace100.apoli.action.factory.ActionTypeFactory;
 import io.github.apace100.apoli.util.ResourceOperation;
 import io.github.apace100.calio.data.SerializableData;
 import io.github.apace100.calio.data.SerializableDataTypes;
@@ -35,8 +35,8 @@ public class ChangeShapeAbilityCooldownAction {
         };
     }
 
-    public static ActionFactory<Entity> getFactory() {
-        return new ActionFactory<>(Shappoli.identifier("change_shape_ability_cooldown"),
+    public static ActionTypeFactory<Entity> getFactory() {
+        return new ActionTypeFactory<>(Shappoli.identifier("change_shape_ability_cooldown"),
             new SerializableData()
                 .add("operation", ApoliDataTypes.RESOURCE_OPERATION, ResourceOperation.ADD)
                 .add("change", SerializableDataTypes.INT)

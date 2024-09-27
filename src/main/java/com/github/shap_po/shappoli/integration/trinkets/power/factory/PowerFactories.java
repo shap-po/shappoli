@@ -1,10 +1,12 @@
 package com.github.shap_po.shappoli.integration.trinkets.power.factory;
 
 import com.github.shap_po.shappoli.integration.trinkets.power.*;
-import io.github.apace100.apoli.power.factory.PowerFactory;
-import io.github.apace100.apoli.power.factory.PowerFactorySupplier;
+import io.github.apace100.apoli.power.factory.PowerTypeFactory;
+import io.github.apace100.apoli.power.type.PowerType;
 import io.github.apace100.apoli.registry.ApoliRegistries;
 import net.minecraft.registry.Registry;
+
+import java.util.function.Supplier;
 
 public class PowerFactories {
     public static void register() {
@@ -15,11 +17,12 @@ public class PowerFactories {
         register(PreventTrinketUnequipPower::createFactory);
     }
 
-    private static void register(PowerFactory<?> powerFactory) {
-        Registry.register(ApoliRegistries.POWER_FACTORY, powerFactory.getSerializerId(), powerFactory);
+    @SuppressWarnings("unchecked")
+    public static <T extends PowerType> PowerTypeFactory<T> register(PowerTypeFactory<?> powerTypeFactory) {
+        return (PowerTypeFactory<T>) Registry.register(ApoliRegistries.POWER_FACTORY, powerTypeFactory.getSerializerId(), powerTypeFactory);
     }
 
-    private static void register(PowerFactorySupplier<?> factorySupplier) {
-        register(factorySupplier.createFactory());
+    public static <T extends PowerType> PowerTypeFactory<T> register(Supplier<PowerTypeFactory<?>> powerTypeFactory) {
+        return register(powerTypeFactory.get());
     }
 }

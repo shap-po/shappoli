@@ -2,7 +2,7 @@ package com.github.shap_po.shappoli.integration.origins.power.factory.action.ent
 
 import com.github.shap_po.shappoli.Shappoli;
 import com.github.shap_po.shappoli.integration.origins.util.OriginsUtil;
-import io.github.apace100.apoli.power.factory.action.ActionFactory;
+import io.github.apace100.apoli.action.factory.ActionTypeFactory;
 import io.github.apace100.calio.data.SerializableData;
 import io.github.apace100.calio.data.SerializableDataTypes;
 import io.github.apace100.origins.origin.Origin;
@@ -21,8 +21,8 @@ public class SetOriginAction {
         OriginsUtil.setOrigin(entity, layer, origin);
     }
 
-    public static ActionFactory<Entity> getFactory() {
-        return new ActionFactory<>(Shappoli.identifier("set_origin"),
+    public static ActionTypeFactory<Entity> getFactory() {
+        return new ActionTypeFactory<>(Shappoli.identifier("set_origin"),
             new SerializableData()
                 .add("layer", SerializableDataTypes.IDENTIFIER, OriginsUtil.ORIGIN_LAYER_ID)
                 .add("origin", SerializableDataTypes.IDENTIFIER)

@@ -2,7 +2,7 @@ package com.github.shap_po.shappoli.integration.walkers.power.factory.condition.
 
 import com.github.shap_po.shappoli.Shappoli;
 import com.github.shap_po.shappoli.integration.walkers.util.WalkersUtil;
-import io.github.apace100.apoli.power.factory.condition.ConditionFactory;
+import io.github.apace100.apoli.condition.factory.ConditionTypeFactory;
 import io.github.apace100.calio.data.SerializableData;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -21,8 +21,8 @@ public class HasShapeAbilityCondition {
         return AbilityRegistry.has(livingEntity);
     }
 
-    public static ConditionFactory<Entity> getFactory() {
-        return new ConditionFactory<>(
+    public static ConditionTypeFactory<Entity> getFactory() {
+        return new ConditionTypeFactory<>(
             Shappoli.identifier("has_shape_ability"),
             new SerializableData(),
             HasShapeAbilityCondition::condition

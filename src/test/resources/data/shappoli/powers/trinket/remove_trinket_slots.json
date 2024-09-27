@@ -2,14 +2,16 @@
   "type": "shappoli:modify_trinket_slots",
   "modifiers": [
     {
+      "id": "shappoli:remove_trinket_slots/chest/necklace",
       "slot": "chest/necklace",
-      "operation": "addition",
-      "value": -1
+      "operation": "add_value",
+      "amount": -1
     },
     {
+      "id": "shappoli:remove_trinket_slots/feet/shoes",
       "slot": "feet/shoes",
-      "operation": "addition",
-      "value": -1
+      "operation": "add_value",
+      "amount": -1
     }
   ]
 }

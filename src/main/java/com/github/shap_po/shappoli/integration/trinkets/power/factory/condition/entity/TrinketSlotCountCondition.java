@@ -4,9 +4,9 @@ import com.github.shap_po.shappoli.Shappoli;
 import com.github.shap_po.shappoli.integration.trinkets.data.ShappoliTrinketsDataTypes;
 import com.github.shap_po.shappoli.integration.trinkets.data.TrinketSlotData;
 import com.github.shap_po.shappoli.integration.trinkets.util.TrinketsUtil;
+import io.github.apace100.apoli.condition.factory.ConditionTypeFactory;
+import io.github.apace100.apoli.condition.factory.EntityConditions;
 import io.github.apace100.apoli.data.ApoliDataTypes;
-import io.github.apace100.apoli.power.factory.condition.ConditionFactory;
-import io.github.apace100.apoli.power.factory.condition.EntityConditions;
 import io.github.apace100.apoli.util.Comparison;
 import io.github.apace100.calio.data.SerializableData;
 import io.github.apace100.calio.data.SerializableDataTypes;
@@ -23,8 +23,8 @@ public class TrinketSlotCountCondition {
         return data.<Comparison>get("comparison").compare(count, data.getInt("compare_to"));
     }
 
-    public static ConditionFactory<Entity> getFactory() {
-        ConditionFactory<Entity> factory = new ConditionFactory<>(
+    public static ConditionTypeFactory<Entity> getFactory() {
+        ConditionTypeFactory<Entity> factory = new ConditionTypeFactory<>(
             Shappoli.identifier("trinket_slot_count"),
             new SerializableData()
                 .add("slot", ShappoliTrinketsDataTypes.TRINKET_SLOT, null)

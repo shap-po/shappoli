@@ -1,7 +1,7 @@
 {
   "type": "shappoli:modify_villager_reputation",
   "modifier": {
-    "operation": "addition",
-    "value": 100
+    "operation": "add_total_late",
+    "amount": 100
   }
 }

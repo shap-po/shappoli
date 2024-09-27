@@ -3,9 +3,9 @@ package com.github.shap_po.shappoli.integration.walkers.power;
 import com.github.shap_po.shappoli.Shappoli;
 import io.github.apace100.apoli.data.ApoliDataTypes;
 import io.github.apace100.apoli.power.Power;
-import io.github.apace100.apoli.power.PowerType;
-import io.github.apace100.apoli.power.factory.PowerFactories;
-import io.github.apace100.apoli.power.factory.PowerFactory;
+import io.github.apace100.apoli.power.factory.PowerTypeFactory;
+import io.github.apace100.apoli.power.factory.PowerTypes;
+import io.github.apace100.apoli.power.type.PowerType;
 import io.github.apace100.calio.data.SerializableData;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -13,11 +13,11 @@ import net.minecraft.util.Pair;
 
 import java.util.function.Predicate;
 
-public class PreventShapeChangePower extends Power {
+public class PreventShapeChangePower extends PowerType {
     private final Predicate<Pair<Entity, Entity>> bientityCondition;
 
     public PreventShapeChangePower(
-        PowerType<?> type,
+        Power type,
         LivingEntity entity,
         Predicate<Pair<Entity, Entity>> bientityCondition
     ) {
@@ -29,8 +29,8 @@ public class PreventShapeChangePower extends Power {
         return bientityCondition == null || bientityCondition.test(new Pair<>(entity, shape));
     }
 
-    public static PowerFactory createFactory() {
-        PowerFactory<Power> factory = new PowerFactory<>(Shappoli.identifier("prevent_shape_change"),
+    public static PowerTypeFactory createFactory() {
+        PowerTypeFactory<?> factory = new PowerTypeFactory<>(Shappoli.identifier("prevent_shape_change"),
             new SerializableData()
                 .add("bientity_condition", ApoliDataTypes.BIENTITY_CONDITION, null)
             ,
@@ -39,7 +39,7 @@ public class PreventShapeChangePower extends Power {
             )
         ).allowCondition();
 
-        PowerFactories.ALIASES.addPathAlias("prevent_morph", factory.getSerializerId().getPath());
+        PowerTypes.ALIASES.addPathAlias("prevent_morph", factory.getSerializerId().getPath());
         return factory;
     }
 }

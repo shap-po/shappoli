@@ -7,8 +7,8 @@ import com.github.shap_po.shappoli.integration.trinkets.util.TrinketsUtil;
 import dev.emi.trinkets.api.SlotReference;
 import io.github.apace100.apoli.data.ApoliDataTypes;
 import io.github.apace100.apoli.power.Power;
-import io.github.apace100.apoli.power.PowerType;
-import io.github.apace100.apoli.power.factory.PowerFactory;
+import io.github.apace100.apoli.power.factory.PowerTypeFactory;
+import io.github.apace100.apoli.power.type.PowerType;
 import io.github.apace100.calio.data.SerializableData;
 import io.github.apace100.calio.data.SerializableDataTypes;
 import net.minecraft.entity.LivingEntity;
@@ -21,19 +21,19 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.Predicate;
 
-public abstract class BasePreventTrinketChangePower extends Power {
+public abstract class BasePreventTrinketChangePower extends PowerType {
     protected final Predicate<Pair<World, ItemStack>> itemCondition;
     protected final List<TrinketSlotData> slots;
     protected final boolean allowCreative;
 
     public BasePreventTrinketChangePower(
-        PowerType<?> type,
+        Power power,
         LivingEntity entity,
         Predicate<Pair<World, ItemStack>> itemCondition,
         List<TrinketSlotData> slots,
         boolean allowInCreative
     ) {
-        super(type, entity);
+        super(power, entity);
         this.itemCondition = itemCondition;
         this.slots = slots;
         this.allowCreative = allowInCreative;
@@ -52,7 +52,7 @@ public abstract class BasePreventTrinketChangePower extends Power {
     @FunctionalInterface
     public interface Factory {
         BasePreventTrinketChangePower create(
-            PowerType<?> type,
+            Power type,
             LivingEntity entity,
             Predicate<Pair<World, ItemStack>> itemCondition,
             List<TrinketSlotData> slots,
@@ -60,9 +60,9 @@ public abstract class BasePreventTrinketChangePower extends Power {
         );
     }
 
-    public static PowerFactory createFactory(String identifier, Factory serializerFactory) {
+    public static PowerTypeFactory createFactory(String identifier, Factory serializerFactory) {
         Objects.requireNonNull(serializerFactory);
-        return new PowerFactory<>(
+        return new PowerTypeFactory<>(
             Shappoli.identifier(identifier),
             new SerializableData()
                 .add("item_condition", ApoliDataTypes.ITEM_CONDITION, null)

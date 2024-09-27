@@ -4,7 +4,7 @@ import com.github.shap_po.shappoli.access.SuppressiblePower;
 import com.github.shap_po.shappoli.power.SuppressPowerPower;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import io.github.apace100.apoli.component.PowerHolderComponent;
-import io.github.apace100.apoli.power.Power;
+import io.github.apace100.apoli.power.type.PowerType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import org.spongepowered.asm.mixin.Mixin;
@@ -12,8 +12,8 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 
-@Mixin(Power.class)
-public class PowerMixin<T extends Power> implements SuppressiblePower {
+@Mixin(PowerType.class)
+public class PowerTypeMixin<T extends PowerType> implements SuppressiblePower {
     @Shadow
     protected LivingEntity entity;
 
@@ -65,7 +65,7 @@ public class PowerMixin<T extends Power> implements SuppressiblePower {
         return original &&
             shappoli$isSuppressed() &&
             (power instanceof SuppressPowerPower ||
-                !PowerHolderComponent.hasPower(entity, SuppressPowerPower.class, p -> p.doesApply(power)));
+                !PowerHolderComponent.hasPowerType(entity, SuppressPowerPower.class, p -> p.doesApply(power)));
     }
 
     @Unique

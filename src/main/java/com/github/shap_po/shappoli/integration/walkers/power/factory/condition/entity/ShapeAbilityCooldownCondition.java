@@ -2,7 +2,7 @@ package com.github.shap_po.shappoli.integration.walkers.power.factory.condition.
 
 import com.github.shap_po.shappoli.Shappoli;
 import io.github.apace100.apoli.data.ApoliDataTypes;
-import io.github.apace100.apoli.power.factory.condition.ConditionFactory;
+import io.github.apace100.apoli.condition.factory.ConditionTypeFactory;
 import io.github.apace100.apoli.util.Comparison;
 import io.github.apace100.calio.data.SerializableData;
 import io.github.apace100.calio.data.SerializableDataTypes;
@@ -23,8 +23,8 @@ public class ShapeAbilityCooldownCondition {
         return comparison.compare(cooldown, compareTo);
     }
 
-    public static ConditionFactory<Entity> getFactory() {
-        return new ConditionFactory<>(
+    public static ConditionTypeFactory<Entity> getFactory() {
+        return new ConditionTypeFactory<>(
             Shappoli.identifier("shape_ability_cooldown"),
             new SerializableData()
                 .add("comparison", ApoliDataTypes.COMPARISON)

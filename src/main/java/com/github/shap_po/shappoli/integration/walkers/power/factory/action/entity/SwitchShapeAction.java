@@ -2,9 +2,9 @@ package com.github.shap_po.shappoli.integration.walkers.power.factory.action.ent
 
 import com.github.shap_po.shappoli.Shappoli;
 import com.github.shap_po.shappoli.integration.walkers.util.WalkersUtil;
+import io.github.apace100.apoli.action.factory.ActionTypeFactory;
+import io.github.apace100.apoli.action.factory.EntityActions;
 import io.github.apace100.apoli.data.ApoliDataTypes;
-import io.github.apace100.apoli.power.factory.action.ActionFactory;
-import io.github.apace100.apoli.power.factory.action.EntityActions;
 import io.github.apace100.calio.data.SerializableData;
 import io.github.apace100.calio.data.SerializableDataTypes;
 import net.minecraft.entity.Entity;
@@ -31,11 +31,11 @@ public class SwitchShapeAction {
         }
     }
 
-    public static ActionFactory<Entity> getFactory() {
-        ActionFactory<Entity> factory = new ActionFactory<>(Shappoli.identifier("switch_shape"),
+    public static ActionTypeFactory<Entity> getFactory() {
+        ActionTypeFactory<Entity> factory = new ActionTypeFactory<>(Shappoli.identifier("switch_shape"),
             new SerializableData()
                 .add("shape", SerializableDataTypes.IDENTIFIER, null)
-                .add("nbt", SerializableDataTypes.NBT, null)
+                .add("nbt", SerializableDataTypes.NBT_COMPOUND, null)
                 .add("action_on_success", ApoliDataTypes.ENTITY_ACTION, null)
             ,
             SwitchShapeAction::action

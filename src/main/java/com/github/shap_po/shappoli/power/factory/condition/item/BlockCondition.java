@@ -1,8 +1,8 @@
 package com.github.shap_po.shappoli.power.factory.condition.item;
 
 import com.github.shap_po.shappoli.Shappoli;
-import io.github.apace100.apoli.power.factory.condition.ConditionFactory;
-import io.github.apace100.apoli.power.factory.condition.ItemConditions;
+import io.github.apace100.apoli.condition.factory.ConditionTypeFactory;
+import io.github.apace100.apoli.condition.factory.ItemConditions;
 import io.github.apace100.calio.data.SerializableData;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
@@ -14,8 +14,8 @@ public class BlockCondition {
         return worldAndStack.getRight().getItem() instanceof BlockItem;
     }
 
-    public static ConditionFactory<Pair<World, ItemStack>> getFactory() {
-        ConditionFactory<Pair<World, ItemStack>> factory = new ConditionFactory<>(
+    public static ConditionTypeFactory<Pair<World, ItemStack>> getFactory() {
+        ConditionTypeFactory<Pair<World, ItemStack>> factory = new ConditionTypeFactory<>(
             Shappoli.identifier("block"),
             new SerializableData(),
             BlockCondition::condition

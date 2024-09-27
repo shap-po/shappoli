@@ -1,7 +1,7 @@
 package com.github.shap_po.shappoli.power.factory.action.bientity;
 
 import com.github.shap_po.shappoli.Shappoli;
-import io.github.apace100.apoli.power.factory.action.ActionFactory;
+import io.github.apace100.apoli.action.factory.ActionTypeFactory;
 import io.github.apace100.calio.data.SerializableData;
 import io.github.apace100.calio.data.SerializableDataTypes;
 import net.minecraft.entity.Entity;
@@ -56,8 +56,8 @@ public class TeleportAction {
     }
 
 
-    public static ActionFactory<Pair<Entity, Entity>> getFactory() {
-        return new ActionFactory<>(Shappoli.identifier("teleport"),
+    public static ActionTypeFactory<Pair<Entity, Entity>> getFactory() {
+        return new ActionTypeFactory<>(Shappoli.identifier("teleport"),
             new SerializableData()
                 .add("teleport_actor", SerializableDataTypes.BOOLEAN, false)
                 .add("teleport_target", SerializableDataTypes.BOOLEAN, true)

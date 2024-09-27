@@ -3,10 +3,10 @@ package com.github.shap_po.shappoli.power.factory.condition.meta;
 import com.github.shap_po.shappoli.Shappoli;
 import com.github.shap_po.shappoli.power.ReceiveConditionPower;
 import io.github.apace100.apoli.component.PowerHolderComponent;
+import io.github.apace100.apoli.condition.factory.ConditionTypeFactory;
 import io.github.apace100.apoli.data.ApoliDataTypes;
 import io.github.apace100.apoli.power.Power;
-import io.github.apace100.apoli.power.PowerType;
-import io.github.apace100.apoli.power.factory.condition.ConditionFactory;
+import io.github.apace100.apoli.power.type.PowerType;
 import io.github.apace100.calio.data.SerializableData;
 import io.github.apace100.calio.util.IdentifierAlias;
 import net.minecraft.entity.Entity;
@@ -26,24 +26,24 @@ public class SendConditionCondition {
             return false;
         }
 
-        PowerType<?> powerType = data.get("receiver");
-        Power power = PowerHolderComponent.KEY.get(entity).getPower(powerType);
+        Power receiver = data.get("receiver");
+        PowerType power = PowerHolderComponent.KEY.get(entity).getPowerType(receiver);
         if (power instanceof ReceiveConditionPower listener) {
             return listener.isActive() && sendFunction.test(listener, condition);
         }
-        Shappoli.LOGGER.warn("Tried to send a condition to a power that does not exist or is not a condition receiver: {}", powerType.getIdentifier());
+        Shappoli.LOGGER.warn("Tried to send a condition to a power that does not exist or is not a condition receiver: {}", receiver.getId());
         return false;
     }
 
-    public static <T> ConditionFactory<T> getFactory(
+    public static <T> ConditionTypeFactory<T> getFactory(
         Function<T, Entity> conditionToEntityFunction,
         BiPredicate<ReceiveConditionPower, T> sendFunction,
         IdentifierAlias aliasProvider
     ) {
-        ConditionFactory<T> factory = new ConditionFactory<>(
+        ConditionTypeFactory<T> factory = new ConditionTypeFactory<>(
             Shappoli.identifier("send_condition"),
             new SerializableData()
-                .add("receiver", ApoliDataTypes.POWER_TYPE)
+                .add("receiver", ApoliDataTypes.POWER_REFERENCE)
             ,
             (data, condition) -> condition(
                 data,

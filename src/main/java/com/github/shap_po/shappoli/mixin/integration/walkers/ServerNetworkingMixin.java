@@ -32,7 +32,7 @@ public class ServerNetworkingMixin {
             Objects.requireNonNull(context.getPlayer().getServer()).execute(() -> {
                 LivingEntity shape = PlayerShape.getCurrentShape(player);
                 if (shape != null && AbilityRegistry.has(shape) && PlayerAbilities.canUseAbility(player)) {
-                    PowerHolderComponent.withPowers(player, ActionOnShapeAbilityUsePower.class, ActionOnShapeAbilityUsePower::doesApply, ActionOnShapeAbilityUsePower::apply);
+                    PowerHolderComponent.withPowerTypes(player, ActionOnShapeAbilityUsePower.class, ActionOnShapeAbilityUsePower::doesApply, ActionOnShapeAbilityUsePower::apply);
                 }
             });
             receiver.receive(context, packet);

@@ -2,8 +2,8 @@ package com.github.shap_po.shappoli.power.factory.action.entity;
 
 import com.github.shap_po.shappoli.Shappoli;
 import io.github.apace100.apoli.data.ApoliDataTypes;
-import io.github.apace100.apoli.power.factory.action.ActionFactory;
-import io.github.apace100.apoli.power.factory.action.EntityActions;
+import io.github.apace100.apoli.action.factory.ActionTypeFactory;
+import io.github.apace100.apoli.action.factory.EntityActions;
 import io.github.apace100.calio.data.SerializableData;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.Pair;
@@ -18,8 +18,8 @@ public class SelfBientityActionAction {
         }
     }
 
-    public static ActionFactory<Entity> getFactory() {
-        ActionFactory<Entity> factory = new ActionFactory<>(
+    public static ActionTypeFactory<Entity> getFactory() {
+        ActionTypeFactory<Entity> factory = new ActionTypeFactory<>(
             Shappoli.identifier("self_bientity_action"),
             new SerializableData()
                 .add("bientity_action", ApoliDataTypes.BIENTITY_ACTION, null)

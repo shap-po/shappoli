@@ -12,10 +12,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class EntityMixin {
     @Inject(method = "tick", at = @At("RETURN"))
     private void shappoli$actionOnEntityCollision(CallbackInfo ci) {
-        PowerHolderComponent.withPowers(
+        PowerHolderComponent.withPowerTypes(
             (Entity) (Object) this,
             ActionOnEntityCollisionPower.class,
-            null,
+            (p) -> true,
             ActionOnEntityCollisionPower::apply
         );
     }

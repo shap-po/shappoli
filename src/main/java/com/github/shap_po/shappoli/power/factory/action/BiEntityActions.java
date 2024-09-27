@@ -4,7 +4,7 @@ import com.github.shap_po.shappoli.power.ReceiveActionPower;
 import com.github.shap_po.shappoli.power.factory.action.bientity.SuppressPowerAction;
 import com.github.shap_po.shappoli.power.factory.action.bientity.TeleportAction;
 import com.github.shap_po.shappoli.power.factory.action.meta.SendActionAction;
-import io.github.apace100.apoli.power.factory.action.ActionFactory;
+import io.github.apace100.apoli.action.factory.ActionTypeFactory;
 import io.github.apace100.apoli.registry.ApoliRegistries;
 import net.minecraft.entity.Entity;
 import net.minecraft.registry.Registry;
@@ -19,12 +19,12 @@ public class BiEntityActions {
             SendActionAction.getFactory(
                 Pair::getLeft,
                 ReceiveActionPower::receiveBientityAction,
-                io.github.apace100.apoli.power.factory.action.BiEntityActions.ALIASES
+                io.github.apace100.apoli.action.factory.BiEntityActions.ALIASES
             )
         );
     }
 
-    private static void register(ActionFactory<Pair<Entity, Entity>> actionFactory) {
-        Registry.register(ApoliRegistries.BIENTITY_ACTION, actionFactory.getSerializerId(), actionFactory);
+    private static void register(ActionTypeFactory<Pair<Entity, Entity>> ActionTypeFactory) {
+        Registry.register(ApoliRegistries.BIENTITY_ACTION, ActionTypeFactory.getSerializerId(), ActionTypeFactory);
     }
 }

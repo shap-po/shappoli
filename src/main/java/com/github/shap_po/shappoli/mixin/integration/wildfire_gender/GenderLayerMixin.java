@@ -2,42 +2,54 @@ package com.github.shap_po.shappoli.mixin.integration.wildfire_gender;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import com.wildfire.render.BreastSide;
 import com.wildfire.render.GenderLayer;
-import com.wildfire.render.WildfireModelRenderer;
 import io.github.apace100.apoli.component.PowerHolderComponent;
-import io.github.apace100.apoli.power.ModelColorPower;
-import net.minecraft.client.render.VertexConsumer;
-import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.util.math.MatrixStack;
+import io.github.apace100.apoli.power.type.ModelColorPowerType;
 import net.minecraft.entity.LivingEntity;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 
 import java.util.List;
 
 @Mixin(GenderLayer.class)
 public abstract class GenderLayerMixin<T extends LivingEntity> {
-    @Shadow
-    protected abstract void renderBreast(T entity, MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int packedLightIn, int packedOverlayIn, BreastSide side);
-
-    @Shadow
-    protected static void renderBox(WildfireModelRenderer.ModelBox model, MatrixStack matrixStack, VertexConsumer bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
-    }
-
     @WrapOperation(
         method = "renderBreast",
-        at = @At(value = "INVOKE", target = "Lcom/wildfire/render/GenderLayer;renderBox(Lcom/wildfire/render/WildfireModelRenderer$ModelBox;Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumer;IIFFFF)V")
+        at = @At(value = "INVOKE", target = "Lnet/minecraft/util/math/ColorHelper$Argb;getArgb(IIII)I")
     )
-    private void shappoli$modifyRenderBreastColor(WildfireModelRenderer.ModelBox model, MatrixStack matrixStack, VertexConsumer bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha, Operation<Void> original, LivingEntity entity) {
-        List<ModelColorPower> modelColorPowers = PowerHolderComponent.KEY.get(entity).getPowers(ModelColorPower.class);
+    private int shappoli$modifyRenderBreastColor(int alpha, int red, int green, int blue, Operation<Integer> original, T entity) {
+        List<ModelColorPowerType> modelColorPowers = PowerHolderComponent.KEY.get(entity).getPowerTypes(ModelColorPowerType.class);
         if (!modelColorPowers.isEmpty()) {
-            red = modelColorPowers.stream().map(ModelColorPower::getRed).reduce((a, b) -> a * b).orElse(red);
-            green = modelColorPowers.stream().map(ModelColorPower::getGreen).reduce((a, b) -> a * b).orElse(green);
-            blue = modelColorPowers.stream().map(ModelColorPower::getBlue).reduce((a, b) -> a * b).orElse(blue);
-            alpha = modelColorPowers.stream().map(ModelColorPower::getAlpha).min(Float::compare).orElse(alpha);
+            red = Math.round(
+                modelColorPowers
+                    .stream()
+                    .map(ModelColorPowerType::getRed)
+                    .reduce((a, b) -> a * b)
+                    .orElse((float) red)
+            );
+            green = Math.round(
+                modelColorPowers
+                    .stream()
+                    .map(ModelColorPowerType::getGreen)
+                    .reduce((a, b) -> a * b)
+                    .orElse((float) green)
+            );
+            blue = Math.round(
+                modelColorPowers
+                    .stream()
+                    .map(ModelColorPowerType::getBlue)
+                    .reduce((a, b) -> a * b)
+                    .orElse((float) blue)
+            );
+            alpha = Math.round(
+                modelColorPowers
+                    .stream()
+                    .map(ModelColorPowerType::getAlpha)
+                    .min(Float::compare)
+                    .orElse((float) alpha)
+            );
         }
-        original.call(model, matrixStack, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+        original.call(alpha, red, green, blue);
+        return alpha;
     }
 }

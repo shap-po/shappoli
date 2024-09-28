@@ -11,7 +11,7 @@
         "type": "apoli:actor_action",
         "action": {
           "type": "apoli:execute_command",
-          "command": "say Suppressed"
+          "command": "say Suppressed powers by source: 'apoli:command'"
         }
       }
     }

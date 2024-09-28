@@ -3,6 +3,6 @@
   "key": "key.attack",
   "entity_action": {
     "type": "apoli:execute_command",
-    "command": "say Suppress by source: Active; Should be suppressed"
+    "command": "say Suppress by source: Active; Should not be suppressed"
   }
 }

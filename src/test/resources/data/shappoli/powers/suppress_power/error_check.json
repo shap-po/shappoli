@@ -1,0 +1,103 @@
+{
+  "type": "apoli:multiple",
+
+  "action_no_fields": {
+    "type": "apoli:active_self",
+    "key": "key.attack",
+    "entity_action": {
+      "type": "apoli:selector_action",
+      "selector": "@s",
+      "bientity_action": {
+        "type": "shappoli:suppress_power",
+        "duration": 40
+      }
+    }
+  },
+
+  "action_nonexisting_power": {
+    "type": "apoli:active_self",
+    "key": "key.attack",
+    "entity_action": {
+      "type": "apoli:selector_action",
+      "selector": "@s",
+      "bientity_action": {
+        "type": "shappoli:suppress_power",
+        "duration": 40,
+        "power": "test:nonexisting_power"
+      }
+    }
+  },
+
+  "action_nonexisting_power_type": {
+    "type": "apoli:active_self",
+    "key": "key.attack",
+    "entity_action": {
+      "type": "apoli:selector_action",
+      "selector": "@s",
+      "bientity_action": {
+        "type": "shappoli:suppress_power",
+        "duration": 40,
+        "power_type": "test:nonexisting_power_type"
+      }
+    }
+  },
+
+  "power_no_fields": {
+    "type": "shappoli:suppress_power"
+  },
+
+  "no_condition_suppressor": {
+    "type": "apoli:active_self",
+    "key": "key.attack",
+    "entity_action": {
+      "type": "apoli:selector_action",
+      "selector": "@s",
+      "bientity_action": {
+        "type": "shappoli:suppress_power",
+        "duration": 40,
+        "power": "*:*_no_condition_suppressed",
+        "bientity_action": {
+          "type": "apoli:actor_action",
+          "action": {
+            "type": "apoli:execute_command",
+            "command": "say Warning check: No condition"
+          }
+        }
+      }
+    }
+  },
+
+  "no_condition_suppressed": {
+    "type": "apoli:attribute",
+    "modifier": {
+      "id": "shappoli:suppress_power/multiple/suppressed/attribute/health",
+      "attribute": "minecraft:generic.max_health",
+      "operation": "addition",
+      "value": 1
+    },
+    "update_health": true
+  },
+
+  "multiple_suppressor": {
+    "type": "apoli:action_on_block_place",
+    "entity_action": {
+      "type": "apoli:selector_action",
+      "selector": "@s",
+      "bientity_action": {
+        "type": "shappoli:suppress_power",
+        "duration": 40,
+        "power": "*:*",
+        "powers": [
+          "*:*_power_hit"
+        ],
+        "bientity_action": {
+          "type": "apoli:actor_action",
+          "action": {
+            "type": "apoli:execute_command",
+            "command": "say Warning check: Suppressed multiple powers"
+          }
+        }
+      }
+    }
+  }
+}

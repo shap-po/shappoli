@@ -9,11 +9,7 @@
       "*:suppress_power_multiple_suppressed"
     ],
     "condition": {
-      "type": "apoli:on_block",
-      "block_condition": {
-        "type": "apoli:block",
-        "block": "minecraft:stone"
-      }
+      "type": "apoli:sneaking"
     }
   },
 
@@ -23,7 +19,7 @@
       "type": "apoli:actor_action",
       "action": {
         "type": "apoli:execute_command",
-        "command": "say Hit"
+        "command": "say Suppress by suppressor power: Hit; Should be suppressed"
       }
     }
   },
@@ -33,7 +29,7 @@
     "key": "key.attack",
     "entity_action": {
       "type": "apoli:execute_command",
-      "command": "say Active 1"
+      "command": "say Suppress by suppressor power: Active; Should be suppressed"
     }
   },
 
@@ -42,7 +38,7 @@
     "key": "key.attack",
     "entity_action": {
       "type": "apoli:execute_command",
-      "command": "say Active 2"
+      "command": "say Suppress by suppressor power: Active; Should not be suppressed"
     }
   }
 }

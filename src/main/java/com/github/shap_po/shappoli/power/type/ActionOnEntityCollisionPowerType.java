@@ -12,6 +12,7 @@ import io.github.apace100.calio.data.SerializableDataTypes;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.Pair;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.function.Consumer;
@@ -19,13 +20,13 @@ import java.util.function.Predicate;
 
 public class ActionOnEntityCollisionPowerType extends CooldownPowerType {
     private final Consumer<Pair<Entity, Entity>> bientityAction;
-    private final Predicate<Pair<Entity, Entity>> bientityCondition;
+    private final @Nullable Predicate<Pair<Entity, Entity>> bientityCondition;
 
     public ActionOnEntityCollisionPowerType(
         Power power, LivingEntity entity,
         int cooldownDuration, HudRender hudRender,
         Consumer<Pair<Entity, Entity>> bientityAction,
-        Predicate<Pair<Entity, Entity>> bientityCondition
+        @Nullable Predicate<Pair<Entity, Entity>> bientityCondition
     ) {
         super(power, entity, cooldownDuration, hudRender);
         this.bientityAction = bientityAction;
@@ -50,7 +51,8 @@ public class ActionOnEntityCollisionPowerType extends CooldownPowerType {
     }
 
     public static PowerTypeFactory getFactory() {
-        return new PowerTypeFactory<>(Shappoli.identifier("action_on_entity_collision"),
+        return new PowerTypeFactory<>(
+            Shappoli.identifier("action_on_entity_collision"),
             new SerializableData()
                 .add("bientity_action", ApoliDataTypes.BIENTITY_ACTION)
                 .add("bientity_condition", ApoliDataTypes.BIENTITY_CONDITION, null)

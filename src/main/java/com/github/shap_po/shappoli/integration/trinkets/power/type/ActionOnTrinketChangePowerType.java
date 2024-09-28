@@ -5,6 +5,7 @@ import com.github.shap_po.shappoli.integration.trinkets.access.SyncingTrinketInv
 import com.github.shap_po.shappoli.integration.trinkets.data.ShappoliTrinketsDataTypes;
 import com.github.shap_po.shappoli.integration.trinkets.data.TrinketSlotData;
 import com.github.shap_po.shappoli.integration.trinkets.util.TrinketsUtil;
+import com.github.shap_po.shappoli.util.MiscUtil;
 import dev.emi.trinkets.api.SlotReference;
 import dev.emi.trinkets.api.TrinketInventory;
 import io.github.apace100.apoli.component.PowerHolderComponent;
@@ -20,27 +21,28 @@ import net.minecraft.inventory.StackReference;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Pair;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 public class ActionOnTrinketChangePowerType extends PowerType {
-    private final Consumer<Entity> entityActionOnEquip;
-    private final Consumer<Pair<World, StackReference>> itemActionOnEquip;
-    private final Consumer<Entity> entityActionOnUnequip;
-    private final Consumer<Pair<World, StackReference>> itemActionOnUnequip;
-    private final Predicate<Pair<World, ItemStack>> itemCondition;
+    private final @Nullable Consumer<Entity> entityActionOnEquip;
+    private final @Nullable Consumer<Pair<World, StackReference>> itemActionOnEquip;
+    private final @Nullable Consumer<Entity> entityActionOnUnequip;
+    private final @Nullable Consumer<Pair<World, StackReference>> itemActionOnUnequip;
+    private final @Nullable Predicate<Pair<World, ItemStack>> itemCondition;
     private final List<TrinketSlotData> slots;
 
     public ActionOnTrinketChangePowerType(
         Power power,
         LivingEntity entity,
-        Consumer<Entity> entityActionOnEquip,
-        Consumer<Pair<World, StackReference>> itemActionOnEquip,
-        Consumer<Entity> entityActionOnUnequip,
-        Consumer<Pair<World, StackReference>> itemActionOnUnequip,
-        Predicate<Pair<World, ItemStack>> itemCondition,
+        @Nullable Consumer<Entity> entityActionOnEquip,
+        @Nullable Consumer<Pair<World, StackReference>> itemActionOnEquip,
+        @Nullable Consumer<Entity> entityActionOnUnequip,
+        @Nullable Consumer<Pair<World, StackReference>> itemActionOnUnequip,
+        @Nullable Predicate<Pair<World, ItemStack>> itemCondition,
         List<TrinketSlotData> slots
     ) {
         super(power, entity);
@@ -99,6 +101,7 @@ public class ActionOnTrinketChangePowerType extends PowerType {
                 .add("item_condition", ApoliDataTypes.ITEM_CONDITION)
                 .add("slot", ShappoliTrinketsDataTypes.TRINKET_SLOT, null)
                 .add("slots", ShappoliTrinketsDataTypes.TRINKET_SLOTS, null)
+                .postProcessor(data -> MiscUtil.checkHasAtLeastOneField(data, "entity_action_on_equip", "item_action_on_equip", "entity_action_on_unequip", "item_action_on_unequip"))
             ,
             data -> (type, player) -> new ActionOnTrinketChangePowerType(
                 type,

@@ -17,6 +17,7 @@ import net.minecraft.inventory.StackReference;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Pair;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Iterator;
 import java.util.List;
@@ -25,17 +26,18 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 public class ModifyTrinketActionType {
-    public static void action(SerializableData.Instance data, Entity entity) {
+    public static void action(
+        Entity entity,
+        List<TrinketSlotData> slots,
+        Function<ItemStack, Integer> processor,
+        int limit,
+        @Nullable Consumer<Entity> entityAction,
+        Consumer<Pair<World, StackReference>> itemAction,
+        @Nullable Predicate<Pair<World, ItemStack>> itemCondition
+    ) {
         if (!(entity instanceof LivingEntity livingEntity)) {
             return;
         }
-
-        List<TrinketSlotData> slots = TrinketSlotData.getSlots(data);
-        Function<ItemStack, Integer> processor = data.<InventoryUtil.ProcessMode>get("process_mode").getProcessor();
-        int limit = data.getInt("limit");
-        Consumer<Entity> entityAction = data.get("entity_action");
-        Consumer<Pair<World, StackReference>> itemAction = data.get("item_action");
-        Predicate<Pair<World, ItemStack>> itemCondition = data.get("item_condition");
 
         int processedItems = 0;
         modifyingItemsLoop:
@@ -59,17 +61,26 @@ public class ModifyTrinketActionType {
     }
 
     public static ActionTypeFactory<Entity> getFactory() {
-        ActionTypeFactory<Entity> factory = new ActionTypeFactory<>(Shappoli.identifier("modify_trinket"),
+        ActionTypeFactory<Entity> factory = new ActionTypeFactory<>(
+            Shappoli.identifier("modify_trinket"),
             new SerializableData()
                 .add("slot", ShappoliTrinketsDataTypes.TRINKET_SLOT, null)
                 .add("slots", ShappoliTrinketsDataTypes.TRINKET_SLOTS, null)
                 .add("process_mode", ApoliDataTypes.PROCESS_MODE, InventoryUtil.ProcessMode.STACKS)
+                .add("limit", SerializableDataTypes.INT, 0)
                 .add("entity_action", ApoliDataTypes.ENTITY_ACTION, null)
                 .add("item_action", ApoliDataTypes.ITEM_ACTION)
                 .add("item_condition", ApoliDataTypes.ITEM_CONDITION, null)
-                .add("limit", SerializableDataTypes.INT, 0)
             ,
-            ModifyTrinketActionType::action
+            (data, entity) -> action(
+                entity,
+                TrinketSlotData.getSlots(data),
+                data.get("process_mode"),
+                data.getInt("limit"),
+                data.get("entity_action"),
+                data.get("item_action"),
+                data.get("item_condition")
+            )
         );
 
         EntityActions.ALIASES.addPathAlias("modify_trinkets", factory.getSerializerId().getPath());

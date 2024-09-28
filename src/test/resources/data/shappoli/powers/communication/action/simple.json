@@ -35,7 +35,7 @@
     },
     "entity_action": {
       "type": "shappoli:send_action",
-      "listener": "*:*_receiver"
+      "receiver": "*:*_receiver"
     }
   },
 
@@ -52,7 +52,7 @@
     "bientity_action": {
       "_": "This will show a warning, because sender_1 is not a receiver",
       "type": "shappoli:send_action",
-      "listener": "*:*_sender_1"
+      "receiver": "*:*_sender_1"
     }
   }
 }

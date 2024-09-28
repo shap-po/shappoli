@@ -5,9 +5,9 @@ import com.github.shap_po.shappoli.integration.trinkets.data.ShappoliTrinketsDat
 import com.github.shap_po.shappoli.integration.trinkets.data.TrinketSlotData;
 import com.github.shap_po.shappoli.integration.trinkets.util.TrinketsUtil;
 import com.github.shap_po.shappoli.util.InventoryUtil;
-import io.github.apace100.apoli.data.ApoliDataTypes;
 import io.github.apace100.apoli.condition.factory.ConditionTypeFactory;
 import io.github.apace100.apoli.condition.factory.ItemConditions;
+import io.github.apace100.apoli.data.ApoliDataTypes;
 import io.github.apace100.apoli.util.Comparison;
 import io.github.apace100.calio.data.SerializableData;
 import io.github.apace100.calio.data.SerializableDataTypes;
@@ -20,19 +20,20 @@ import net.minecraft.world.World;
 import java.util.List;
 
 public class EquippedTrinketCountConditionType {
-    public static boolean condition(SerializableData.Instance data, Pair<World, ItemStack> worldAndStack) {
-        ItemStack stack = worldAndStack.getRight();
+    public static boolean condition(
+        ItemStack stack,
+        List<TrinketSlotData> slots,
+        Comparison comparison, int compareTo
+    ) {
         Entity entity = InventoryUtil.getHolder(stack);
         if (!(entity instanceof LivingEntity livingEntity)) {
             return false;
         }
 
-        List<TrinketSlotData> slots = TrinketSlotData.getSlots(data);
-
         int count = TrinketsUtil.getTrinkets(livingEntity, slots)
             .filter(trinket -> trinket.getRight().getItem().equals(stack.getItem()))
             .mapToInt(trinket -> 1).sum();
-        return data.<Comparison>get("comparison").compare(count, data.getInt("compare_to"));
+        return comparison.compare(count, compareTo);
     }
 
     public static ConditionTypeFactory<Pair<World, ItemStack>> getFactory() {
@@ -44,7 +45,12 @@ public class EquippedTrinketCountConditionType {
                 .add("comparison", ApoliDataTypes.COMPARISON, Comparison.GREATER_THAN_OR_EQUAL)
                 .add("compare_to", SerializableDataTypes.INT, 1)
             ,
-            EquippedTrinketCountConditionType::condition
+            (data, worldAndStack) -> condition(
+                worldAndStack.getRight(),
+                TrinketSlotData.getSlots(data),
+                data.get("comparison"),
+                data.getInt("compare_to")
+            )
         );
 
         ItemConditions.ALIASES.addPathAlias("equipped_trinket", factory.getSerializerId().getPath());

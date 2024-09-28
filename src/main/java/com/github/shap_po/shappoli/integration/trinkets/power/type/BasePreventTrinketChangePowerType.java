@@ -16,20 +16,21 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Pair;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Predicate;
 
 public abstract class BasePreventTrinketChangePowerType extends PowerType {
-    protected final Predicate<Pair<World, ItemStack>> itemCondition;
+    protected final @Nullable Predicate<Pair<World, ItemStack>> itemCondition;
     protected final List<TrinketSlotData> slots;
     protected final boolean allowCreative;
 
     public BasePreventTrinketChangePowerType(
         Power power,
         LivingEntity entity,
-        Predicate<Pair<World, ItemStack>> itemCondition,
+        @Nullable Predicate<Pair<World, ItemStack>> itemCondition,
         List<TrinketSlotData> slots,
         boolean allowInCreative
     ) {
@@ -68,7 +69,8 @@ public abstract class BasePreventTrinketChangePowerType extends PowerType {
                 .add("item_condition", ApoliDataTypes.ITEM_CONDITION, null)
                 .add("slot", ShappoliTrinketsDataTypes.TRINKET_SLOT, null)
                 .add("slots", ShappoliTrinketsDataTypes.TRINKET_SLOTS, null)
-                .add("allow_in_creative", SerializableDataTypes.BOOLEAN, true),
+                .add("allow_in_creative", SerializableDataTypes.BOOLEAN, true)
+            ,
             data -> (type, player) ->
                 serializerFactory.create(
                     type,

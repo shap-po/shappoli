@@ -27,35 +27,43 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 public class SuppressPowerActionType {
-    public static void action(SerializableData.Instance data, Pair<Entity, Entity> actorAndTarget) {
-        List<PowerReference> ignoredPowers = MiscUtil.listFromData(data, "ignored_power", "ignored_powers");
-        PowerHolderComponent component = PowerHolderComponent.KEY.get(actorAndTarget.getRight());
+    public static void action(
+        Entity actor, Entity target,
+        List<PowerReference> powerRefs, List<Identifier> powerIds, List<Identifier> powerSources,
+        List<PowerReference> ignoredPowers,
+        int duration,
+        @Nullable Consumer<Pair<Entity, Entity>> bientityAction,
+        boolean ignoreNoConditionWarning, boolean ignoreMultiplePowerWarning
 
-        Iterator<PowerType> powers = getPowers(data, component).iterator();
+    ) {
+        PowerHolderComponent component = PowerHolderComponent.KEY.get(target);
+
+        Iterator<PowerType> powers = getPowers(component, powerRefs, powerIds, powerSources).iterator();
 
         boolean suppressed = false;
         while (powers.hasNext()) {
             boolean result = suppressPower(
-                data, actorAndTarget, component,
-                ignoredPowers, powers.next()
+                powers.next(),
+                component,
+                actor,
+                ignoredPowers,
+                duration,
+                ignoreNoConditionWarning, ignoreMultiplePowerWarning
             );
             suppressed = suppressed || result;
         }
 
-        Consumer<Pair<Entity, Entity>> bientity_action = data.get("bientity_action");
-        if (suppressed && bientity_action != null) {
-            bientity_action.accept(actorAndTarget);
+        if (suppressed && bientityAction != null) {
+            bientityAction.accept(new Pair<>(actor, target));
         }
     }
 
-    private static Stream<PowerType> getPowers(SerializableData.Instance data, PowerHolderComponent component) {
-        List<PowerReference> powerRefs = MiscUtil.listFromData(data, "power", "powers");
+    private static Stream<PowerType> getPowers(
+        PowerHolderComponent component,
+        List<PowerReference> powerRefs, List<Identifier> powerIds, List<Identifier> powerSources
+    ) {
         Stream<PowerType> powersFromRefs = powerRefs.stream().map(component::getPowerType);
-
-        List<Identifier> powerIds = MiscUtil.listFromData(data, "power_type", "power_types");
         Stream<PowerType> powersFromIds = PowerHolderComponentUtil.getPowerTypes(component, powerIds);
-
-        List<Identifier> powerSources = MiscUtil.listFromData(data, "power_source", "power_sources");
         Stream<PowerType> powersFromSources = powerSources.stream()
             .flatMap(source -> component.getPowersFromSource(source)
                 .stream()
@@ -67,8 +75,12 @@ public class SuppressPowerActionType {
     }
 
     private static <P extends PowerType> boolean suppressPower(
-        SerializableData.Instance data, Pair<Entity, Entity> actorAndTarget, PowerHolderComponent component,
-        List<PowerReference> ignoredPowers, @Nullable P power
+        @Nullable P power,
+        PowerHolderComponent component,
+        Entity actor,
+        List<PowerReference> ignoredPowers,
+        int duration,
+        boolean ignoreNoConditionWarning, boolean ignoreMultiplePowerWarning
     ) {
         SuppressiblePower suppressiblePower = (SuppressiblePower) power;
         if (power == null || ignoredPowers.stream().anyMatch(ignored -> power.getPower().equals(ignored))) {
@@ -81,7 +93,7 @@ public class SuppressPowerActionType {
         }
 
         if (power.getPower() instanceof MultiplePower multiplePowerType) {
-            if (!data.getBoolean("ignore_multiple_power_warning")) {
+            if (!ignoreMultiplePowerWarning) {
                 Shappoli.LOGGER.warn(
                     "Suppressed power \"{}\" of type \"apoli:multiple\". This is generally not recommended. If you want to ignore this message, set the \"ignore_multiple_power_warning\" parameter to \"true\"",
                     power.getPowerId()
@@ -92,18 +104,18 @@ public class SuppressPowerActionType {
                 .getSubPowers()
                 .stream()
                 .map(subPowerId -> component.getPowerType(new PowerReference(subPowerId.getId())))
-                .map(subPower -> suppressPower(data, actorAndTarget, component, ignoredPowers, subPower))
+                .map(subPower -> suppressPower(subPower, component, actor, ignoredPowers, duration, ignoreNoConditionWarning, ignoreMultiplePowerWarning))
                 .reduce(false, Boolean::logicalOr);
         }
 
-        if (!suppressiblePower.shappoli$hasConditions() && !data.getBoolean("ignore_no_condition_warning")) {
+        if (!suppressiblePower.shappoli$hasConditions() && !ignoreNoConditionWarning) {
             Shappoli.LOGGER.warn(
                 "Suppressed power \"{}\" of type \"{}\" that does not support conditions. This probably would not work. If you want to ignore this message, set the \"ignore_no_condition_warning\" parameter to \"true\"",
                 power.getPowerId(), PowerHolderComponentUtil.getPowerId(power)
             );
         }
 
-        return suppressiblePower.shappoli$suppressFor(data.getInt("duration"), actorAndTarget.getLeft());
+        return suppressiblePower.shappoli$suppressFor(duration, actor);
     }
 
     public static ActionTypeFactory<Pair<Entity, Entity>> getFactory() {
@@ -128,8 +140,20 @@ public class SuppressPowerActionType {
 
                 .add("ignore_no_condition_warning", SerializableDataTypes.BOOLEAN, false)
                 .add("ignore_multiple_power_warning", SerializableDataTypes.BOOLEAN, false)
+
+                .postProcessor(data -> MiscUtil.checkHasAtLeastOneField(data, "power", "powers", "power_type", "power_types", "power_source", "power_sources"))
             ,
-            SuppressPowerActionType::action
+            (data, actorAndTarget) -> action(
+                actorAndTarget.getLeft(), actorAndTarget.getRight(),
+                MiscUtil.listFromData(data, "power", "powers"),
+                MiscUtil.listFromData(data, "power_type", "power_types"),
+                MiscUtil.listFromData(data, "power_source", "power_sources"),
+                MiscUtil.listFromData(data, "ignored_power", "ignored_powers"),
+                data.getInt("duration"),
+                data.get("bientity_action"),
+                data.getBoolean("ignore_no_condition_warning"),
+                data.getBoolean("ignore_multiple_power_warning")
+            )
         );
     }
 }

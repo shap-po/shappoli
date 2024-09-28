@@ -10,18 +10,18 @@ import net.minecraft.util.Pair;
 import net.minecraft.world.World;
 
 public class TrinketConditionType {
-    public static boolean condition(SerializableData.Instance data, Pair<World, ItemStack> worldAndStack) {
-        return TrinketsApi.getTrinket(worldAndStack.getRight().getItem()) != TrinketsApi.getDefaultTrinket();
+    public static boolean condition(ItemStack stack) {
+        return TrinketsApi.getTrinket(stack.getItem()) != TrinketsApi.getDefaultTrinket();
     }
 
     public static ConditionTypeFactory<Pair<World, ItemStack>> getFactory() {
         ConditionTypeFactory<Pair<World, ItemStack>> factory = new ConditionTypeFactory<>(
-            Shappoli.identifier("trinket"),
+            Shappoli.identifier("is_trinket"),
             new SerializableData(),
-            TrinketConditionType::condition
+            (data, worldAndStack) -> condition(worldAndStack.getRight())
         );
 
-        ItemConditions.ALIASES.addPathAlias("is_trinket", factory.getSerializerId().getPath());
+        ItemConditions.ALIASES.addPathAlias("trinket", factory.getSerializerId().getPath());
         return factory;
     }
 }

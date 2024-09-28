@@ -10,18 +10,18 @@ import net.minecraft.util.Pair;
 import net.minecraft.world.World;
 
 public class BlockConditionType {
-    public static boolean condition(SerializableData.Instance data, Pair<World, ItemStack> worldAndStack) {
-        return worldAndStack.getRight().getItem() instanceof BlockItem;
+    public static boolean condition(ItemStack stack) {
+        return stack.getItem() instanceof BlockItem;
     }
 
     public static ConditionTypeFactory<Pair<World, ItemStack>> getFactory() {
         ConditionTypeFactory<Pair<World, ItemStack>> factory = new ConditionTypeFactory<>(
-            Shappoli.identifier("block"),
+            Shappoli.identifier("is_block"),
             new SerializableData(),
-            BlockConditionType::condition
+            (data, worldAndStack) -> condition(worldAndStack.getRight())
         );
 
-        ItemConditions.ALIASES.addPathAlias("is_block", factory.getSerializerId().getPath());
+        ItemConditions.ALIASES.addPathAlias("block", factory.getSerializerId().getPath());
         return factory;
     }
 }

@@ -13,20 +13,21 @@ import net.minecraft.util.Pair;
 import java.util.function.Consumer;
 
 public class ShapeActionActionType {
-    public static void action(SerializableData.Instance data, Entity entity) {
+    public static void action(Entity entity, Consumer<Pair<Entity, Entity>> action) {
         if (!(entity instanceof ServerPlayerEntity player)) {
             return;
         }
 
-        data.<Consumer<Pair<Entity, Entity>>>get("bientity_action").accept(new Pair<>(entity, WalkersUtil.getShape(player)));
+        action.accept(new Pair<>(entity, WalkersUtil.getShape(player)));
     }
 
     public static ActionTypeFactory<Entity> getFactory() {
-        ActionTypeFactory<Entity> factory = new ActionTypeFactory<>(Shappoli.identifier("shape_action"),
+        ActionTypeFactory<Entity> factory = new ActionTypeFactory<>(
+            Shappoli.identifier("shape_action"),
             new SerializableData()
                 .add("bientity_action", ApoliDataTypes.BIENTITY_ACTION)
             ,
-            ShapeActionActionType::action
+            (data, entity) -> action(entity, data.get("bientity_action"))
         );
 
         EntityActions.ALIASES.addPathAlias("action_on_shape", factory.getSerializerId().getPath());

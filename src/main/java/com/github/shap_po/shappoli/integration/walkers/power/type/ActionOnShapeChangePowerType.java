@@ -10,19 +10,20 @@ import io.github.apace100.calio.data.SerializableData;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.Pair;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 public class ActionOnShapeChangePowerType extends PowerType {
     private final Consumer<Pair<Entity, Entity>> bientityAction;
-    private final Predicate<Pair<Entity, Entity>> bientityCondition;
+    private final @Nullable Predicate<Pair<Entity, Entity>> bientityCondition;
 
     public ActionOnShapeChangePowerType(
         Power type,
         LivingEntity entity,
         Consumer<Pair<Entity, Entity>> bientityAction,
-        Predicate<Pair<Entity, Entity>> bientityCondition
+        @Nullable Predicate<Pair<Entity, Entity>> bientityCondition
     ) {
         super(type, entity);
         this.bientityAction = bientityAction;

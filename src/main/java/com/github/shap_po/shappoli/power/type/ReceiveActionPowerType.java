@@ -1,10 +1,10 @@
 package com.github.shap_po.shappoli.power.type;
 
 import com.github.shap_po.shappoli.Shappoli;
+import com.github.shap_po.shappoli.util.MiscUtil;
 import io.github.apace100.apoli.data.ApoliDataTypes;
 import io.github.apace100.apoli.power.Power;
 import io.github.apace100.apoli.power.factory.PowerTypeFactory;
-import io.github.apace100.apoli.power.factory.PowerTypes;
 import io.github.apace100.apoli.power.type.PowerType;
 import io.github.apace100.calio.data.SerializableData;
 import net.minecraft.entity.Entity;
@@ -13,29 +13,30 @@ import net.minecraft.inventory.StackReference;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Pair;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 public class ReceiveActionPowerType extends PowerType {
-    private final Consumer<Entity> action;
-    private final Consumer<Pair<Entity, Entity>> bientityAction;
-    private final Predicate<Pair<Entity, Entity>> bientityCondition;
-    private final Consumer<Entity> entityAction;
-    private final Predicate<Entity> entityCondition;
-    private final Consumer<Pair<World, StackReference>> itemAction;
-    private final Predicate<Pair<World, ItemStack>> itemCondition;
+    private final @Nullable Consumer<Entity> action;
+    private final @Nullable Consumer<Pair<Entity, Entity>> bientityAction;
+    private final @Nullable Predicate<Pair<Entity, Entity>> bientityCondition;
+    private final @Nullable Consumer<Entity> entityAction;
+    private final @Nullable Predicate<Entity> entityCondition;
+    private final @Nullable Consumer<Pair<World, StackReference>> itemAction;
+    private final @Nullable Predicate<Pair<World, ItemStack>> itemCondition;
 
     public ReceiveActionPowerType(
         Power type,
         LivingEntity entity,
-        Consumer<Entity> action,
-        Consumer<Pair<Entity, Entity>> bientityAction,
-        Predicate<Pair<Entity, Entity>> bientityCondition,
-        Consumer<Entity> entityAction,
-        Predicate<Entity> entityCondition,
-        Consumer<Pair<World, StackReference>> itemAction,
-        Predicate<Pair<World, ItemStack>> itemCondition
+        @Nullable Consumer<Entity> action,
+        @Nullable Consumer<Pair<Entity, Entity>> bientityAction,
+        @Nullable Predicate<Pair<Entity, Entity>> bientityCondition,
+        @Nullable Consumer<Entity> entityAction,
+        @Nullable Predicate<Entity> entityCondition,
+        @Nullable Consumer<Pair<World, StackReference>> itemAction,
+        @Nullable Predicate<Pair<World, ItemStack>> itemCondition
     ) {
         super(type, entity);
         this.action = action;
@@ -80,7 +81,8 @@ public class ReceiveActionPowerType extends PowerType {
     }
 
     public static PowerTypeFactory getFactory() {
-        PowerTypeFactory<?> factory = new PowerTypeFactory<>(Shappoli.identifier("receive_action"),
+        return new PowerTypeFactory<>(
+            Shappoli.identifier("receive_action"),
             new SerializableData()
                 .add("action", ApoliDataTypes.ENTITY_ACTION, null)
                 .add("bientity_action", ApoliDataTypes.BIENTITY_ACTION, null)
@@ -89,6 +91,7 @@ public class ReceiveActionPowerType extends PowerType {
                 .add("entity_condition", ApoliDataTypes.ENTITY_CONDITION, null)
                 .add("item_action", ApoliDataTypes.ITEM_ACTION, null)
                 .add("item_condition", ApoliDataTypes.ITEM_CONDITION, null)
+                .postProcessor(data -> MiscUtil.checkHasAtLeastOneField(data, "action", "bientity_action", "entity_action", "item_action"))
             ,
             data -> (type, entity) -> new ReceiveActionPowerType(type, entity,
                 data.get("action"),
@@ -100,8 +103,5 @@ public class ReceiveActionPowerType extends PowerType {
                 data.get("item_condition")
             )
         ).allowCondition();
-
-        PowerTypes.ALIASES.addPathAlias("action_on_event_receive", factory.getSerializerId().getPath());
-        return factory;
     }
 }

@@ -3,6 +3,7 @@ package com.github.shap_po.shappoli.integration.trinkets.power.type;
 import com.github.shap_po.shappoli.Shappoli;
 import com.github.shap_po.shappoli.integration.trinkets.data.ShappoliTrinketsDataTypes;
 import com.github.shap_po.shappoli.integration.trinkets.data.SlotEntityAttributeModifier;
+import com.github.shap_po.shappoli.util.MiscUtil;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import dev.emi.trinkets.TrinketPlayerScreenHandler;
@@ -111,17 +112,17 @@ public class ModifyTrinketSlotPowerType extends PowerType {
 
     private Multimap<String, EntityAttributeModifier> getModifiersMap() {
         Multimap<String, EntityAttributeModifier> modifiersMap = HashMultimap.create();
-        modifiers.forEach(mod -> {
-            modifiersMap.put(mod.getAttribute().slot, mod.getModifier());
-        });
+        modifiers.forEach(mod -> modifiersMap.put(mod.getAttribute().slot, mod.getModifier()));
         return modifiersMap;
     }
 
     public static PowerTypeFactory getFactory() {
-        PowerTypeFactory<?> factory = new PowerTypeFactory<>(Shappoli.identifier("modify_trinket_slot"),
+        PowerTypeFactory<?> factory = new PowerTypeFactory<>(
+            Shappoli.identifier("modify_trinket_slot"),
             new SerializableData()
                 .add("modifier", ShappoliTrinketsDataTypes.SLOT_ENTITY_ATTRIBUTE_MODIFIER, null)
                 .add("modifiers", ShappoliTrinketsDataTypes.SLOT_ENTITY_ATTRIBUTE_MODIFIERS, null)
+                .postProcessor(data -> MiscUtil.checkHasAtLeastOneField(data, "modifier", "modifiers"))
             ,
             data -> (type, player) -> {
                 ModifyTrinketSlotPowerType power = new ModifyTrinketSlotPowerType(type, player);

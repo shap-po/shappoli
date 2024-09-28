@@ -12,21 +12,23 @@ import net.minecraft.util.Pair;
 import java.util.EnumSet;
 
 public class TeleportActionType {
-    public static void action(SerializableData.Instance data, Pair<Entity, Entity> actorAndTarget) {
-        Entity actor = actorAndTarget.getLeft();
-        Entity target = actorAndTarget.getRight();
+    public static void action(
+        Entity actor, Entity target,
+        boolean teleportActor,
+        boolean teleportTarget,
+        boolean rotate
+    ) {
         if (actor.getEntityWorld().isClient) {
             return;
         }
 
         CachedPosition actorPosition = new CachedPosition(actor);
         CachedPosition targetPosition = new CachedPosition(target);
-        boolean rotate = data.getBoolean("rotate");
 
-        if (data.getBoolean("teleport_actor")) {
+        if (teleportActor) {
             targetPosition.teleport(actor, rotate);
         }
-        if (data.getBoolean("teleport_target")) {
+        if (teleportTarget) {
             actorPosition.teleport(target, rotate);
         }
     }
@@ -57,13 +59,24 @@ public class TeleportActionType {
 
 
     public static ActionTypeFactory<Pair<Entity, Entity>> getFactory() {
-        return new ActionTypeFactory<>(Shappoli.identifier("teleport"),
+        return new ActionTypeFactory<>(
+            Shappoli.identifier("teleport"),
             new SerializableData()
                 .add("teleport_actor", SerializableDataTypes.BOOLEAN, false)
                 .add("teleport_target", SerializableDataTypes.BOOLEAN, true)
                 .add("rotate", SerializableDataTypes.BOOLEAN, false)
+                .postProcessor(data -> {
+                    if (!data.getBoolean("teleport_actor") && !data.getBoolean("teleport_target")) {
+                        throw new IllegalStateException("Any of 'teleport_actor' or 'teleport_target' fields must to true!");
+                    }
+                })
             ,
-            TeleportActionType::action
+            (data, actorAndTarget) -> action(
+                actorAndTarget.getLeft(), actorAndTarget.getRight(),
+                data.getBoolean("teleport_actor"),
+                data.getBoolean("teleport_target"),
+                data.getBoolean("rotate")
+            )
         );
     }
 }

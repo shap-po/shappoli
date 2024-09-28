@@ -13,11 +13,11 @@ import net.minecraft.util.Pair;
 import java.util.function.Predicate;
 
 public class ShapeConditionType {
-    public static boolean condition(SerializableData.Instance data, Entity entity) {
+    public static boolean condition(Entity entity, Predicate<Pair<Entity, Entity>> biEntityCondition) {
         if (!(entity instanceof PlayerEntity player)) {
             return false;
         }
-        return data.<Predicate<Pair<Entity, Entity>>>get("bientity_condition").test(new Pair<>(player, WalkersUtil.getShape(player)));
+        return biEntityCondition.test(new Pair<>(player, WalkersUtil.getShape(player)));
     }
 
     public static ConditionTypeFactory<Entity> getFactory() {
@@ -26,7 +26,7 @@ public class ShapeConditionType {
             new SerializableData()
                 .add("bientity_condition", ApoliDataTypes.BIENTITY_CONDITION)
             ,
-            ShapeConditionType::condition
+            (data, entity) -> condition(entity, data.get("bientity_condition"))
         );
 
         EntityConditions.ALIASES.addPathAlias("shape", factory.getSerializerId().getPath());

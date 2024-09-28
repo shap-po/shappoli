@@ -20,18 +20,20 @@ import java.util.List;
 import java.util.function.Predicate;
 
 public class EquippedTrinketCountConditionType {
-    public static boolean condition(SerializableData.Instance data, Entity entity) {
+    public static boolean condition(
+        Entity entity,
+        Predicate<Pair<World, ItemStack>> itemCondition,
+        List<TrinketSlotData> slots,
+        Comparison comparison, int compareTo
+    ) {
         if (!(entity instanceof LivingEntity livingEntity)) {
             return false;
         }
 
-        Predicate<Pair<World, ItemStack>> itemCondition = data.get("item_condition");
-        List<TrinketSlotData> slots = TrinketSlotData.getSlots(data);
-
         int count = TrinketsUtil.getTrinkets(livingEntity, slots, itemCondition)
             .mapToInt(trinket -> 1)
             .sum();
-        return data.<Comparison>get("comparison").compare(count, data.getInt("compare_to"));
+        return comparison.compare(count, compareTo);
     }
 
     public static ConditionTypeFactory<Entity> getFactory() {
@@ -44,7 +46,13 @@ public class EquippedTrinketCountConditionType {
                 .add("comparison", ApoliDataTypes.COMPARISON, Comparison.GREATER_THAN_OR_EQUAL)
                 .add("compare_to", SerializableDataTypes.INT, 1)
             ,
-            EquippedTrinketCountConditionType::condition
+            (data, entity) -> condition(
+                entity,
+                data.get("item_condition"),
+                TrinketSlotData.getSlots(data),
+                data.get("comparison"),
+                data.getInt("compare_to")
+            )
         );
 
         EntityConditions.ALIASES.addPathAlias("equipped_trinket", factory.getSerializerId().getPath());

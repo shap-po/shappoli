@@ -16,20 +16,19 @@ import java.util.function.Function;
 
 public class SendConditionConditionType {
     public static <T> boolean condition(
-        SerializableData.Instance data, T condition,
-        Function<T, Entity> conditionToEntityFunction,
+        T conditionData,
+        Entity entity,
+        Power receiver,
         BiPredicate<ReceiveConditionPowerType, T> sendFunction
     ) {
-        Entity entity = conditionToEntityFunction.apply(condition);
         if (entity == null) {
             Shappoli.LOGGER.warn("Tried to send a condition to a null entity. Probably something went wrong on Shappoli's side. Please report this to the mod author.");
             return false;
         }
 
-        Power receiver = data.get("receiver");
         PowerType power = PowerHolderComponent.KEY.get(entity).getPowerType(receiver);
         if (power instanceof ReceiveConditionPowerType listener) {
-            return listener.isActive() && sendFunction.test(listener, condition);
+            return listener.isActive() && sendFunction.test(listener, conditionData);
         }
         Shappoli.LOGGER.warn("Tried to send a condition to a power that does not exist or is not a condition receiver: {}", receiver.getId());
         return false;
@@ -45,10 +44,10 @@ public class SendConditionConditionType {
             new SerializableData()
                 .add("receiver", ApoliDataTypes.POWER_REFERENCE)
             ,
-            (data, condition) -> condition(
-                data,
-                condition,
-                conditionToEntityFunction,
+            (data, conditionData) -> condition(
+                conditionData,
+                conditionToEntityFunction.apply(conditionData),
+                data.get("receiver"),
                 sendFunction
             )
         );

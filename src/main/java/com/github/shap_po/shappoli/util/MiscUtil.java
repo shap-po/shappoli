@@ -17,4 +17,16 @@ public class MiscUtil {
         }
         return list;
     }
+
+    /**
+     * @throws IllegalArgumentException If none of the fields are present
+     */
+    public static void checkHasAtLeastOneField(SerializableData.Instance data, String... fields) {
+        for (String field : fields) {
+            if (data.isPresent(field)) {
+                return;
+            }
+        }
+        throw new IllegalArgumentException("Any of the following fields must be defied: " + String.join(", ", fields));
+    }
 }

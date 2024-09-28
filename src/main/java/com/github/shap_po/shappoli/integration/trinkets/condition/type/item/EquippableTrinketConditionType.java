@@ -19,15 +19,15 @@ import net.minecraft.world.World;
 import java.util.List;
 
 public class EquippableTrinketConditionType {
-    public static boolean condition(SerializableData.Instance data, Pair<World, ItemStack> worldAndStack) {
-        ItemStack stack = worldAndStack.getRight();
+    public static boolean condition(
+        ItemStack stack,
+        List<TrinketSlotData> slots,
+        boolean onlyEmpty
+    ) {
         Entity entity = InventoryUtil.getHolder(stack);
         if (!(entity instanceof LivingEntity livingEntity)) {
             return false;
         }
-
-        List<TrinketSlotData> slots = TrinketSlotData.getSlots(data);
-        boolean onlyEmpty = data.getBoolean("only_empty");
 
         return TrinketsUtil.getSlots(livingEntity, slots).anyMatch(slot -> {
             if (onlyEmpty && !slot.inventory().getStack(slot.index()).isEmpty()) {
@@ -45,7 +45,11 @@ public class EquippableTrinketConditionType {
                 .add("slots", ShappoliTrinketsDataTypes.TRINKET_SLOTS, null)
                 .add("only_empty", SerializableDataTypes.BOOLEAN, false)
             ,
-            EquippableTrinketConditionType::condition
+            (data, worldAndStack) -> condition(
+                worldAndStack.getRight(),
+                TrinketSlotData.getSlots(data),
+                data.getBoolean("only_empty")
+            )
         );
 
         ItemConditions.ALIASES.addPathAlias("is_equippable_trinket", factory.getSerializerId().getPath());

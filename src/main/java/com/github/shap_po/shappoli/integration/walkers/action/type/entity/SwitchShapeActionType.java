@@ -11,34 +11,40 @@ import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
 
 public class SwitchShapeActionType {
-    public static void action(SerializableData.Instance data, Entity entity) {
+    public static void action(
+        Entity entity,
+        Identifier shapeId, NbtCompound nbt,
+        @Nullable Consumer<Entity> actionOnSuccess
+    ) {
         if (!(entity instanceof ServerPlayerEntity player)) {
             return;
         }
 
-        Identifier shapeId = data.getId("shape");
-        NbtCompound nbt = data.get("nbt");
-
         boolean result = WalkersUtil.switchShape(player, shapeId, nbt);
 
-        Consumer<Entity> action = data.get("action_on_success");
-        if (result && action != null) {
-            action.accept(entity);
+        if (result && actionOnSuccess != null) {
+            actionOnSuccess.accept(entity);
         }
     }
 
     public static ActionTypeFactory<Entity> getFactory() {
-        ActionTypeFactory<Entity> factory = new ActionTypeFactory<>(Shappoli.identifier("switch_shape"),
+        ActionTypeFactory<Entity> factory = new ActionTypeFactory<>(
+            Shappoli.identifier("switch_shape"),
             new SerializableData()
                 .add("shape", SerializableDataTypes.IDENTIFIER, null)
                 .add("nbt", SerializableDataTypes.NBT_COMPOUND, null)
                 .add("action_on_success", ApoliDataTypes.ENTITY_ACTION, null)
             ,
-            SwitchShapeActionType::action
+            (data, entity) -> action(
+                entity,
+                data.getId("shape"), data.get("nbt"),
+                data.get("action_on_success")
+            )
         );
 
         EntityActions.ALIASES.addPathAlias("change_shape", factory.getSerializerId().getPath());

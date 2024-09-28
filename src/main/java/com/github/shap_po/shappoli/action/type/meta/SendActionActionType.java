@@ -16,22 +16,20 @@ import java.util.function.Function;
 
 public class SendActionActionType {
     public static <T> void action(
-        SerializableData.Instance data,
-        T t,
-        Function<T, Entity> actionToEntityFunction,
+        T actionData,
+        Entity entity,
+        Power receiver,
         BiConsumer<ReceiveActionPowerType, T> sendFunction
     ) {
-        Entity entity = actionToEntityFunction.apply(t);
         if (entity == null) {
             Shappoli.LOGGER.warn("Tried to send an action to a null entity. Probably something went wrong on Shappoli's side. Please report this to the mod author.");
             return;
         }
 
-        Power receiver = data.get("receiver");
         PowerType power = PowerHolderComponent.KEY.get(entity).getPowerType(receiver);
 
         if (power instanceof ReceiveActionPowerType listener) {
-            sendFunction.accept(listener, t);
+            sendFunction.accept(listener, actionData);
         } else {
             Shappoli.LOGGER.warn("Tried to send an action to a power that does not exist or is not an action receiver: {}", receiver.getId());
         }
@@ -42,21 +40,17 @@ public class SendActionActionType {
         BiConsumer<ReceiveActionPowerType, T> sendFunction,
         IdentifierAlias aliasProvider
     ) {
-        ActionTypeFactory<T> factory = new ActionTypeFactory<>(Shappoli.identifier("send_action"),
+        return new ActionTypeFactory<>(
+            Shappoli.identifier("send_action"),
             new SerializableData()
-                .add("listener", ApoliDataTypes.POWER_REFERENCE, null) // alias
-                .addFunctionedDefault("receiver", ApoliDataTypes.POWER_REFERENCE, data -> data.get("listener"))
+                .add("receiver", ApoliDataTypes.POWER_REFERENCE)
             ,
-            (instance, pair) -> action(
-                instance,
-                pair,
-                actionToEntityFunction,
+            (data, actionData) -> action(
+                actionData,
+                actionToEntityFunction.apply(actionData),
+                data.get("receiver"),
                 sendFunction
             )
         );
-
-        aliasProvider.addPathAlias("send_event", factory.getSerializerId().getPath());
-        aliasProvider.addPathAlias("emit_event", factory.getSerializerId().getPath());
-        return factory;
     }
 }

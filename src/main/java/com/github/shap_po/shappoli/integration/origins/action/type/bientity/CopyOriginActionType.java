@@ -12,35 +12,44 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.Pair;
 
 public class CopyOriginActionType {
-    public static void action(SerializableData.Instance data, Pair<Entity, Entity> actorAndTarget) {
-        Entity actor = actorAndTarget.getLeft();
-        Entity target = actorAndTarget.getRight();
-
+    public static void action(
+        Entity actor, Entity target,
+        OriginLayer layer,
+        boolean modifyActor, boolean modifyTarget
+    ) {
         if (actor.getEntityWorld().isClient) {
             return;
         }
 
-        OriginLayer layer = OriginsUtil.getLayer(data.get("layer"));
-
         Origin actorOrigin = OriginsUtil.getOrigin(actor, layer);
         Origin targetOrigin = OriginsUtil.getOrigin(target, layer);
 
-        if (data.getBoolean("modify_actor")) {
+        if (modifyActor) {
             OriginsUtil.setOrigin(actor, layer, targetOrigin);
         }
-        if (data.getBoolean("modify_target")) {
+        if (modifyTarget) {
             OriginsUtil.setOrigin(target, layer, actorOrigin);
         }
     }
 
     public static ActionTypeFactory<Pair<Entity, Entity>> getFactory() {
-        ActionTypeFactory<Pair<Entity, Entity>> factory = new ActionTypeFactory<>(Shappoli.identifier("copy_origin"),
+        ActionTypeFactory<Pair<Entity, Entity>> factory = new ActionTypeFactory<>(
+            Shappoli.identifier("copy_origin"),
             new SerializableData()
                 .add("layer", SerializableDataTypes.IDENTIFIER, OriginsUtil.ORIGIN_LAYER_ID)
                 .add("modify_actor", SerializableDataTypes.BOOLEAN, false)
                 .add("modify_target", SerializableDataTypes.BOOLEAN, true)
+                .postProcessor(data -> {
+                    if (!data.getBoolean("modify_actor") && !data.getBoolean("modify_target")) {
+                        throw new IllegalStateException("Any of 'modify_actor' and 'modify_target' fields must be true.");
+                    }
+                })
             ,
-            CopyOriginActionType::action
+            (data, actorAndTarget) -> action(
+                actorAndTarget.getLeft(), actorAndTarget.getRight(),
+                OriginsUtil.getLayer(data.get("layer")),
+                data.getBoolean("modify_actor"), data.getBoolean("modify_target")
+            )
         );
 
         BiEntityActions.ALIASES.addPathAlias("transfer_origin", factory.getSerializerId().getPath());

@@ -8,7 +8,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import tocraft.walkers.api.PlayerAbilities;
 
 public class CanUseShapeAbilityConditionType {
-    public static boolean condition(SerializableData.Instance data, Entity entity) {
+    public static boolean condition(Entity entity) {
         if (!(entity instanceof PlayerEntity player)) {
             return false;
         }
@@ -18,9 +18,8 @@ public class CanUseShapeAbilityConditionType {
     public static ConditionTypeFactory<Entity> getFactory() {
         return new ConditionTypeFactory<>(
             Shappoli.identifier("can_use_shape_ability"),
-            new SerializableData()
-            ,
-            CanUseShapeAbilityConditionType::condition
+            new SerializableData(),
+            (data, entity) -> condition(entity)
         );
     }
 }

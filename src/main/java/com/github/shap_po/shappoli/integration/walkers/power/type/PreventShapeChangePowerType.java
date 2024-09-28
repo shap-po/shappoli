@@ -10,16 +10,17 @@ import io.github.apace100.calio.data.SerializableData;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.Pair;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Predicate;
 
 public class PreventShapeChangePowerType extends PowerType {
-    private final Predicate<Pair<Entity, Entity>> bientityCondition;
+    private final @Nullable Predicate<Pair<Entity, Entity>> bientityCondition;
 
     public PreventShapeChangePowerType(
         Power type,
         LivingEntity entity,
-        Predicate<Pair<Entity, Entity>> bientityCondition
+        @Nullable Predicate<Pair<Entity, Entity>> bientityCondition
     ) {
         super(type, entity);
         this.bientityCondition = bientityCondition;
@@ -30,7 +31,8 @@ public class PreventShapeChangePowerType extends PowerType {
     }
 
     public static PowerTypeFactory getFactory() {
-        PowerTypeFactory<?> factory = new PowerTypeFactory<>(Shappoli.identifier("prevent_shape_change"),
+        PowerTypeFactory<?> factory = new PowerTypeFactory<>(
+            Shappoli.identifier("prevent_shape_change"),
             new SerializableData()
                 .add("bientity_condition", ApoliDataTypes.BIENTITY_CONDITION, null)
             ,

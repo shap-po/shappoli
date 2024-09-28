@@ -13,14 +13,20 @@ import io.github.apace100.calio.data.SerializableDataTypes;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 
+import java.util.List;
+
 public class TrinketSlotCountConditionType {
-    public static boolean condition(SerializableData.Instance data, Entity entity) {
+    public static boolean condition(
+        Entity entity,
+        List<TrinketSlotData> slots,
+        Comparison comparison, int compareTo
+    ) {
         if (!(entity instanceof LivingEntity livingEntity)) {
             return false;
         }
 
-        int count = TrinketsUtil.getSlots(livingEntity, TrinketSlotData.getSlots(data)).mapToInt(slot -> 1).sum();
-        return data.<Comparison>get("comparison").compare(count, data.getInt("compare_to"));
+        int count = TrinketsUtil.getSlots(livingEntity, slots).mapToInt(slot -> 1).sum();
+        return comparison.compare(count, compareTo);
     }
 
     public static ConditionTypeFactory<Entity> getFactory() {
@@ -32,7 +38,12 @@ public class TrinketSlotCountConditionType {
                 .add("comparison", ApoliDataTypes.COMPARISON, Comparison.GREATER_THAN)
                 .add("compare_to", SerializableDataTypes.INT, 0)
             ,
-            TrinketSlotCountConditionType::condition
+            (data, entity) -> condition(
+                entity,
+                TrinketSlotData.getSlots(data),
+                data.get("comparison"),
+                data.getInt("compare_to")
+            )
         );
 
         EntityConditions.ALIASES.addPathAlias("trinket_slots_count", factory.getSerializerId().getPath());

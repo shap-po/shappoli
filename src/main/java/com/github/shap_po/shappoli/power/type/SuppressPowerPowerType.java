@@ -33,10 +33,12 @@ public class SuppressPowerPowerType extends PowerType {
     }
 
     public static PowerTypeFactory getFactory() {
-        return new PowerTypeFactory<>(Shappoli.identifier("suppress_power"),
+        return new PowerTypeFactory<>(
+            Shappoli.identifier("suppress_power"),
             new SerializableData()
                 .add("power", ApoliDataTypes.POWER_REFERENCE, null)
                 .add("powers", ShappoliDataTypes.POWER_REFERENCES, null)
+                .postProcessor(data -> MiscUtil.checkHasAtLeastOneField(data, "power", "powers"))
             ,
             data -> (type, entity) -> new SuppressPowerPowerType(
                 type, entity,

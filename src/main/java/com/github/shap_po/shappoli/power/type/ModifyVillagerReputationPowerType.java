@@ -10,14 +10,18 @@ import io.github.apace100.calio.data.SerializableData;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.Pair;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.function.Predicate;
 
 public class ModifyVillagerReputationPowerType extends ValueModifyingPowerType {
-    private final Predicate<Pair<Entity, Entity>> bientityCondition;
+    private final @Nullable Predicate<Pair<Entity, Entity>> bientityCondition;
 
-    public ModifyVillagerReputationPowerType(Power power, LivingEntity entity, Predicate<Pair<Entity, Entity>> bientityCondition) {
+    public ModifyVillagerReputationPowerType(
+        Power power, LivingEntity entity,
+        @Nullable Predicate<Pair<Entity, Entity>> bientityCondition
+    ) {
         super(power, entity);
         this.bientityCondition = bientityCondition;
     }

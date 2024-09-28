@@ -1,8 +1,8 @@
 package com.github.shap_po.shappoli.integration.walkers.condition.type.entity;
 
 import com.github.shap_po.shappoli.Shappoli;
-import io.github.apace100.apoli.data.ApoliDataTypes;
 import io.github.apace100.apoli.condition.factory.ConditionTypeFactory;
+import io.github.apace100.apoli.data.ApoliDataTypes;
 import io.github.apace100.apoli.util.Comparison;
 import io.github.apace100.calio.data.SerializableData;
 import io.github.apace100.calio.data.SerializableDataTypes;
@@ -11,13 +11,14 @@ import net.minecraft.entity.player.PlayerEntity;
 import tocraft.walkers.api.PlayerAbilities;
 
 public class ShapeAbilityCooldownConditionType {
-    public static boolean condition(SerializableData.Instance data, Entity entity) {
+    public static boolean condition(
+        Entity entity,
+        Comparison comparison, int compareTo
+    ) {
         if (!(entity instanceof PlayerEntity player)) {
             return false;
         }
 
-        Comparison comparison = data.get("comparison");
-        int compareTo = data.get("compare_to");
         int cooldown = PlayerAbilities.getCooldown(player);
 
         return comparison.compare(cooldown, compareTo);
@@ -30,7 +31,10 @@ public class ShapeAbilityCooldownConditionType {
                 .add("comparison", ApoliDataTypes.COMPARISON)
                 .add("compare_to", SerializableDataTypes.INT)
             ,
-            ShapeAbilityCooldownConditionType::condition
+            (data, entity) -> condition(
+                entity,
+                data.get("comparison"), data.getInt("compare_to")
+            )
         );
     }
 }

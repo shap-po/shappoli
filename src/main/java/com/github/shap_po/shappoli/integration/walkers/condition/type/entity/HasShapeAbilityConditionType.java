@@ -10,7 +10,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import tocraft.walkers.ability.AbilityRegistry;
 
 public class HasShapeAbilityConditionType {
-    public static boolean condition(SerializableData.Instance data, Entity entity) {
+    public static boolean condition(Entity entity) {
         if (!(entity instanceof LivingEntity livingEntity)) {
             return false;
         }
@@ -25,7 +25,7 @@ public class HasShapeAbilityConditionType {
         return new ConditionTypeFactory<>(
             Shappoli.identifier("has_shape_ability"),
             new SerializableData(),
-            HasShapeAbilityConditionType::condition
+            (data, entity) -> condition(entity)
         );
     }
 }

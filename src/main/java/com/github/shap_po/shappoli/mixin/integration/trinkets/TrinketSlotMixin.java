@@ -1,6 +1,6 @@
 package com.github.shap_po.shappoli.mixin.integration.trinkets;
 
-import com.github.shap_po.shappoli.integration.trinkets.power.PreventTrinketEquipPower;
+import com.github.shap_po.shappoli.integration.trinkets.power.type.PreventTrinketEquipPowerType;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import dev.emi.trinkets.TrinketSlot;
 import dev.emi.trinkets.api.SlotReference;
@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.At;
 public interface TrinketSlotMixin {
     @ModifyReturnValue(method = "canInsert", at = @At("RETURN"))
     private static boolean shappoli$preventTrinketEquip(boolean original, ItemStack stack, SlotReference slotRef, LivingEntity entity) {
-        return !PowerHolderComponent.hasPowerType(entity, PreventTrinketEquipPower.class,
+        return !PowerHolderComponent.hasPowerType(entity, PreventTrinketEquipPowerType.class,
             p -> p.doesApply(entity, slotRef, stack)
         ) && original;
     }

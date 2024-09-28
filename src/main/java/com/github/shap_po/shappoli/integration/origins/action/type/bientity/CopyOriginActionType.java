@@ -1,0 +1,49 @@
+package com.github.shap_po.shappoli.integration.origins.action.type.bientity;
+
+import com.github.shap_po.shappoli.Shappoli;
+import com.github.shap_po.shappoli.integration.origins.util.OriginsUtil;
+import io.github.apace100.apoli.action.factory.ActionTypeFactory;
+import io.github.apace100.apoli.action.factory.BiEntityActions;
+import io.github.apace100.calio.data.SerializableData;
+import io.github.apace100.calio.data.SerializableDataTypes;
+import io.github.apace100.origins.origin.Origin;
+import io.github.apace100.origins.origin.OriginLayer;
+import net.minecraft.entity.Entity;
+import net.minecraft.util.Pair;
+
+public class CopyOriginActionType {
+    public static void action(SerializableData.Instance data, Pair<Entity, Entity> actorAndTarget) {
+        Entity actor = actorAndTarget.getLeft();
+        Entity target = actorAndTarget.getRight();
+
+        if (actor.getEntityWorld().isClient) {
+            return;
+        }
+
+        OriginLayer layer = OriginsUtil.getLayer(data.get("layer"));
+
+        Origin actorOrigin = OriginsUtil.getOrigin(actor, layer);
+        Origin targetOrigin = OriginsUtil.getOrigin(target, layer);
+
+        if (data.getBoolean("modify_actor")) {
+            OriginsUtil.setOrigin(actor, layer, targetOrigin);
+        }
+        if (data.getBoolean("modify_target")) {
+            OriginsUtil.setOrigin(target, layer, actorOrigin);
+        }
+    }
+
+    public static ActionTypeFactory<Pair<Entity, Entity>> getFactory() {
+        ActionTypeFactory<Pair<Entity, Entity>> factory = new ActionTypeFactory<>(Shappoli.identifier("copy_origin"),
+            new SerializableData()
+                .add("layer", SerializableDataTypes.IDENTIFIER, OriginsUtil.ORIGIN_LAYER_ID)
+                .add("modify_actor", SerializableDataTypes.BOOLEAN, false)
+                .add("modify_target", SerializableDataTypes.BOOLEAN, true)
+            ,
+            CopyOriginActionType::action
+        );
+
+        BiEntityActions.ALIASES.addPathAlias("transfer_origin", factory.getSerializerId().getPath());
+        return factory;
+    }
+}

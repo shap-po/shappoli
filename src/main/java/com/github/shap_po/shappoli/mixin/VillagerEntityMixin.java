@@ -1,6 +1,6 @@
 package com.github.shap_po.shappoli.mixin;
 
-import com.github.shap_po.shappoli.power.ModifyVillagerReputationPower;
+import com.github.shap_po.shappoli.power.type.ModifyVillagerReputationPowerType;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import io.github.apace100.apoli.component.PowerHolderComponent;
 import net.minecraft.entity.Entity;
@@ -20,6 +20,6 @@ public abstract class VillagerEntityMixin extends Entity {
 
     @ModifyReturnValue(method = "getReputation", at = @At("RETURN"))
     private int shappoli$modifyReputation(int original, PlayerEntity player) {
-        return Math.round(PowerHolderComponent.modify(player, ModifyVillagerReputationPower.class, original, (p) -> p.doesApply((LivingEntity) (Object) this)));
+        return Math.round(PowerHolderComponent.modify(player, ModifyVillagerReputationPowerType.class, original, (p) -> p.doesApply((LivingEntity) (Object) this)));
     }
 }

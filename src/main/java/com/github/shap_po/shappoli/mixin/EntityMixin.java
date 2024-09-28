@@ -1,6 +1,6 @@
 package com.github.shap_po.shappoli.mixin;
 
-import com.github.shap_po.shappoli.power.ActionOnEntityCollisionPower;
+import com.github.shap_po.shappoli.power.type.ActionOnEntityCollisionPowerType;
 import io.github.apace100.apoli.component.PowerHolderComponent;
 import net.minecraft.entity.Entity;
 import org.spongepowered.asm.mixin.Mixin;
@@ -14,9 +14,9 @@ public abstract class EntityMixin {
     private void shappoli$actionOnEntityCollision(CallbackInfo ci) {
         PowerHolderComponent.withPowerTypes(
             (Entity) (Object) this,
-            ActionOnEntityCollisionPower.class,
+            ActionOnEntityCollisionPowerType.class,
             (p) -> true,
-            ActionOnEntityCollisionPower::apply
+            ActionOnEntityCollisionPowerType::apply
         );
     }
 }

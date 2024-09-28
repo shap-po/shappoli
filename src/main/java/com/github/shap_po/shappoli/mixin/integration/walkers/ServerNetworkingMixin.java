@@ -1,6 +1,6 @@
 package com.github.shap_po.shappoli.mixin.integration.walkers;
 
-import com.github.shap_po.shappoli.integration.walkers.power.ActionOnShapeAbilityUsePower;
+import com.github.shap_po.shappoli.integration.walkers.power.type.ActionOnShapeAbilityUsePowerType;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import io.github.apace100.apoli.component.PowerHolderComponent;
@@ -32,7 +32,7 @@ public class ServerNetworkingMixin {
             Objects.requireNonNull(context.getPlayer().getServer()).execute(() -> {
                 LivingEntity shape = PlayerShape.getCurrentShape(player);
                 if (shape != null && AbilityRegistry.has(shape) && PlayerAbilities.canUseAbility(player)) {
-                    PowerHolderComponent.withPowerTypes(player, ActionOnShapeAbilityUsePower.class, ActionOnShapeAbilityUsePower::doesApply, ActionOnShapeAbilityUsePower::apply);
+                    PowerHolderComponent.withPowerTypes(player, ActionOnShapeAbilityUsePowerType.class, ActionOnShapeAbilityUsePowerType::doesApply, ActionOnShapeAbilityUsePowerType::apply);
                 }
             });
             receiver.receive(context, packet);

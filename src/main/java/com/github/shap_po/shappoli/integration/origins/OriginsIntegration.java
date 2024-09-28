@@ -1,7 +1,7 @@
 package com.github.shap_po.shappoli.integration.origins;
 
-import com.github.shap_po.shappoli.integration.origins.power.factory.action.BiEntityActions;
-import com.github.shap_po.shappoli.integration.origins.power.factory.action.EntityActions;
+import com.github.shap_po.shappoli.integration.origins.action.factory.BiEntityActions;
+import com.github.shap_po.shappoli.integration.origins.action.factory.EntityActions;
 
 public class OriginsIntegration {
     public static void register() {

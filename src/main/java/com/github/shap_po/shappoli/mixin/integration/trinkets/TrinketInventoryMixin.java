@@ -1,7 +1,7 @@
 package com.github.shap_po.shappoli.mixin.integration.trinkets;
 
 import com.github.shap_po.shappoli.integration.trinkets.access.SyncingTrinketInventory;
-import com.github.shap_po.shappoli.integration.trinkets.power.ActionOnTrinketChangePower;
+import com.github.shap_po.shappoli.integration.trinkets.power.type.ActionOnTrinketChangePowerType;
 import com.github.shap_po.shappoli.util.InventoryUtil;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
@@ -50,7 +50,7 @@ public class TrinketInventoryMixin implements SyncingTrinketInventory {
 
     @Inject(method = "removeStack(I)Lnet/minecraft/item/ItemStack;", at = @At("HEAD"))
     private void shappoli$onRemoveStack(int slot, CallbackInfoReturnable<ItemStack> cir) {
-        ActionOnTrinketChangePower.handleTrinketChange(shappoli$getEntity(), shappoli$getInventory(), shappoli$getStack(slot), slot, false);
+        ActionOnTrinketChangePowerType.handleTrinketChange(shappoli$getEntity(), shappoli$getInventory(), shappoli$getStack(slot), slot, false);
     }
 
     @Inject(method = "removeStack(II)Lnet/minecraft/item/ItemStack;", at = @At("HEAD"))
@@ -67,9 +67,9 @@ public class TrinketInventoryMixin implements SyncingTrinketInventory {
             original.call(slot, stack);
             return;
         }
-        ActionOnTrinketChangePower.handleTrinketChange(shappoli$getEntity(), shappoli$getInventory(), oldStack, slot, false);
+        ActionOnTrinketChangePowerType.handleTrinketChange(shappoli$getEntity(), shappoli$getInventory(), oldStack, slot, false);
         original.call(slot, stack); // update the stack before handling the equip action
-        ActionOnTrinketChangePower.handleTrinketChange(shappoli$getEntity(), shappoli$getInventory(), stack, slot, true);
+        ActionOnTrinketChangePowerType.handleTrinketChange(shappoli$getEntity(), shappoli$getInventory(), stack, slot, true);
     }
 
 

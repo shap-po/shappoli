@@ -1,7 +1,7 @@
 package com.github.shap_po.shappoli.mixin.integration.trinkets;
 
 
-import com.github.shap_po.shappoli.integration.trinkets.power.ActionOnTrinketChangePower;
+import com.github.shap_po.shappoli.integration.trinkets.power.type.ActionOnTrinketChangePowerType;
 import dev.emi.trinkets.SurvivalTrinketSlot;
 import dev.emi.trinkets.api.TrinketInventory;
 import net.minecraft.entity.player.PlayerEntity;
@@ -39,7 +39,7 @@ public abstract class PlayerScreenHandlerMixin extends ScreenHandler {
         }
         if (trinketSlot.hasStack()) {
             ItemStack stack = trinketSlot.getStack();
-            ActionOnTrinketChangePower.handleTrinketChange(owner, (TrinketInventory) trinketSlot.inventory, stack, trinketSlot.getIndex(), false);
+            ActionOnTrinketChangePowerType.handleTrinketChange(owner, (TrinketInventory) trinketSlot.inventory, stack, trinketSlot.getIndex(), false);
         }
     }
 }

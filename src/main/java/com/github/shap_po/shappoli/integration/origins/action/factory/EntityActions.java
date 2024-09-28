@@ -1,0 +1,17 @@
+package com.github.shap_po.shappoli.integration.origins.action.factory;
+
+import com.github.shap_po.shappoli.integration.origins.action.type.entity.SetOriginActionType;
+import io.github.apace100.apoli.action.factory.ActionTypeFactory;
+import io.github.apace100.apoli.registry.ApoliRegistries;
+import net.minecraft.entity.Entity;
+import net.minecraft.registry.Registry;
+
+public class EntityActions {
+    public static void register() {
+        register(SetOriginActionType.getFactory());
+    }
+
+    private static void register(ActionTypeFactory<Entity> ActionTypeFactory) {
+        Registry.register(ApoliRegistries.ENTITY_ACTION, ActionTypeFactory.getSerializerId(), ActionTypeFactory);
+    }
+}

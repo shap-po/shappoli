@@ -1,7 +1,7 @@
 package com.github.shap_po.shappoli.mixin;
 
 import com.github.shap_po.shappoli.access.SuppressiblePower;
-import com.github.shap_po.shappoli.power.SuppressPowerPower;
+import com.github.shap_po.shappoli.power.type.SuppressPowerPowerType;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import io.github.apace100.apoli.component.PowerHolderComponent;
 import io.github.apace100.apoli.power.type.PowerType;
@@ -64,8 +64,8 @@ public class PowerTypeMixin<T extends PowerType> implements SuppressiblePower {
     private boolean shappoli$deactivatePower(boolean original) {
         return original &&
             shappoli$isSuppressed() &&
-            (power instanceof SuppressPowerPower ||
-                !PowerHolderComponent.hasPowerType(entity, SuppressPowerPower.class, p -> p.doesApply(power)));
+            (power instanceof SuppressPowerPowerType ||
+                !PowerHolderComponent.hasPowerType(entity, SuppressPowerPowerType.class, p -> p.doesApply(power)));
     }
 
     @Unique

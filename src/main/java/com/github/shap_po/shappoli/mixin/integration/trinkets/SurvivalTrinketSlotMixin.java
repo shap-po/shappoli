@@ -1,6 +1,6 @@
 package com.github.shap_po.shappoli.mixin.integration.trinkets;
 
-import com.github.shap_po.shappoli.integration.trinkets.power.PreventTrinketUnequipPower;
+import com.github.shap_po.shappoli.integration.trinkets.power.type.PreventTrinketUnequipPowerType;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import dev.emi.trinkets.SurvivalTrinketSlot;
 import dev.emi.trinkets.api.SlotReference;
@@ -33,7 +33,7 @@ public class SurvivalTrinketSlotMixin extends Slot {
         ItemStack stack = this.getStack();
         SlotReference slotRef = new SlotReference(trinketInventory, slotOffset);
 
-        return !PowerHolderComponent.hasPowerType(player, PreventTrinketUnequipPower.class,
+        return !PowerHolderComponent.hasPowerType(player, PreventTrinketUnequipPowerType.class,
             p -> p.doesApply(player, slotRef, stack)
         ) && original;
     }

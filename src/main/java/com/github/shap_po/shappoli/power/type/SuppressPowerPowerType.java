@@ -1,7 +1,6 @@
 package com.github.shap_po.shappoli.power.type;
 
 import com.github.shap_po.shappoli.Shappoli;
-import com.github.shap_po.shappoli.data.ShappoliDataTypes;
 import com.github.shap_po.shappoli.util.MiscUtil;
 import io.github.apace100.apoli.data.ApoliDataTypes;
 import io.github.apace100.apoli.power.Power;
@@ -37,7 +36,7 @@ public class SuppressPowerPowerType extends PowerType {
             Shappoli.identifier("suppress_power"),
             new SerializableData()
                 .add("power", ApoliDataTypes.POWER_REFERENCE, null)
-                .add("powers", ShappoliDataTypes.POWER_REFERENCES, null)
+                .add("powers", ApoliDataTypes.POWER_REFERENCE.listOf(), null)
                 .postProcessor(data -> MiscUtil.checkHasAtLeastOneField(data, "power", "powers"))
             ,
             data -> (type, entity) -> new SuppressPowerPowerType(

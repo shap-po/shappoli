@@ -10,8 +10,7 @@
         "type": "shappoli:suppress_power",
         "power_type": "apoli:active_self",
         "power_types": [
-          "shappoli:action_on_trinket_update",
-          "test:nonexistent_power"
+          "shappoli:action_on_trinket_update"
         ],
         "ignored_powers": [
           "*:*_power_active2"
@@ -21,7 +20,7 @@
           "type": "apoli:actor_action",
           "action": {
             "type": "apoli:execute_command",
-            "command": "say Suppressed"
+            "command": "say Suppressed powers by types: 'apoli:active_self', 'shappoli:action_on_trinket_update'; Ignored power: '*:*_power_active2'"
           }
         }
       }
@@ -33,7 +32,7 @@
     "key": "key.attack",
     "entity_action": {
       "type": "apoli:execute_command",
-      "command": "say Active 1"
+      "command": "say Suppress by type: Active; Should be suppressed"
     }
   },
 
@@ -42,7 +41,7 @@
     "key": "key.attack",
     "entity_action": {
       "type": "apoli:execute_command",
-      "command": "say Active 2"
+      "command": "say Suppress by type: Active; Should not be suppressed (ignored)"
     }
   },
 
@@ -50,7 +49,7 @@
     "type": "shappoli:action_on_trinket_update",
     "entity_action_on_equip": {
       "type": "apoli:execute_command",
-      "command": "say Equipped"
+      "command": "say Suppress by type: Trinket; Should be suppressed"
     },
     "item_condition": {
       "type": "apoli:empty",

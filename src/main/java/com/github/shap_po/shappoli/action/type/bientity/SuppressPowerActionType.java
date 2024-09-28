@@ -2,9 +2,7 @@ package com.github.shap_po.shappoli.action.type.bientity;
 
 import com.github.shap_po.shappoli.Shappoli;
 import com.github.shap_po.shappoli.access.SuppressiblePower;
-import com.github.shap_po.shappoli.data.ShappoliDataTypes;
 import com.github.shap_po.shappoli.util.MiscUtil;
-import com.github.shap_po.shappoli.util.PowerHolderComponentUtil;
 import com.google.common.collect.Streams;
 import io.github.apace100.apoli.action.factory.ActionTypeFactory;
 import io.github.apace100.apoli.component.PowerHolderComponent;
@@ -12,6 +10,7 @@ import io.github.apace100.apoli.data.ApoliDataTypes;
 import io.github.apace100.apoli.power.MultiplePower;
 import io.github.apace100.apoli.power.Power;
 import io.github.apace100.apoli.power.PowerReference;
+import io.github.apace100.apoli.power.factory.PowerTypeFactory;
 import io.github.apace100.apoli.power.type.PowerType;
 import io.github.apace100.calio.data.SerializableData;
 import io.github.apace100.calio.data.SerializableDataTypes;
@@ -29,7 +28,7 @@ import java.util.stream.Stream;
 public class SuppressPowerActionType {
     public static void action(
         Entity actor, Entity target,
-        List<PowerReference> powerRefs, List<Identifier> powerIds, List<Identifier> powerSources,
+        List<PowerReference> powerRefs, List<PowerTypeFactory> powerTypeFactories, List<Identifier> powerSources,
         List<PowerReference> ignoredPowers,
         int duration,
         @Nullable Consumer<Pair<Entity, Entity>> bientityAction,
@@ -37,8 +36,7 @@ public class SuppressPowerActionType {
 
     ) {
         PowerHolderComponent component = PowerHolderComponent.KEY.get(target);
-
-        Iterator<PowerType> powers = getPowers(component, powerRefs, powerIds, powerSources).iterator();
+        Iterator<PowerType> powers = getPowerTypes(component, powerRefs, powerTypeFactories, powerSources).iterator();
 
         boolean suppressed = false;
         while (powers.hasNext()) {
@@ -58,12 +56,20 @@ public class SuppressPowerActionType {
         }
     }
 
-    private static Stream<PowerType> getPowers(
+    private static Stream<PowerType> getPowerTypes(
         PowerHolderComponent component,
-        List<PowerReference> powerRefs, List<Identifier> powerIds, List<Identifier> powerSources
+        List<PowerReference> powerRefs, List<PowerTypeFactory> powerTypeFactories, List<Identifier> powerSources
     ) {
         Stream<PowerType> powersFromRefs = powerRefs.stream().map(component::getPowerType);
-        Stream<PowerType> powersFromIds = PowerHolderComponentUtil.getPowerTypes(component, powerIds);
+        Stream<PowerType> powersFromTypes = component
+            .getPowerTypes().stream()
+            .filter(powerType -> powerTypeFactories.stream()
+                .anyMatch(powerTypeFactory -> powerTypeFactory.equals(
+                    powerType.getPower()
+                        .getFactoryInstance()
+                        .getFactory()
+                ))
+            );
         Stream<PowerType> powersFromSources = powerSources.stream()
             .flatMap(source -> component.getPowersFromSource(source)
                 .stream()
@@ -71,32 +77,32 @@ public class SuppressPowerActionType {
             )
             .map(component::getPowerType);
 
-        return Streams.concat(powersFromRefs, powersFromIds, powersFromSources);
+        return Streams.concat(powersFromRefs, powersFromTypes, powersFromSources);
     }
 
     private static <P extends PowerType> boolean suppressPower(
-        @Nullable P power,
+        @Nullable P powerType,
         PowerHolderComponent component,
         Entity actor,
         List<PowerReference> ignoredPowers,
         int duration,
         boolean ignoreNoConditionWarning, boolean ignoreMultiplePowerWarning
     ) {
-        SuppressiblePower suppressiblePower = (SuppressiblePower) power;
-        if (power == null || ignoredPowers.stream().anyMatch(ignored -> power.getPower().equals(ignored))) {
+        SuppressiblePower suppressiblePower = (SuppressiblePower) powerType;
+        if (powerType == null || ignoredPowers.stream().anyMatch(ignored -> powerType.getPower().equals(ignored))) {
             return false;
         }
 
         if (!suppressiblePower.shappoli$canBeSuppressed()) {
-            Shappoli.LOGGER.error("Tried to suppress a power that cannot be suppressed: {}", power.getPowerId());
+            Shappoli.LOGGER.error("Tried to suppress a power that cannot be suppressed: {}", powerType.getPowerId());
             return false;
         }
 
-        if (power.getPower() instanceof MultiplePower multiplePowerType) {
+        if (powerType.getPower() instanceof MultiplePower multiplePowerType) {
             if (!ignoreMultiplePowerWarning) {
                 Shappoli.LOGGER.warn(
                     "Suppressed power \"{}\" of type \"apoli:multiple\". This is generally not recommended. If you want to ignore this message, set the \"ignore_multiple_power_warning\" parameter to \"true\"",
-                    power.getPowerId()
+                    powerType.getPowerId()
                 );
             }
             // loop over all sub powers and try to suppress them
@@ -111,7 +117,8 @@ public class SuppressPowerActionType {
         if (!suppressiblePower.shappoli$hasConditions() && !ignoreNoConditionWarning) {
             Shappoli.LOGGER.warn(
                 "Suppressed power \"{}\" of type \"{}\" that does not support conditions. This probably would not work. If you want to ignore this message, set the \"ignore_no_condition_warning\" parameter to \"true\"",
-                power.getPowerId(), PowerHolderComponentUtil.getPowerId(power)
+                powerType.getPowerId(),
+                powerType.getPower().getFactoryInstance().getSerializerId()
             );
         }
 
@@ -119,21 +126,20 @@ public class SuppressPowerActionType {
     }
 
     public static ActionTypeFactory<Pair<Entity, Entity>> getFactory() {
-        return new ActionTypeFactory<>(Shappoli.identifier("suppress_power"),
+        return new ActionTypeFactory<>(
+            Shappoli.identifier("suppress_power"),
             new SerializableData()
                 .add("power", ApoliDataTypes.POWER_REFERENCE, null) // power reference, example: my_namespace:my_power
-                .add("powers", ShappoliDataTypes.POWER_REFERENCES, null)
+                .add("powers", ApoliDataTypes.POWER_REFERENCE.listOf(), null)
 
-                .add("power_id", SerializableDataTypes.IDENTIFIER, null) // power type, example: apoli:action_on_hit
-                .add("power_ids", SerializableDataTypes.IDENTIFIERS, null)
-                .addFunctionedDefault("power_type", SerializableDataTypes.IDENTIFIER, data -> data.get("power_id"))
-                .addFunctionedDefault("power_types", SerializableDataTypes.IDENTIFIERS, data -> data.get("power_ids"))
+                .add("power_type", ApoliDataTypes.POWER_TYPE_FACTORY, null) // power type, example: apoli:action_on_hit
+                .add("power_types", ApoliDataTypes.POWER_TYPE_FACTORY.listOf(), null)
 
                 .add("power_source", SerializableDataTypes.IDENTIFIER, null) // power source identifier, example: apoli:command
                 .add("power_sources", SerializableDataTypes.IDENTIFIERS, null)
 
                 .add("ignored_power", ApoliDataTypes.POWER_REFERENCE, null) // power reference to ignore
-                .add("ignored_powers", ShappoliDataTypes.POWER_REFERENCES, null)
+                .add("ignored_powers", ApoliDataTypes.POWER_REFERENCE.listOf(), null)
 
                 .add("duration", SerializableDataTypes.POSITIVE_INT)
                 .add("bientity_action", ApoliDataTypes.BIENTITY_ACTION, null)

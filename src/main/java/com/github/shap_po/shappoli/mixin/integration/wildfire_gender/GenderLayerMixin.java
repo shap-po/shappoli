@@ -7,9 +7,12 @@ import io.github.apace100.apoli.component.PowerHolderComponent;
 import io.github.apace100.apoli.power.type.ModelColorPowerType;
 import net.minecraft.entity.LivingEntity;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 
 import java.util.List;
+import java.util.function.BinaryOperator;
+import java.util.function.Function;
 
 @Mixin(GenderLayer.class)
 public abstract class GenderLayerMixin<T extends LivingEntity> {
@@ -19,37 +22,29 @@ public abstract class GenderLayerMixin<T extends LivingEntity> {
     )
     private int shappoli$modifyRenderBreastColor(int alpha, int red, int green, int blue, Operation<Integer> original, T entity) {
         List<ModelColorPowerType> modelColorPowers = PowerHolderComponent.KEY.get(entity).getPowerTypes(ModelColorPowerType.class);
+
         if (!modelColorPowers.isEmpty()) {
-            red = Math.round(
-                modelColorPowers
-                    .stream()
-                    .map(ModelColorPowerType::getRed)
-                    .reduce((a, b) -> a * b)
-                    .orElse((float) red)
-            );
-            green = Math.round(
-                modelColorPowers
-                    .stream()
-                    .map(ModelColorPowerType::getGreen)
-                    .reduce((a, b) -> a * b)
-                    .orElse((float) green)
-            );
-            blue = Math.round(
-                modelColorPowers
-                    .stream()
-                    .map(ModelColorPowerType::getBlue)
-                    .reduce((a, b) -> a * b)
-                    .orElse((float) blue)
-            );
-            alpha = Math.round(
-                modelColorPowers
-                    .stream()
-                    .map(ModelColorPowerType::getAlpha)
-                    .min(Float::compare)
-                    .orElse((float) alpha)
-            );
+            red = shappoli$getNewColor(red, modelColorPowers, ModelColorPowerType::getRed, (a, b) -> a * b);
+            green = shappoli$getNewColor(green, modelColorPowers, ModelColorPowerType::getGreen, (a, b) -> a * b);
+            blue = shappoli$getNewColor(blue, modelColorPowers, ModelColorPowerType::getBlue, (a, b) -> a * b);
+            alpha = shappoli$getNewColor(alpha, modelColorPowers, ModelColorPowerType::getAlpha, Math::min);
         }
-        original.call(alpha, red, green, blue);
-        return alpha;
+
+        return original.call(alpha, red, green, blue);
+    }
+
+    @Unique
+    private int shappoli$getNewColor(
+        int original, List<ModelColorPowerType> modelColorPowers,
+        Function<ModelColorPowerType, Float> colorGetter,
+        BinaryOperator<Float> reducer
+    ) {
+        return Math.round(
+            modelColorPowers.stream()
+                .map(colorGetter)
+                .reduce(reducer)
+                .map(c -> c * 255)
+                .orElse((float) original)
+        );
     }
 }

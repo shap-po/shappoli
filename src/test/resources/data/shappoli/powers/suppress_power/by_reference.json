@@ -1,0 +1,55 @@
+{
+  "type": "apoli:multiple",
+
+  "suppressor": {
+    "type": "apoli:action_on_block_break",
+    "entity_action": {
+      "type": "apoli:selector_action",
+      "selector": "@s",
+      "bientity_action": {
+        "type": "shappoli:suppress_power",
+        "power": "*:*_power_active1",
+        "powers": [
+          "*:*_power_hit"
+        ],
+        "duration": 40,
+        "bientity_action": {
+          "type": "apoli:actor_action",
+          "action": {
+            "type": "apoli:execute_command",
+            "command": "say Suppressed powers by references: '*:*_power_active1', '*:*_power_hit'"
+          }
+        }
+      }
+    }
+  },
+
+  "power_active1": {
+    "type": "apoli:active_self",
+    "key": "key.attack",
+    "entity_action": {
+      "type": "apoli:execute_command",
+      "command": "say Suppress by reference: Active; Should be suppressed"
+    }
+  },
+
+  "power_active2": {
+    "type": "apoli:active_self",
+    "key": "key.attack",
+    "entity_action": {
+      "type": "apoli:execute_command",
+      "command": "say Suppress by reference: Active; Should not be suppressed"
+    }
+  },
+
+  "power_hit": {
+    "type": "apoli:action_on_hit",
+    "bientity_action": {
+      "type": "apoli:actor_action",
+      "action": {
+        "type": "apoli:execute_command",
+        "command": "say Suppress by reference: Hit; Should be suppressed"
+      }
+    }
+  }
+}

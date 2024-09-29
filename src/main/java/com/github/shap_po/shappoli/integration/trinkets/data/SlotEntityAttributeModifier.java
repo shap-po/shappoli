@@ -4,7 +4,6 @@ import com.github.shap_po.shappoli.mixin.integration.trinkets.SlotEntityAttribut
 import dev.emi.trinkets.api.SlotAttributes;
 import io.github.apace100.calio.data.SerializableData;
 import io.github.apace100.calio.data.SerializableDataTypes;
-import io.github.apace100.calio.mixin.EntityAttributeModifierAccessor;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 
 public class SlotEntityAttributeModifier {
@@ -45,7 +44,7 @@ public class SlotEntityAttributeModifier {
         dataInstance.set("slot", instance.attribute.slot);
         dataInstance.set("operation", instance.getModifier().getOperation());
         dataInstance.set("value", instance.getModifier().getValue());
-        dataInstance.set("name", ((EntityAttributeModifierAccessor) instance.getModifier()).getName());
+        dataInstance.set("name", instance.getModifier().getName());
         return dataInstance;
     }
 }

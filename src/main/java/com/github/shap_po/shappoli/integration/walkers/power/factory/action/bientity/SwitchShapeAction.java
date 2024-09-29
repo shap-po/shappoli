@@ -32,7 +32,8 @@ public class SwitchShapeAction {
     }
 
     public static ActionFactory<Pair<Entity, Entity>> getFactory() {
-        ActionFactory<Pair<Entity, Entity>> factory = new ActionFactory<>(Shappoli.identifier("switch_shape"),
+        ActionFactory<Pair<Entity, Entity>> factory = new ActionFactory<>(
+            Shappoli.identifier("switch_shape"),
             new SerializableData()
                 .add("ignore_nbt", SerializableDataTypes.BOOLEAN, false)
                 .add("action_on_success", ApoliDataTypes.BIENTITY_ACTION, null)

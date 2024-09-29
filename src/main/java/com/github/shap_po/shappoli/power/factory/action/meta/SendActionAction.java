@@ -42,7 +42,8 @@ public class SendActionAction {
         BiConsumer<ReceiveActionPower, T> sendFunction,
         IdentifierAlias aliasProvider
     ) {
-        ActionFactory<T> factory = new ActionFactory<>(Shappoli.identifier("send_action"),
+        ActionFactory<T> factory = new ActionFactory<>(
+            Shappoli.identifier("send_action"),
             new SerializableData()
                 .add("listener", ApoliDataTypes.POWER_TYPE, null) // alias
                 .addFunctionedDefault("receiver", ApoliDataTypes.POWER_TYPE, data -> data.get("listener"))

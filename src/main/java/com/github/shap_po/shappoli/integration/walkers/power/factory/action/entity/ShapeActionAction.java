@@ -22,7 +22,8 @@ public class ShapeActionAction {
     }
 
     public static ActionFactory<Entity> getFactory() {
-        ActionFactory<Entity> factory = new ActionFactory<>(Shappoli.identifier("shape_action"),
+        ActionFactory<Entity> factory = new ActionFactory<>(
+            Shappoli.identifier("shape_action"),
             new SerializableData()
                 .add("bientity_action", ApoliDataTypes.BIENTITY_ACTION)
             ,

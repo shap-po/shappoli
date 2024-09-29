@@ -59,7 +59,8 @@ public class ModifyTrinketAction {
     }
 
     public static ActionFactory<Entity> getFactory() {
-        ActionFactory<Entity> factory = new ActionFactory<>(Shappoli.identifier("modify_trinket"),
+        ActionFactory<Entity> factory = new ActionFactory<>(
+            Shappoli.identifier("modify_trinket"),
             new SerializableData()
                 .add("slot", ShappoliTrinketsDataTypes.TRINKET_SLOT, null)
                 .add("slots", ShappoliTrinketsDataTypes.TRINKET_SLOTS, null)

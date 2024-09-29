@@ -57,7 +57,8 @@ public class TeleportAction {
 
 
     public static ActionFactory<Pair<Entity, Entity>> getFactory() {
-        return new ActionFactory<>(Shappoli.identifier("teleport"),
+        return new ActionFactory<>(
+            Shappoli.identifier("teleport"),
             new SerializableData()
                 .add("teleport_actor", SerializableDataTypes.BOOLEAN, false)
                 .add("teleport_target", SerializableDataTypes.BOOLEAN, true)

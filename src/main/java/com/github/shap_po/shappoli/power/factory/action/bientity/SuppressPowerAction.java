@@ -107,7 +107,8 @@ public class SuppressPowerAction {
     }
 
     public static ActionFactory<Pair<Entity, Entity>> getFactory() {
-        return new ActionFactory<>(Shappoli.identifier("suppress_power"),
+        return new ActionFactory<>(
+            Shappoli.identifier("suppress_power"),
             new SerializableData()
                 .add("power", ApoliDataTypes.POWER_TYPE, null) // power reference, example: my_namespace:my_power
                 .add("powers", ShappoliDataTypes.POWER_TYPES, null)

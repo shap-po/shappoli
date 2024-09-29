@@ -34,7 +34,8 @@ public class CopyOriginAction {
     }
 
     public static ActionFactory<Pair<Entity, Entity>> getFactory() {
-        ActionFactory<Pair<Entity, Entity>> factory = new ActionFactory<>(Shappoli.identifier("copy_origin"),
+        ActionFactory<Pair<Entity, Entity>> factory = new ActionFactory<>(
+            Shappoli.identifier("copy_origin"),
             new SerializableData()
                 .add("layer", SerializableDataTypes.IDENTIFIER, OriginsUtil.ORIGIN_LAYER_ID)
                 .add("modify_actor", SerializableDataTypes.BOOLEAN, false)

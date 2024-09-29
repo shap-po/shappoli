@@ -48,7 +48,8 @@ public class ConditionedModifyTrinketSlotPower extends ModifyTrinketSlotPower {
     }
 
     public static PowerFactory<Power> createFactory() {
-        PowerFactory<Power> factory = new PowerFactory<>(Shappoli.identifier("conditioned_modify_trinket_slot"),
+        PowerFactory<Power> factory = new PowerFactory<>(
+            Shappoli.identifier("conditioned_modify_trinket_slot"),
             new SerializableData()
                 .add("modifier", ShappoliTrinketsDataTypes.SLOT_ENTITY_ATTRIBUTE_MODIFIER, null)
                 .add("modifiers", ShappoliTrinketsDataTypes.SLOT_ENTITY_ATTRIBUTE_MODIFIERS, null)

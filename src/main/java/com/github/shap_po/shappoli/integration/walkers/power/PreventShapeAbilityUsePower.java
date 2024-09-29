@@ -34,7 +34,8 @@ public class PreventShapeAbilityUsePower extends Power {
     }
 
     public static PowerFactory createFactory() {
-        return new PowerFactory<>(Shappoli.identifier("prevent_shape_ability_use"),
+        return new PowerFactory<>(
+            Shappoli.identifier("prevent_shape_ability_use"),
             new SerializableData()
                 .add("bientity_condition", ApoliDataTypes.BIENTITY_CONDITION, null)
             ,

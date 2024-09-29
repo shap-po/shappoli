@@ -80,7 +80,8 @@ public class ReceiveActionPower extends Power {
     }
 
     public static PowerFactory createFactory() {
-        PowerFactory<Power> factory = new PowerFactory<>(Shappoli.identifier("receive_action"),
+        PowerFactory<Power> factory = new PowerFactory<>(
+            Shappoli.identifier("receive_action"),
             new SerializableData()
                 .add("action", ApoliDataTypes.ENTITY_ACTION, null)
                 .add("bientity_action", ApoliDataTypes.BIENTITY_ACTION, null)

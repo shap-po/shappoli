@@ -121,7 +121,8 @@ public class ModifyTrinketSlotPower extends Power {
     }
 
     public static PowerFactory<Power> createFactory() {
-        PowerFactory<Power> factory = new PowerFactory<>(Shappoli.identifier("modify_trinket_slot"),
+        PowerFactory<Power> factory = new PowerFactory<>(
+            Shappoli.identifier("modify_trinket_slot"),
             new SerializableData()
                 .add("modifier", ShappoliTrinketsDataTypes.SLOT_ENTITY_ATTRIBUTE_MODIFIER, null)
                 .add("modifiers", ShappoliTrinketsDataTypes.SLOT_ENTITY_ATTRIBUTE_MODIFIERS, null)

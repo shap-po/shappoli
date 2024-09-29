@@ -50,7 +50,8 @@ public class ActionOnEntityCollisionPower extends CooldownPower {
     }
 
     public static PowerFactory createFactory() {
-        return new PowerFactory<>(Shappoli.identifier("action_on_entity_collision"),
+        return new PowerFactory<>(
+            Shappoli.identifier("action_on_entity_collision"),
             new SerializableData()
                 .add("bientity_action", ApoliDataTypes.BIENTITY_ACTION)
                 .add("bientity_condition", ApoliDataTypes.BIENTITY_CONDITION, null)

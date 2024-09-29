@@ -33,7 +33,8 @@ public class SuppressPowerPower extends Power {
     }
 
     public static PowerFactory createFactory() {
-        return new PowerFactory<>(Shappoli.identifier("suppress_power"),
+        return new PowerFactory<>(
+            Shappoli.identifier("suppress_power"),
             new SerializableData()
                 .add("power", ApoliDataTypes.POWER_TYPE, null)
                 .add("powers", ShappoliDataTypes.POWER_TYPES, null)

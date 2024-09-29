@@ -30,7 +30,8 @@ public class PreventShapeChangePower extends Power {
     }
 
     public static PowerFactory createFactory() {
-        PowerFactory<Power> factory = new PowerFactory<>(Shappoli.identifier("prevent_shape_change"),
+        PowerFactory<Power> factory = new PowerFactory<>(
+            Shappoli.identifier("prevent_shape_change"),
             new SerializableData()
                 .add("bientity_condition", ApoliDataTypes.BIENTITY_CONDITION, null)
             ,

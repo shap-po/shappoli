@@ -2,7 +2,7 @@
   "type": "apoli:multiple",
 
   "suppressor": {
-    "type": "apoli:action_on_block_place",
+    "type": "apoli:action_on_block_break",
     "entity_action": {
       "type": "apoli:selector_action",
       "selector": "@s",
@@ -10,7 +10,7 @@
         "type": "shappoli:suppress_power",
         "power_type": "apoli:active_self",
         "power_types": [
-          "shappoli:action_on_trinket_update",
+          "shappoli:action_on_trinket_change",
           "test:nonexistent_power"
         ],
         "ignored_powers": [
@@ -47,7 +47,7 @@
   },
 
   "power_trinket": {
-    "type": "shappoli:action_on_trinket_update",
+    "type": "shappoli:action_on_trinket_change",
     "entity_action_on_equip": {
       "type": "apoli:execute_command",
       "command": "say Equipped"

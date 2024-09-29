@@ -8,12 +8,12 @@ import net.minecraft.item.ItemStack;
 public class InventoryUtil {
     @SuppressWarnings({"ConstantConditions"})
     public static Entity getHolder(ItemStack stack) {
-        return ((EntityLinkedItemStack) (Object) stack).apoli$getEntity();
+        return ((EntityLinkedItemStack) (Object) stack).getEntity();
     }
 
     @SuppressWarnings({"ConstantConditions"})
     public static ItemStack setHolder(ItemStack stack, Entity holder) {
-        ((EntityLinkedItemStack) (Object) stack).apoli$setEntity(holder);
+        ((EntityLinkedItemStack) (Object) stack).setEntity(holder);
         return stack;
     }
 }

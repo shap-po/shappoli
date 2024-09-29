@@ -1,5 +1,5 @@
 {
-  "type": "shappoli:conditioned_modify_trinket_slots",
+  "type": "shappoli:conditioned_modify_trinket_slot",
   "modifiers": [
     {
       "slot": "chest/necklace",

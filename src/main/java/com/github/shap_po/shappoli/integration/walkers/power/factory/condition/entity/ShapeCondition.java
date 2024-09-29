@@ -4,7 +4,6 @@ import com.github.shap_po.shappoli.Shappoli;
 import com.github.shap_po.shappoli.integration.walkers.util.WalkersUtil;
 import io.github.apace100.apoli.data.ApoliDataTypes;
 import io.github.apace100.apoli.power.factory.condition.ConditionFactory;
-import io.github.apace100.apoli.power.factory.condition.EntityConditions;
 import io.github.apace100.calio.data.SerializableData;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -21,15 +20,12 @@ public class ShapeCondition {
     }
 
     public static ConditionFactory<Entity> getFactory() {
-        ConditionFactory<Entity> factory = new ConditionFactory<>(
+        return new ConditionFactory<>(
             Shappoli.identifier("shape_condition"),
             new SerializableData()
                 .add("bientity_condition", ApoliDataTypes.BIENTITY_CONDITION)
             ,
             ShapeCondition::condition
         );
-
-        EntityConditions.ALIASES.addPathAlias("shape", factory.getSerializerId().getPath());
-        return factory;
     }
 }

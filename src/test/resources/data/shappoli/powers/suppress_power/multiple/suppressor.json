@@ -1,5 +1,5 @@
 {
-  "type": "apoli:action_on_block_place",
+  "type": "apoli:action_on_block_break",
   "entity_action": {
     "type": "apoli:selector_action",
     "selector": "@s",

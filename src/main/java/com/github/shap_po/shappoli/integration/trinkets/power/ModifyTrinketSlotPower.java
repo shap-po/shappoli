@@ -13,7 +13,6 @@ import dev.emi.trinkets.api.TrinketInventory;
 import dev.emi.trinkets.api.TrinketsApi;
 import io.github.apace100.apoli.power.Power;
 import io.github.apace100.apoli.power.PowerType;
-import io.github.apace100.apoli.power.factory.PowerFactories;
 import io.github.apace100.apoli.power.factory.PowerFactory;
 import io.github.apace100.calio.data.SerializableData;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
@@ -121,21 +120,18 @@ public class ModifyTrinketSlotPower extends Power {
     }
 
     public static PowerFactory<Power> createFactory() {
-        PowerFactory<Power> factory = new PowerFactory<>(
+        return new PowerFactory<>(
             Shappoli.identifier("modify_trinket_slot"),
             new SerializableData()
                 .add("modifier", ShappoliTrinketsDataTypes.SLOT_ENTITY_ATTRIBUTE_MODIFIER, null)
                 .add("modifiers", ShappoliTrinketsDataTypes.SLOT_ENTITY_ATTRIBUTE_MODIFIERS, null)
             ,
-            data -> (type, player) -> {
-                ModifyTrinketSlotPower power = new ModifyTrinketSlotPower(type, player);
+            data -> (type1, player) -> {
+                ModifyTrinketSlotPower power = new ModifyTrinketSlotPower(type1, player);
                 data.ifPresent("modifier", power::addModifier);
                 data.<List<SlotEntityAttributeModifier>>ifPresent("modifiers", mods -> mods.forEach(power::addModifier));
                 return power;
             }
         );
-
-        PowerFactories.ALIASES.addPathAlias("modify_trinket_slots", factory.getSerializerId().getPath());
-        return factory;
     }
 }

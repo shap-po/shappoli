@@ -7,13 +7,11 @@ import com.github.shap_po.shappoli.integration.trinkets.util.TrinketsUtil;
 import dev.emi.trinkets.api.SlotReference;
 import io.github.apace100.apoli.data.ApoliDataTypes;
 import io.github.apace100.apoli.power.factory.action.ActionFactory;
-import io.github.apace100.apoli.power.factory.action.EntityActions;
 import io.github.apace100.apoli.util.InventoryUtil;
 import io.github.apace100.calio.data.SerializableData;
 import io.github.apace100.calio.data.SerializableDataTypes;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.inventory.StackReference;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Pair;
 import net.minecraft.world.World;
@@ -34,8 +32,8 @@ public class ModifyTrinketAction {
         Function<ItemStack, Integer> processor = data.<InventoryUtil.ProcessMode>get("process_mode").getProcessor();
         int limit = data.getInt("limit");
         Consumer<Entity> entityAction = data.get("entity_action");
-        Consumer<Pair<World, StackReference>> itemAction = data.get("item_action");
-        Predicate<Pair<World, ItemStack>> itemCondition = data.get("item_condition");
+        Consumer<Pair<World, ItemStack>> itemAction = data.get("item_action");
+        Predicate<ItemStack> itemCondition = data.get("item_condition");
 
         int processedItems = 0;
         modifyingItemsLoop:
@@ -59,7 +57,7 @@ public class ModifyTrinketAction {
     }
 
     public static ActionFactory<Entity> getFactory() {
-        ActionFactory<Entity> factory = new ActionFactory<>(
+        return new ActionFactory<>(
             Shappoli.identifier("modify_trinket"),
             new SerializableData()
                 .add("slot", ShappoliTrinketsDataTypes.TRINKET_SLOT, null)
@@ -72,8 +70,5 @@ public class ModifyTrinketAction {
             ,
             ModifyTrinketAction::action
         );
-
-        EntityActions.ALIASES.addPathAlias("modify_trinkets", factory.getSerializerId().getPath());
-        return factory;
     }
 }

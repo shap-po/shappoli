@@ -4,7 +4,6 @@ import com.github.shap_po.shappoli.Shappoli;
 import io.github.apace100.apoli.data.ApoliDataTypes;
 import io.github.apace100.apoli.power.Power;
 import io.github.apace100.apoli.power.PowerType;
-import io.github.apace100.apoli.power.factory.PowerFactories;
 import io.github.apace100.apoli.power.factory.PowerFactory;
 import io.github.apace100.calio.data.SerializableData;
 import net.minecraft.entity.Entity;
@@ -38,21 +37,18 @@ public class ActionOnShapeChangePower extends Power {
     }
 
     public static PowerFactory createFactory() {
-        PowerFactory<Power> factory = new PowerFactory<>(
+        return new PowerFactory<>(
             Shappoli.identifier("action_on_shape_change"),
             new SerializableData()
                 .add("bientity_action", ApoliDataTypes.BIENTITY_ACTION)
                 .add("bientity_condition", ApoliDataTypes.BIENTITY_CONDITION, null)
             ,
-            data -> (type, player) -> new ActionOnShapeChangePower(
-                type,
+            data -> (type1, player) -> new ActionOnShapeChangePower(
+                type1,
                 player,
                 data.get("bientity_action"),
                 data.get("bientity_condition")
             )
         ).allowCondition();
-
-        PowerFactories.ALIASES.addPathAlias("action_on_morph", factory.getSerializerId().getPath());
-        return factory;
     }
 }

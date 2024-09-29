@@ -11,8 +11,7 @@ public class EntityConditions {
     public static void register() {
         register(SendConditionCondition.getFactory(
             entity -> entity,
-            ReceiveConditionPower::receiveEntity,
-            io.github.apace100.apoli.power.factory.condition.EntityConditions.ALIASES
+            ReceiveConditionPower::receiveEntity
         ));
     }
 

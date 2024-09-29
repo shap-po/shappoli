@@ -15,8 +15,7 @@ public class EntityActions {
         register(
             SendActionAction.getFactory(
                 entity -> entity,
-                ReceiveActionPower::receiveEntityAction,
-                io.github.apace100.apoli.power.factory.action.EntityActions.ALIASES
+                ReceiveActionPower::receiveEntityAction
             )
         );
     }

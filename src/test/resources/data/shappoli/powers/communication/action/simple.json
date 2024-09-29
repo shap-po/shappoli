@@ -19,8 +19,8 @@
       "command": "say Received an entity action"
     },
     "item_action": {
-      "type": "apoli:holder_action",
-      "action": {
+      "type": "apoli:holder",
+      "entity_action": {
         "type": "apoli:execute_command",
         "command": "say Received an item action"
       }

@@ -4,12 +4,10 @@ import com.github.shap_po.shappoli.Shappoli;
 import io.github.apace100.apoli.data.ApoliDataTypes;
 import io.github.apace100.apoli.power.Power;
 import io.github.apace100.apoli.power.PowerType;
-import io.github.apace100.apoli.power.factory.PowerFactories;
 import io.github.apace100.apoli.power.factory.PowerFactory;
 import io.github.apace100.calio.data.SerializableData;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.inventory.StackReference;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Pair;
 import net.minecraft.world.World;
@@ -23,8 +21,8 @@ public class ReceiveActionPower extends Power {
     private final Predicate<Pair<Entity, Entity>> bientityCondition;
     private final Consumer<Entity> entityAction;
     private final Predicate<Entity> entityCondition;
-    private final Consumer<Pair<World, StackReference>> itemAction;
-    private final Predicate<Pair<World, ItemStack>> itemCondition;
+    private final Consumer<Pair<World, ItemStack>> itemAction;
+    private final Predicate<ItemStack> itemCondition;
 
     public ReceiveActionPower(
         PowerType<?> type,
@@ -34,8 +32,8 @@ public class ReceiveActionPower extends Power {
         Predicate<Pair<Entity, Entity>> bientityCondition,
         Consumer<Entity> entityAction,
         Predicate<Entity> entityCondition,
-        Consumer<Pair<World, StackReference>> itemAction,
-        Predicate<Pair<World, ItemStack>> itemCondition
+        Consumer<Pair<World, ItemStack>> itemAction,
+        Predicate<ItemStack> itemCondition
     ) {
         super(type, entity);
         this.action = action;
@@ -62,8 +60,8 @@ public class ReceiveActionPower extends Power {
         }
     }
 
-    public void receiveItemAction(Pair<World, StackReference> worldAndStack) {
-        if (itemCondition == null || itemCondition.test(new Pair<>(worldAndStack.getLeft(), worldAndStack.getRight().get()))) {
+    public void receiveItemAction(Pair<World, ItemStack> worldAndStack) {
+        if (itemCondition == null || itemCondition.test(worldAndStack.getRight())) {
             maybeAccept(itemAction, worldAndStack);
             receiveAnyAction();
         }
@@ -80,7 +78,7 @@ public class ReceiveActionPower extends Power {
     }
 
     public static PowerFactory createFactory() {
-        PowerFactory<Power> factory = new PowerFactory<>(
+        return new PowerFactory<>(
             Shappoli.identifier("receive_action"),
             new SerializableData()
                 .add("action", ApoliDataTypes.ENTITY_ACTION, null)
@@ -91,7 +89,7 @@ public class ReceiveActionPower extends Power {
                 .add("item_action", ApoliDataTypes.ITEM_ACTION, null)
                 .add("item_condition", ApoliDataTypes.ITEM_CONDITION, null)
             ,
-            data -> (type, entity) -> new ReceiveActionPower(type, entity,
+            data -> (type1, entity1) -> new ReceiveActionPower(type1, entity1,
                 data.get("action"),
                 data.get("bientity_action"),
                 data.get("bientity_condition"),
@@ -101,8 +99,5 @@ public class ReceiveActionPower extends Power {
                 data.get("item_condition")
             )
         ).allowCondition();
-
-        PowerFactories.ALIASES.addPathAlias("action_on_event_receive", factory.getSerializerId().getPath());
-        return factory;
     }
 }

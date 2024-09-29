@@ -8,7 +8,6 @@ import io.github.apace100.apoli.power.Power;
 import io.github.apace100.apoli.power.PowerType;
 import io.github.apace100.apoli.power.factory.action.ActionFactory;
 import io.github.apace100.calio.data.SerializableData;
-import io.github.apace100.calio.util.IdentifierAlias;
 import net.minecraft.entity.Entity;
 
 import java.util.function.BiConsumer;
@@ -39,10 +38,9 @@ public class SendActionAction {
 
     public static <T> ActionFactory<T> getFactory(
         Function<T, Entity> actionToEntityFunction,
-        BiConsumer<ReceiveActionPower, T> sendFunction,
-        IdentifierAlias aliasProvider
+        BiConsumer<ReceiveActionPower, T> sendFunction
     ) {
-        ActionFactory<T> factory = new ActionFactory<>(
+        return new ActionFactory<>(
             Shappoli.identifier("send_action"),
             new SerializableData()
                 .add("listener", ApoliDataTypes.POWER_TYPE, null) // alias
@@ -55,9 +53,5 @@ public class SendActionAction {
                 sendFunction
             )
         );
-
-        aliasProvider.addPathAlias("send_event", factory.getSerializerId().getPath());
-        aliasProvider.addPathAlias("emit_event", factory.getSerializerId().getPath());
-        return factory;
     }
 }

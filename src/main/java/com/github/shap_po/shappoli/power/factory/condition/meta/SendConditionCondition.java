@@ -8,7 +8,6 @@ import io.github.apace100.apoli.power.Power;
 import io.github.apace100.apoli.power.PowerType;
 import io.github.apace100.apoli.power.factory.condition.ConditionFactory;
 import io.github.apace100.calio.data.SerializableData;
-import io.github.apace100.calio.util.IdentifierAlias;
 import net.minecraft.entity.Entity;
 
 import java.util.function.BiPredicate;
@@ -37,10 +36,9 @@ public class SendConditionCondition {
 
     public static <T> ConditionFactory<T> getFactory(
         Function<T, Entity> conditionToEntityFunction,
-        BiPredicate<ReceiveConditionPower, T> sendFunction,
-        IdentifierAlias aliasProvider
+        BiPredicate<ReceiveConditionPower, T> sendFunction
     ) {
-        ConditionFactory<T> factory = new ConditionFactory<>(
+        return new ConditionFactory<>(
             Shappoli.identifier("send_condition"),
             new SerializableData()
                 .add("receiver", ApoliDataTypes.POWER_TYPE)
@@ -52,8 +50,5 @@ public class SendConditionCondition {
                 sendFunction
             )
         );
-
-        aliasProvider.addPathAlias("request_condition", factory.getSerializerId().getPath());
-        return factory;
     }
 }

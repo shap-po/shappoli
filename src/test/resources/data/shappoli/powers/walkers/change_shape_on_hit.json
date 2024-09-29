@@ -9,6 +9,6 @@
   },
 
   "bientity_action": {
-    "type": "shappoli:change_shape"
+    "type": "shappoli:switch_shape"
   }
 }

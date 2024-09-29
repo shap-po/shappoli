@@ -8,12 +8,12 @@
       "type": "apoli:sneaking"
     },
     "if_action": {
-      "type": "shappoli:change_shape_ability_cooldown",
+      "type": "shappoli:switch_shape_ability_cooldown",
       "operation": "set",
       "change": 0
     },
     "else_action": {
-      "type": "shappoli:change_shape_ability_cooldown",
+      "type": "shappoli:switch_shape_ability_cooldown",
       "operation": "add",
       "change": 10
     }

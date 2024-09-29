@@ -5,7 +5,6 @@ import com.github.shap_po.shappoli.integration.trinkets.data.ShappoliTrinketsDat
 import com.github.shap_po.shappoli.integration.trinkets.data.SlotEntityAttributeModifier;
 import io.github.apace100.apoli.power.Power;
 import io.github.apace100.apoli.power.PowerType;
-import io.github.apace100.apoli.power.factory.PowerFactories;
 import io.github.apace100.apoli.power.factory.PowerFactory;
 import io.github.apace100.calio.data.SerializableData;
 import io.github.apace100.calio.data.SerializableDataTypes;
@@ -48,23 +47,20 @@ public class ConditionedModifyTrinketSlotPower extends ModifyTrinketSlotPower {
     }
 
     public static PowerFactory<Power> createFactory() {
-        PowerFactory<Power> factory = new PowerFactory<>(
+        return new PowerFactory<>(
             Shappoli.identifier("conditioned_modify_trinket_slot"),
             new SerializableData()
                 .add("modifier", ShappoliTrinketsDataTypes.SLOT_ENTITY_ATTRIBUTE_MODIFIER, null)
                 .add("modifiers", ShappoliTrinketsDataTypes.SLOT_ENTITY_ATTRIBUTE_MODIFIERS, null)
-                .add("tick_rate", SerializableDataTypes.POSITIVE_INT, 20)
+                .add("tick_rate", SerializableDataTypes.INT, 20)
                 .add("apply_on_added", SerializableDataTypes.BOOLEAN, true)
             ,
-            data -> (type, player) -> {
-                ConditionedModifyTrinketSlotPower power = new ConditionedModifyTrinketSlotPower(type, player, data.getInt("tick_rate"), data.getBoolean("apply_on_added"));
+            data -> (type1, player) -> {
+                ConditionedModifyTrinketSlotPower power = new ConditionedModifyTrinketSlotPower(type1, player, data.getInt("tick_rate"), data.getBoolean("apply_on_added"));
                 data.ifPresent("modifier", power::addModifier);
                 data.<List<SlotEntityAttributeModifier>>ifPresent("modifiers", mods -> mods.forEach(power::addModifier));
                 return power;
             }
         ).allowCondition();
-
-        PowerFactories.ALIASES.addPathAlias("conditioned_modify_trinket_slots", factory.getSerializerId().getPath());
-        return factory;
     }
 }

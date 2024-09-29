@@ -37,7 +37,7 @@ public class ChangeShapeAbilityCooldownAction {
 
     public static ActionFactory<Entity> getFactory() {
         return new ActionFactory<>(
-            Shappoli.identifier("change_shape_ability_cooldown"),
+            Shappoli.identifier("switch_shape_ability_cooldown"),
             new SerializableData()
                 .add("operation", ApoliDataTypes.RESOURCE_OPERATION, ResourceOperation.ADD)
                 .add("change", SerializableDataTypes.INT)

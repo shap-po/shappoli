@@ -48,7 +48,11 @@ public class OriginsUtil {
     }
 
     public static @Nullable OriginLayer getLayer(Identifier layerId) {
-        return OriginLayers.getNullableLayer(layerId);
+        try {
+            return OriginLayers.getLayer(layerId);
+        } catch (IllegalArgumentException e) {
+            return null;
+        }
     }
 
     public static @Nullable OriginComponent getOriginComponent(Entity entity) {

@@ -18,8 +18,7 @@ public class BiEntityActions {
         register(
             SendActionAction.getFactory(
                 Pair::getLeft,
-                ReceiveActionPower::receiveBientityAction,
-                io.github.apace100.apoli.power.factory.action.BiEntityActions.ALIASES
+                ReceiveActionPower::receiveBientityAction
             )
         );
     }

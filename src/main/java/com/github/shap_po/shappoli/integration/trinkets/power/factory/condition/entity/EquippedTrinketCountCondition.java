@@ -6,7 +6,6 @@ import com.github.shap_po.shappoli.integration.trinkets.data.TrinketSlotData;
 import com.github.shap_po.shappoli.integration.trinkets.util.TrinketsUtil;
 import io.github.apace100.apoli.data.ApoliDataTypes;
 import io.github.apace100.apoli.power.factory.condition.ConditionFactory;
-import io.github.apace100.apoli.power.factory.condition.EntityConditions;
 import io.github.apace100.apoli.util.Comparison;
 import io.github.apace100.calio.data.SerializableData;
 import io.github.apace100.calio.data.SerializableDataTypes;
@@ -25,7 +24,7 @@ public class EquippedTrinketCountCondition {
             return false;
         }
 
-        Predicate<Pair<World, ItemStack>> itemCondition = data.get("item_condition");
+        Predicate<ItemStack> itemCondition = data.get("item_condition");
         List<TrinketSlotData> slots = TrinketSlotData.getSlots(data);
 
         int count = TrinketsUtil.getTrinkets(livingEntity, slots, itemCondition)
@@ -35,7 +34,7 @@ public class EquippedTrinketCountCondition {
     }
 
     public static ConditionFactory<Entity> getFactory() {
-        ConditionFactory<Entity> factory = new ConditionFactory<>(
+        return new ConditionFactory<>(
             Shappoli.identifier("equipped_trinket_count"),
             new SerializableData()
                 .add("item_condition", ApoliDataTypes.ITEM_CONDITION)
@@ -46,8 +45,5 @@ public class EquippedTrinketCountCondition {
             ,
             EquippedTrinketCountCondition::condition
         );
-
-        EntityConditions.ALIASES.addPathAlias("equipped_trinket", factory.getSerializerId().getPath());
-        return factory;
     }
 }

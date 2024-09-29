@@ -12,8 +12,7 @@ public class BiEntityConditions {
     public static void register() {
         register(SendConditionCondition.getFactory(
             Pair::getLeft,
-            ReceiveConditionPower::receiveBientity,
-            io.github.apace100.apoli.power.factory.condition.BiEntityConditions.ALIASES
+            ReceiveConditionPower::receiveBientity
         ));
     }
 

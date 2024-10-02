@@ -110,10 +110,8 @@ public class SuppressPowerAction {
                 .add("power", ApoliDataTypes.POWER_TYPE, null) // power reference, example: my_namespace:my_power
                 .add("powers", ShappoliDataTypes.POWER_TYPES, null)
 
-                .add("power_id", SerializableDataTypes.IDENTIFIER, null) // power type, example: apoli:action_on_hit
-                .add("power_ids", SerializableDataTypes.IDENTIFIERS, null)
-                .addFunctionedDefault("power_type", SerializableDataTypes.IDENTIFIER, data -> data.get("power_id"))
-                .addFunctionedDefault("power_types", SerializableDataTypes.IDENTIFIERS, data -> data.get("power_ids"))
+                .add("power_type", SerializableDataTypes.IDENTIFIER, null) // power type, example: apoli:action_on_hit
+                .add("power_types", SerializableDataTypes.IDENTIFIERS, null)
 
                 .add("power_source", SerializableDataTypes.IDENTIFIER, null) // power source identifier, example: apoli:command
                 .add("power_sources", SerializableDataTypes.IDENTIFIERS, null)

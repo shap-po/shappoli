@@ -13,9 +13,6 @@ public class BiEntityConditions {
     }
 
     private static void register(ConditionFactory<Pair<Entity, Entity>> conditionFactory) {
-        // Register only if original condition is not already registered
-        if (!ApoliRegistries.BIENTITY_CONDITION.containsId(conditionFactory.getSerializerId())) {
-            Registry.register(ApoliRegistries.BIENTITY_CONDITION, conditionFactory.getSerializerId(), conditionFactory);
-        }
+        Registry.register(ApoliRegistries.BIENTITY_CONDITION, conditionFactory.getSerializerId(), conditionFactory);
     }
 }

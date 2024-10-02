@@ -7,7 +7,7 @@
     "condition": {
       "type": "shappoli:shape_condition",
       "bientity_condition": {
-        "type": "apoli:equal"
+        "type": "shappoli:equal"
       }
     },
     "if_action": {

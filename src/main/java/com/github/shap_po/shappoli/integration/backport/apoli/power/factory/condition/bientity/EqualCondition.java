@@ -1,6 +1,6 @@
 package com.github.shap_po.shappoli.integration.backport.apoli.power.factory.condition.bientity;
 
-import io.github.apace100.apoli.Apoli;
+import com.github.shap_po.shappoli.Shappoli;
 import io.github.apace100.apoli.power.factory.condition.ConditionFactory;
 import io.github.apace100.calio.data.SerializableData;
 import net.minecraft.entity.Entity;
@@ -18,7 +18,7 @@ public class EqualCondition {
 
     public static ConditionFactory<Pair<Entity, Entity>> getFactory() {
         return new ConditionFactory<>(
-            Apoli.identifier("equal"),
+            Shappoli.identifier("equal"),
             new SerializableData(),
             EqualCondition::condition
         );

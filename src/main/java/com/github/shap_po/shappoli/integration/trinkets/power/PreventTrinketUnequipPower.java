@@ -15,7 +15,7 @@ public class PreventTrinketUnequipPower extends BasePreventTrinketChangePower {
     public PreventTrinketUnequipPower(
         PowerType<?> type,
         LivingEntity entity,
-        Predicate<ItemStack> itemCondition,
+        Predicate<Pair<World, ItemStack>> itemCondition,
         List<TrinketSlotData> slots,
         boolean allowCreative
     ) {

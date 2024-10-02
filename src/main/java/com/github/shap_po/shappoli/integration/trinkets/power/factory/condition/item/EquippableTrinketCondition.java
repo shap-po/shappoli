@@ -12,11 +12,14 @@ import io.github.apace100.calio.data.SerializableDataTypes;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.Pair;
+import net.minecraft.world.World;
 
 import java.util.List;
 
 public class EquippableTrinketCondition {
-    public static boolean condition(SerializableData.Instance data, ItemStack stack) {
+    public static boolean condition(SerializableData.Instance data, Pair<World, ItemStack> worldAndStack) {
+        ItemStack stack = worldAndStack.getRight();
         Entity entity = InventoryUtil.getHolder(stack);
         if (!(entity instanceof LivingEntity livingEntity)) {
             return false;
@@ -33,7 +36,7 @@ public class EquippableTrinketCondition {
         });
     }
 
-    public static ConditionFactory<ItemStack> getFactory() {
+    public static ConditionFactory<Pair<World, ItemStack>> getFactory() {
         return new ConditionFactory<>(
             Shappoli.identifier("is_equippable_trinket"),
             new SerializableData()

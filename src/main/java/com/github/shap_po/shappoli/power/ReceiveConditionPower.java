@@ -10,15 +10,16 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Pair;
+import net.minecraft.world.World;
 
 import java.util.function.Predicate;
 
 public class ReceiveConditionPower extends Power {
     private final Predicate<Pair<Entity, Entity>> bientityCondition;
     private final Predicate<Entity> entityCondition;
-    private final Predicate<ItemStack> itemCondition;
+    private final Predicate<Pair<World, ItemStack>> itemCondition;
 
-    public ReceiveConditionPower(PowerType<?> type, LivingEntity entity, Predicate<Pair<Entity, Entity>> bientityCondition, Predicate<Entity> entityCondition, Predicate<ItemStack> itemCondition) {
+    public ReceiveConditionPower(PowerType<?> type, LivingEntity entity, Predicate<Pair<Entity, Entity>> bientityCondition, Predicate<Entity> entityCondition, Predicate<Pair<World, ItemStack>> itemCondition) {
         super(type, entity);
         this.bientityCondition = bientityCondition;
         this.entityCondition = entityCondition;
@@ -37,7 +38,7 @@ public class ReceiveConditionPower extends Power {
         return checkCondition(entity, entityCondition);
     }
 
-    public boolean receiveItem(ItemStack item) {
+    public boolean receiveItem(Pair<World, ItemStack> item) {
         return checkCondition(item, itemCondition);
     }
 

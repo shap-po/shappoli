@@ -15,6 +15,7 @@ import io.github.apace100.apoli.power.factory.PowerFactory;
 import io.github.apace100.calio.data.SerializableData;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.inventory.StackReference;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Pair;
 import net.minecraft.world.World;
@@ -25,20 +26,20 @@ import java.util.function.Predicate;
 
 public class ActionOnTrinketChangePower extends Power {
     private final Consumer<Entity> entityActionOnEquip;
-    private final Consumer<Pair<World, ItemStack>> itemActionOnEquip;
+    private final Consumer<Pair<World, StackReference>> itemActionOnEquip;
     private final Consumer<Entity> entityActionOnUnequip;
-    private final Consumer<Pair<World, ItemStack>> itemActionOnUnequip;
-    private final Predicate<ItemStack> itemCondition;
+    private final Consumer<Pair<World, StackReference>> itemActionOnUnequip;
+    private final Predicate<Pair<World, ItemStack>> itemCondition;
     private final List<TrinketSlotData> slots;
 
     public ActionOnTrinketChangePower(
         PowerType<?> type,
         LivingEntity entity,
         Consumer<Entity> entityActionOnEquip,
-        Consumer<Pair<World, ItemStack>> itemActionOnEquip,
+        Consumer<Pair<World, StackReference>> itemActionOnEquip,
         Consumer<Entity> entityActionOnUnequip,
-        Consumer<Pair<World, ItemStack>> itemActionOnUnequip,
-        Predicate<ItemStack> itemCondition,
+        Consumer<Pair<World, StackReference>> itemActionOnUnequip,
+        Predicate<Pair<World, ItemStack>> itemCondition,
         List<TrinketSlotData> slots
     ) {
         super(type, entity);
@@ -98,8 +99,8 @@ public class ActionOnTrinketChangePower extends Power {
                 .add("slot", ShappoliTrinketsDataTypes.TRINKET_SLOT, null)
                 .add("slots", ShappoliTrinketsDataTypes.TRINKET_SLOTS, null)
             ,
-            data -> (type1, player) -> new ActionOnTrinketChangePower(
-                type1,
+            data -> (type, player) -> new ActionOnTrinketChangePower(
+                type,
                 player,
                 data.get("entity_action_on_equip"),
                 data.get("item_action_on_equip"),

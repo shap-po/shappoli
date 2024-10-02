@@ -95,10 +95,10 @@ dependencies {
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-    modImplementation "io.github.apace100:apoli:${project.apoli_version}"
+    modImplementation "com.github.apace100:apoli:${project.apoli_version}"
 
     // Optional dependencies
-    modCompileOnly("io.github.apace100:origins-fabric:${project.origins_version}") {
+    modCompileOnly("com.github.apace100:origins-fabric:${project.origins_version}") {
         transitive = false
     }
     modCompileOnly("dev.emi:trinkets:${project.trinkets_version}") {

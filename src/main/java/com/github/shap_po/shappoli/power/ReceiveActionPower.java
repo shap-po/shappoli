@@ -8,6 +8,7 @@ import io.github.apace100.apoli.power.factory.PowerFactory;
 import io.github.apace100.calio.data.SerializableData;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.inventory.StackReference;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Pair;
 import net.minecraft.world.World;
@@ -21,8 +22,8 @@ public class ReceiveActionPower extends Power {
     private final Predicate<Pair<Entity, Entity>> bientityCondition;
     private final Consumer<Entity> entityAction;
     private final Predicate<Entity> entityCondition;
-    private final Consumer<Pair<World, ItemStack>> itemAction;
-    private final Predicate<ItemStack> itemCondition;
+    private final Consumer<Pair<World, StackReference>> itemAction;
+    private final Predicate<Pair<World, ItemStack>> itemCondition;
 
     public ReceiveActionPower(
         PowerType<?> type,
@@ -32,8 +33,8 @@ public class ReceiveActionPower extends Power {
         Predicate<Pair<Entity, Entity>> bientityCondition,
         Consumer<Entity> entityAction,
         Predicate<Entity> entityCondition,
-        Consumer<Pair<World, ItemStack>> itemAction,
-        Predicate<ItemStack> itemCondition
+        Consumer<Pair<World, StackReference>> itemAction,
+        Predicate<Pair<World, ItemStack>> itemCondition
     ) {
         super(type, entity);
         this.action = action;
@@ -60,8 +61,8 @@ public class ReceiveActionPower extends Power {
         }
     }
 
-    public void receiveItemAction(Pair<World, ItemStack> worldAndStack) {
-        if (itemCondition == null || itemCondition.test(worldAndStack.getRight())) {
+    public void receiveItemAction(Pair<World, StackReference> worldAndStack) {
+        if (itemCondition == null || itemCondition.test(new Pair<>(worldAndStack.getLeft(), worldAndStack.getRight().get()))) {
             maybeAccept(itemAction, worldAndStack);
             receiveAnyAction();
         }
@@ -89,7 +90,7 @@ public class ReceiveActionPower extends Power {
                 .add("item_action", ApoliDataTypes.ITEM_ACTION, null)
                 .add("item_condition", ApoliDataTypes.ITEM_CONDITION, null)
             ,
-            data -> (type1, entity1) -> new ReceiveActionPower(type1, entity1,
+            data -> (type, entity) -> new ReceiveActionPower(type, entity,
                 data.get("action"),
                 data.get("bientity_action"),
                 data.get("bientity_condition"),

@@ -24,7 +24,7 @@ public class EquippedTrinketCountCondition {
             return false;
         }
 
-        Predicate<ItemStack> itemCondition = data.get("item_condition");
+        Predicate<Pair<World, ItemStack>> itemCondition = data.get("item_condition");
         List<TrinketSlotData> slots = TrinketSlotData.getSlots(data);
 
         int count = TrinketsUtil.getTrinkets(livingEntity, slots, itemCondition)

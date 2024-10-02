@@ -43,8 +43,8 @@ public class ActionOnShapeChangePower extends Power {
                 .add("bientity_action", ApoliDataTypes.BIENTITY_ACTION)
                 .add("bientity_condition", ApoliDataTypes.BIENTITY_CONDITION, null)
             ,
-            data -> (type1, player) -> new ActionOnShapeChangePower(
-                type1,
+            data -> (type, player) -> new ActionOnShapeChangePower(
+                type,
                 player,
                 data.get("bientity_action"),
                 data.get("bientity_condition")

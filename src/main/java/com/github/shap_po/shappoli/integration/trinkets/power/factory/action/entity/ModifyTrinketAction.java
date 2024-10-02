@@ -12,6 +12,7 @@ import io.github.apace100.calio.data.SerializableData;
 import io.github.apace100.calio.data.SerializableDataTypes;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.inventory.StackReference;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Pair;
 import net.minecraft.world.World;
@@ -32,8 +33,8 @@ public class ModifyTrinketAction {
         Function<ItemStack, Integer> processor = data.<InventoryUtil.ProcessMode>get("process_mode").getProcessor();
         int limit = data.getInt("limit");
         Consumer<Entity> entityAction = data.get("entity_action");
-        Consumer<Pair<World, ItemStack>> itemAction = data.get("item_action");
-        Predicate<ItemStack> itemCondition = data.get("item_condition");
+        Consumer<Pair<World, StackReference>> itemAction = data.get("item_action");
+        Predicate<Pair<World, ItemStack>> itemCondition = data.get("item_condition");
 
         int processedItems = 0;
         modifyingItemsLoop:

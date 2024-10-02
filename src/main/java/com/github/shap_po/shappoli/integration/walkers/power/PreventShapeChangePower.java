@@ -34,7 +34,7 @@ public class PreventShapeChangePower extends Power {
             new SerializableData()
                 .add("bientity_condition", ApoliDataTypes.BIENTITY_CONDITION, null)
             ,
-            data -> (type1, player) -> new PreventShapeChangePower(type1, player,
+            data -> (type, player) -> new PreventShapeChangePower(type, player,
                 data.get("bientity_condition")
             )
         ).allowCondition();

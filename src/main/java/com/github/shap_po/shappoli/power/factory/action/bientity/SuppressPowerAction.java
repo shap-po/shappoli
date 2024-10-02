@@ -10,6 +10,7 @@ import io.github.apace100.apoli.component.PowerHolderComponent;
 import io.github.apace100.apoli.data.ApoliDataTypes;
 import io.github.apace100.apoli.power.MultiplePowerType;
 import io.github.apace100.apoli.power.Power;
+import io.github.apace100.apoli.power.PowerType;
 import io.github.apace100.apoli.power.PowerTypeReference;
 import io.github.apace100.apoli.power.factory.action.ActionFactory;
 import io.github.apace100.calio.data.SerializableData;
@@ -22,6 +23,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 public class SuppressPowerAction {
@@ -57,6 +59,7 @@ public class SuppressPowerAction {
         Stream<Power> powersFromSources = powerSources.stream()
             .flatMap(source -> component.getPowersFromSource(source)
                 .stream()
+                .filter(Predicate.not(PowerType::isSubPower))
             )
             .map(component::getPower);
 
@@ -119,7 +122,7 @@ public class SuppressPowerAction {
                 .add("ignored_power", ApoliDataTypes.POWER_TYPE, null) // power reference to ignore
                 .add("ignored_powers", ShappoliDataTypes.POWER_TYPES, null)
 
-                .add("duration", SerializableDataTypes.INT)
+                .add("duration", SerializableDataTypes.POSITIVE_INT)
                 .add("bientity_action", ApoliDataTypes.BIENTITY_ACTION, null)
 
                 .add("ignore_no_condition_warning", SerializableDataTypes.BOOLEAN, false)

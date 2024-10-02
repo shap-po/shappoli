@@ -1,7 +1,6 @@
 package com.github.shap_po.shappoli.power;
 
 import com.github.shap_po.shappoli.Shappoli;
-import io.github.apace100.apoli.component.PowerHolderComponent;
 import io.github.apace100.apoli.data.ApoliDataTypes;
 import io.github.apace100.apoli.power.CooldownPower;
 import io.github.apace100.apoli.power.PowerType;
@@ -37,8 +36,7 @@ public class ActionOnEntityCollisionPower extends CooldownPower {
         List<Entity> collidingEntities = getCollidingEntities();
         for (Entity other : collidingEntities) {
             if (this.canUse() &&
-                !(PowerHolderComponent.hasPower(entity, PreventEntityCollisionPower.class, p -> p.doesApply(other))
-                    || PowerHolderComponent.hasPower(other, PreventEntityCollisionPower.class, p -> p.doesApply(entity))) &&
+                !PreventEntityCollisionPower.doesApply(entity, other) &&
                 (bientityCondition == null || bientityCondition.test(new Pair<>(entity, other)))
             ) {
                 bientityAction.accept(new Pair<>(entity, other));

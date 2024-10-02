@@ -126,8 +126,8 @@ public class ModifyTrinketSlotPower extends Power {
                 .add("modifier", ShappoliTrinketsDataTypes.SLOT_ENTITY_ATTRIBUTE_MODIFIER, null)
                 .add("modifiers", ShappoliTrinketsDataTypes.SLOT_ENTITY_ATTRIBUTE_MODIFIERS, null)
             ,
-            data -> (type1, player) -> {
-                ModifyTrinketSlotPower power = new ModifyTrinketSlotPower(type1, player);
+            data -> (type, player) -> {
+                ModifyTrinketSlotPower power = new ModifyTrinketSlotPower(type, player);
                 data.ifPresent("modifier", power::addModifier);
                 data.<List<SlotEntityAttributeModifier>>ifPresent("modifiers", mods -> mods.forEach(power::addModifier));
                 return power;

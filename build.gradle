@@ -144,6 +144,7 @@ modrinth {
     token = ENV.MODRINTH_TOKEN
     projectId = project.archives_base_name
     uploadFile = remapJar
+    changelog = ""
     dependencies {
         // The scope can be `required`, `optional`, `incompatible`, or `embedded`
         // The type can either be `project` or `version`

@@ -1,0 +1,8 @@
+{
+  "type": "apoli:active_self",
+  "key": "key.attack",
+
+  "entity_action": {
+    "type": "shappoli:use_shape_ability"
+  }
+}

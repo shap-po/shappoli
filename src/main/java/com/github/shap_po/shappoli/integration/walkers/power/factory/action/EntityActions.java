@@ -1,9 +1,6 @@
 package com.github.shap_po.shappoli.integration.walkers.power.factory.action;
 
-import com.github.shap_po.shappoli.integration.walkers.power.factory.action.entity.ChangeShapeAbilityCooldownAction;
-import com.github.shap_po.shappoli.integration.walkers.power.factory.action.entity.ExecuteShapeAbilityAction;
-import com.github.shap_po.shappoli.integration.walkers.power.factory.action.entity.ShapeActionAction;
-import com.github.shap_po.shappoli.integration.walkers.power.factory.action.entity.SwitchShapeAction;
+import com.github.shap_po.shappoli.integration.walkers.power.factory.action.entity.*;
 import io.github.apace100.apoli.power.factory.action.ActionFactory;
 import io.github.apace100.apoli.registry.ApoliRegistries;
 import net.minecraft.entity.Entity;
@@ -15,6 +12,7 @@ public class EntityActions {
         register(ExecuteShapeAbilityAction.getFactory());
         register(ShapeActionAction.getFactory());
         register(SwitchShapeAction.getFactory());
+        register(UseShapeAbilityAction.getFactory());
     }
 
     private static void register(ActionFactory<Entity> actionFactory) {

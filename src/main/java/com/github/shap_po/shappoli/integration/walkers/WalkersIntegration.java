@@ -4,6 +4,7 @@ import com.github.shap_po.shappoli.integration.walkers.power.factory.PowerTypes;
 import com.github.shap_po.shappoli.integration.walkers.action.factory.BiEntityActionTypes;
 import com.github.shap_po.shappoli.integration.walkers.action.factory.EntityActionTypes;
 import com.github.shap_po.shappoli.integration.walkers.condition.factory.EntityConditionTypes;
+import com.github.shap_po.shappoli.integration.walkers.registry.ShappoliWalkersShapeAbilityTypeRegistry;
 
 public class WalkersIntegration {
     public static void register() {
@@ -11,5 +12,7 @@ public class WalkersIntegration {
         BiEntityActionTypes.register();
         EntityActionTypes.register();
         EntityConditionTypes.register();
+
+        ShappoliWalkersShapeAbilityTypeRegistry.register();
     }
 }

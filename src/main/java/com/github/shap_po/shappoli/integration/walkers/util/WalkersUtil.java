@@ -9,6 +9,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.Pair;
 import org.jetbrains.annotations.Nullable;
 import tocraft.walkers.api.PlayerShape;
 import tocraft.walkers.impl.PlayerDataProvider;
@@ -69,5 +70,21 @@ public class WalkersUtil {
     public static LivingEntity getShape(PlayerEntity player) {
         LivingEntity shape = PlayerShape.getCurrentShape(player);
         return shape == null ? player : shape;
+    }
+
+    /**
+     * Gets the entity to use it for shape-related actions.
+     * <br>
+     * If the entity is a player, the player's shape is returned, otherwise the entity itself.
+     */
+    public static LivingEntity getEffectiveShape(LivingEntity entity) {
+        if (entity instanceof PlayerEntity player) {
+            return getShape(player);
+        }
+        return entity;
+    }
+
+    public static Pair<ServerPlayerEntity, LivingEntity> getPlayerShapePair(ServerPlayerEntity player) {
+        return new Pair<>(player, getShape(player));
     }
 }

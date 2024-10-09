@@ -3,6 +3,7 @@ package com.github.shap_po.shappoli.integration.walkers.condition.type.entity;
 import com.github.shap_po.shappoli.Shappoli;
 import com.github.shap_po.shappoli.integration.walkers.registry.ShappoliWalkersRegistries;
 import com.github.shap_po.shappoli.integration.walkers.util.WalkersUtil;
+import com.github.shap_po.shappoli.util.MiscUtil;
 import io.github.apace100.apoli.condition.factory.ConditionTypeFactory;
 import io.github.apace100.calio.data.SerializableData;
 import io.github.apace100.calio.data.SerializableDataTypes;
@@ -12,15 +13,18 @@ import net.minecraft.util.Identifier;
 import tocraft.walkers.ability.AbilityRegistry;
 import tocraft.walkers.ability.ShapeAbility;
 
+import java.util.List;
+import java.util.Objects;
+
 public class HasShapeAbilityConditionType {
-    public static boolean condition(Entity entity,Identifier ability) {
+    public static boolean condition(Entity entity, List<Identifier> abilities) {
         if (!(entity instanceof LivingEntity livingEntity)) {
             return false;
         }
 
         LivingEntity shape = WalkersUtil.getEffectiveShape(livingEntity);
 
-        if (ability == null) {
+        if (abilities.isEmpty()) {
             return AbilityRegistry.has(shape);
         }
 
@@ -29,8 +33,11 @@ public class HasShapeAbilityConditionType {
             return false;
         }
 
-        Class<? extends ShapeAbility<?>> shapeAbilityClass = ShappoliWalkersRegistries.SHAPE_ABILITY_TYPE.get(ability);
-        return shapeAbilityClass != null && shapeAbilityClass.isInstance(shapeAbility);
+        return abilities
+            .stream()
+            .map(ShappoliWalkersRegistries.SHAPE_ABILITY_TYPE::get)
+            .filter(Objects::nonNull)
+            .anyMatch(a -> a.isInstance(shapeAbility));
     }
 
     public static ConditionTypeFactory<Entity> getFactory() {
@@ -38,8 +45,9 @@ public class HasShapeAbilityConditionType {
             Shappoli.identifier("has_shape_ability"),
             new SerializableData()
                 .add("ability", SerializableDataTypes.IDENTIFIER, null)
+                .add("abilities", SerializableDataTypes.IDENTIFIERS, null)
             ,
-            (data, entity) -> condition(entity, data.getId("ability"))
+            (data, entity) -> condition(entity, MiscUtil.listFromData(data, "ability", "abilities"))
         );
     }
 }

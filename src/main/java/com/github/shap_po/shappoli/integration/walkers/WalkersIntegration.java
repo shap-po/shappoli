@@ -4,6 +4,7 @@ import com.github.shap_po.shappoli.integration.walkers.ability.factory.ShapeAbil
 import com.github.shap_po.shappoli.integration.walkers.action.factory.BiEntityActionTypes;
 import com.github.shap_po.shappoli.integration.walkers.action.factory.EntityActionTypes;
 import com.github.shap_po.shappoli.integration.walkers.condition.factory.EntityConditionTypes;
+import com.github.shap_po.shappoli.integration.walkers.events.ShapeEventHandler;
 import com.github.shap_po.shappoli.integration.walkers.power.factory.PowerTypes;
 import com.github.shap_po.shappoli.integration.walkers.registry.ShappoliWalkersShapeAbilityTypeRegistry;
 
@@ -15,6 +16,7 @@ public class WalkersIntegration {
         EntityConditionTypes.register();
 
         ShapeAbilities.register();
+        ShapeEventHandler.register();
         ShappoliWalkersShapeAbilityTypeRegistry.register();
     }
 }

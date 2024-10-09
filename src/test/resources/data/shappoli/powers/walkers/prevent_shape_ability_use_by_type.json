@@ -1,10 +1,4 @@
 {
   "type": "shappoli:prevent_shape_ability_use",
-  "bientity_condition": {
-    "type": "apoli:target_condition",
-    "condition": {
-      "type": "apoli:entity_type",
-      "entity_type": "minecraft:blaze"
-    }
-  }
+  "ability": "shappoli:shoot_fireball"
 }

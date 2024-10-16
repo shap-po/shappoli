@@ -3,7 +3,7 @@ package com.github.shap_po.shappoli.integration.walkers.condition.type.entity;
 import com.github.shap_po.shappoli.Shappoli;
 import com.github.shap_po.shappoli.integration.walkers.util.WalkersUtil;
 import io.github.apace100.apoli.condition.factory.ConditionTypeFactory;
-import io.github.apace100.apoli.condition.factory.EntityConditions;
+import io.github.apace100.apoli.condition.type.EntityConditionTypes;
 import io.github.apace100.apoli.data.ApoliDataTypes;
 import io.github.apace100.calio.data.SerializableData;
 import net.minecraft.entity.Entity;
@@ -29,7 +29,7 @@ public class ShapeConditionType {
             (data, entity) -> condition(entity, data.get("bientity_condition"))
         );
 
-        EntityConditions.ALIASES.addPathAlias("shape", factory.getSerializerId().getPath());
+        EntityConditionTypes.ALIASES.addPathAlias("shape", factory.getSerializerId().getPath());
         return factory;
     }
 }

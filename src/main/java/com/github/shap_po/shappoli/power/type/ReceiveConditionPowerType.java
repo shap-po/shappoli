@@ -56,7 +56,7 @@ public class ReceiveConditionPowerType extends PowerType {
                 .add("bientity_condition", ApoliDataTypes.BIENTITY_CONDITION, null)
                 .add("entity_condition", ApoliDataTypes.ENTITY_CONDITION, null)
                 .add("item_condition", ApoliDataTypes.ITEM_CONDITION, null)
-                .postProcessor(data -> MiscUtil.checkHasAtLeastOneField(data, "bientity_condition", "entity_condition", "item_condition"))
+                .validate(data -> MiscUtil.checkAtLeastOneFieldExists(data, "bientity_condition", "entity_condition", "item_condition"))
             ,
             data -> (type, entity) -> new ReceiveConditionPowerType(
                 type, entity,

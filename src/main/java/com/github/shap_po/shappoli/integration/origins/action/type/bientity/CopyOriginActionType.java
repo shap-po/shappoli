@@ -2,8 +2,9 @@ package com.github.shap_po.shappoli.integration.origins.action.type.bientity;
 
 import com.github.shap_po.shappoli.Shappoli;
 import com.github.shap_po.shappoli.integration.origins.util.OriginsUtil;
+import com.github.shap_po.shappoli.util.MiscUtil;
 import io.github.apace100.apoli.action.factory.ActionTypeFactory;
-import io.github.apace100.apoli.action.factory.BiEntityActions;
+import io.github.apace100.apoli.action.type.BiEntityActionTypes;
 import io.github.apace100.calio.data.SerializableData;
 import io.github.apace100.calio.data.SerializableDataTypes;
 import io.github.apace100.origins.origin.Origin;
@@ -39,11 +40,7 @@ public class CopyOriginActionType {
                 .add("layer", SerializableDataTypes.IDENTIFIER, OriginsUtil.ORIGIN_LAYER_ID)
                 .add("modify_actor", SerializableDataTypes.BOOLEAN, false)
                 .add("modify_target", SerializableDataTypes.BOOLEAN, true)
-                .postProcessor(data -> {
-                    if (!data.getBoolean("modify_actor") && !data.getBoolean("modify_target")) {
-                        throw new IllegalStateException("Any of 'modify_actor' and 'modify_target' fields must be true.");
-                    }
-                })
+                .validate(MiscUtil::checkAtLeastOneFieldIsTrue)
             ,
             (data, actorAndTarget) -> action(
                 actorAndTarget.getLeft(), actorAndTarget.getRight(),
@@ -52,7 +49,7 @@ public class CopyOriginActionType {
             )
         );
 
-        BiEntityActions.ALIASES.addPathAlias("transfer_origin", factory.getSerializerId().getPath());
+        BiEntityActionTypes.ALIASES.addPathAlias("transfer_origin", factory.getSerializerId().getPath());
         return factory;
     }
 }

@@ -7,7 +7,7 @@ import com.github.shap_po.shappoli.integration.trinkets.util.TrinketsUtil;
 import com.github.shap_po.shappoli.util.InventoryUtil;
 import dev.emi.trinkets.TrinketSlot;
 import io.github.apace100.apoli.condition.factory.ConditionTypeFactory;
-import io.github.apace100.apoli.condition.factory.ItemConditions;
+import io.github.apace100.apoli.condition.type.ItemConditionTypes;
 import io.github.apace100.calio.data.SerializableData;
 import io.github.apace100.calio.data.SerializableDataTypes;
 import net.minecraft.entity.Entity;
@@ -52,7 +52,7 @@ public class EquippableTrinketConditionType {
             )
         );
 
-        ItemConditions.ALIASES.addPathAlias("is_equippable_trinket", factory.getSerializerId().getPath());
+        ItemConditionTypes.ALIASES.addPathAlias("is_equippable_trinket", factory.getSerializerId().getPath());
         return factory;
     }
 }

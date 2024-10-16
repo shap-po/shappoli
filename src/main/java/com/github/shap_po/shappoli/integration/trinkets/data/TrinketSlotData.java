@@ -55,7 +55,7 @@ public class TrinketSlotData {
         );
     }
 
-    public static SerializableData.Instance toData(SerializableData data, TrinketSlotData slot) {
+    public static SerializableData.Instance toData(TrinketSlotData slot,SerializableData data) {
         SerializableData.Instance dataInstance = data.new Instance();
         dataInstance.set("name", slot.name);
         dataInstance.set("group", slot.group);

@@ -10,7 +10,7 @@ import net.minecraft.registry.Registry;
 import net.minecraft.util.Pair;
 import net.minecraft.world.World;
 
-public class ItemConditions {
+public class ItemConditionTypes {
     public static void register() {
         register(EquippableTrinketConditionType.getFactory());
         register(EquippedTrinketCountConditionType.getFactory());

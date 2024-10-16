@@ -6,7 +6,7 @@ import com.github.shap_po.shappoli.integration.trinkets.data.TrinketSlotData;
 import com.github.shap_po.shappoli.integration.trinkets.util.TrinketsUtil;
 import dev.emi.trinkets.api.SlotReference;
 import io.github.apace100.apoli.action.factory.ActionTypeFactory;
-import io.github.apace100.apoli.action.factory.EntityActions;
+import io.github.apace100.apoli.action.type.EntityActionTypes;
 import io.github.apace100.apoli.data.ApoliDataTypes;
 import io.github.apace100.apoli.util.InventoryUtil;
 import io.github.apace100.calio.data.SerializableData;
@@ -83,7 +83,7 @@ public class ModifyTrinketActionType {
             )
         );
 
-        EntityActions.ALIASES.addPathAlias("modify_trinkets", factory.getSerializerId().getPath());
+        EntityActionTypes.ALIASES.addPathAlias("modify_trinkets", factory.getSerializerId().getPath());
         return factory;
     }
 }

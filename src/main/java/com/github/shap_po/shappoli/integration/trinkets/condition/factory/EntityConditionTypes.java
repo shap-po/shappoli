@@ -7,7 +7,7 @@ import io.github.apace100.apoli.registry.ApoliRegistries;
 import net.minecraft.entity.Entity;
 import net.minecraft.registry.Registry;
 
-public class EntityConditions {
+public class EntityConditionTypes {
     public static void register() {
         register(EquippedTrinketCountConditionType.getFactory());
         register(TrinketSlotCountConditionType.getFactory());

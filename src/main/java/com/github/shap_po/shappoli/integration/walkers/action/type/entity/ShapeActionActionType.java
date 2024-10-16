@@ -3,7 +3,7 @@ package com.github.shap_po.shappoli.integration.walkers.action.type.entity;
 import com.github.shap_po.shappoli.Shappoli;
 import com.github.shap_po.shappoli.integration.walkers.util.WalkersUtil;
 import io.github.apace100.apoli.action.factory.ActionTypeFactory;
-import io.github.apace100.apoli.action.factory.EntityActions;
+import io.github.apace100.apoli.action.type.EntityActionTypes;
 import io.github.apace100.apoli.data.ApoliDataTypes;
 import io.github.apace100.calio.data.SerializableData;
 import net.minecraft.entity.Entity;
@@ -30,7 +30,7 @@ public class ShapeActionActionType {
             (data, entity) -> action(entity, data.get("bientity_action"))
         );
 
-        EntityActions.ALIASES.addPathAlias("action_on_shape", factory.getSerializerId().getPath());
+        EntityActionTypes.ALIASES.addPathAlias("action_on_shape", factory.getSerializerId().getPath());
         return factory;
     }
 }

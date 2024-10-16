@@ -116,7 +116,7 @@ public class SuppressPowerActionType {
 
         if (!suppressiblePower.shappoli$hasConditions() && !ignoreNoConditionWarning) {
             Shappoli.LOGGER.warn(
-                "Suppressed power \"{}\" of type \"{}\" that does not support conditions. This probably would not work. If you want to ignore this message, set the \"ignore_no_condition_warning\" parameter to \"true\"",
+                "Suppressed power \"{}\" of type \"{}\" that does not support ConditionTypes. This probably would not work. If you want to ignore this message, set the \"ignore_no_condition_warning\" parameter to \"true\"",
                 powerType.getPowerId(),
                 powerType.getPower().getFactoryInstance().getSerializerId()
             );
@@ -130,16 +130,16 @@ public class SuppressPowerActionType {
             Shappoli.identifier("suppress_power"),
             new SerializableData()
                 .add("power", ApoliDataTypes.POWER_REFERENCE, null) // power reference, example: my_namespace:my_power
-                .add("powers", ApoliDataTypes.POWER_REFERENCE.listOf(), null)
+                .add("powers", ApoliDataTypes.POWER_REFERENCE.list(), null)
 
                 .add("power_type", ApoliDataTypes.POWER_TYPE_FACTORY, null) // power type, example: apoli:action_on_hit
-                .add("power_types", ApoliDataTypes.POWER_TYPE_FACTORY.listOf(), null)
+                .add("power_types", ApoliDataTypes.POWER_TYPE_FACTORY.list(), null)
 
                 .add("power_source", SerializableDataTypes.IDENTIFIER, null) // power source identifier, example: apoli:command
                 .add("power_sources", SerializableDataTypes.IDENTIFIERS, null)
 
                 .add("ignored_power", ApoliDataTypes.POWER_REFERENCE, null) // power reference to ignore
-                .add("ignored_powers", ApoliDataTypes.POWER_REFERENCE.listOf(), null)
+                .add("ignored_powers", ApoliDataTypes.POWER_REFERENCE.list(), null)
 
                 .add("duration", SerializableDataTypes.POSITIVE_INT)
                 .add("bientity_action", ApoliDataTypes.BIENTITY_ACTION, null)
@@ -147,7 +147,7 @@ public class SuppressPowerActionType {
                 .add("ignore_no_condition_warning", SerializableDataTypes.BOOLEAN, false)
                 .add("ignore_multiple_power_warning", SerializableDataTypes.BOOLEAN, false)
 
-                .postProcessor(data -> MiscUtil.checkHasAtLeastOneField(data, "power", "powers", "power_type", "power_types", "power_source", "power_sources"))
+                .validate(data -> MiscUtil.checkAtLeastOneFieldExists(data, "power", "powers", "power_type", "power_types", "power_source", "power_sources"))
             ,
             (data, actorAndTarget) -> action(
                 actorAndTarget.getLeft(), actorAndTarget.getRight(),

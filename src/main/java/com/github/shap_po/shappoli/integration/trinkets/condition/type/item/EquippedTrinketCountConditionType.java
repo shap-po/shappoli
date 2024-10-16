@@ -6,7 +6,7 @@ import com.github.shap_po.shappoli.integration.trinkets.data.TrinketSlotData;
 import com.github.shap_po.shappoli.integration.trinkets.util.TrinketsUtil;
 import com.github.shap_po.shappoli.util.InventoryUtil;
 import io.github.apace100.apoli.condition.factory.ConditionTypeFactory;
-import io.github.apace100.apoli.condition.factory.ItemConditions;
+import io.github.apace100.apoli.condition.type.ItemConditionTypes;
 import io.github.apace100.apoli.data.ApoliDataTypes;
 import io.github.apace100.apoli.util.Comparison;
 import io.github.apace100.calio.data.SerializableData;
@@ -53,7 +53,7 @@ public class EquippedTrinketCountConditionType {
             )
         );
 
-        ItemConditions.ALIASES.addPathAlias("equipped_trinket", factory.getSerializerId().getPath());
+        ItemConditionTypes.ALIASES.addPathAlias("equipped_trinket", factory.getSerializerId().getPath());
         return factory;
     }
 }

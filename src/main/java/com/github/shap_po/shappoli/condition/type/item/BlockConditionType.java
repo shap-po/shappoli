@@ -2,7 +2,7 @@ package com.github.shap_po.shappoli.condition.type.item;
 
 import com.github.shap_po.shappoli.Shappoli;
 import io.github.apace100.apoli.condition.factory.ConditionTypeFactory;
-import io.github.apace100.apoli.condition.factory.ItemConditions;
+import io.github.apace100.apoli.condition.type.ItemConditionTypes;
 import io.github.apace100.calio.data.SerializableData;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
@@ -21,7 +21,7 @@ public class BlockConditionType {
             (data, worldAndStack) -> condition(worldAndStack.getRight())
         );
 
-        ItemConditions.ALIASES.addPathAlias("block", factory.getSerializerId().getPath());
+        ItemConditionTypes.ALIASES.addPathAlias("block", factory.getSerializerId().getPath());
         return factory;
     }
 }

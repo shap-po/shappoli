@@ -36,8 +36,8 @@ public class SuppressPowerPowerType extends PowerType {
             Shappoli.identifier("suppress_power"),
             new SerializableData()
                 .add("power", ApoliDataTypes.POWER_REFERENCE, null)
-                .add("powers", ApoliDataTypes.POWER_REFERENCE.listOf(), null)
-                .postProcessor(data -> MiscUtil.checkHasAtLeastOneField(data, "power", "powers"))
+                .add("powers", ApoliDataTypes.POWER_REFERENCE.list(), null)
+                .validate(data -> MiscUtil.checkAtLeastOneFieldExists(data, "power", "powers"))
             ,
             data -> (type, entity) -> new SuppressPowerPowerType(
                 type, entity,

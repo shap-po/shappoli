@@ -6,12 +6,12 @@ import net.minecraft.item.ItemStack;
 
 @SuppressWarnings({"UnusedReturnValue"})
 public class InventoryUtil {
-    @SuppressWarnings({"ConstantConditions"})
+    @SuppressWarnings({"ConstantConditionTypes"})
     public static Entity getHolder(ItemStack stack) {
         return ((EntityLinkedItemStack) (Object) stack).apoli$getEntity();
     }
 
-    @SuppressWarnings({"ConstantConditions"})
+    @SuppressWarnings({"ConstantConditionTypes"})
     public static ItemStack setHolder(ItemStack stack, Entity holder) {
         ((EntityLinkedItemStack) (Object) stack).apoli$setEntity(holder);
         return stack;

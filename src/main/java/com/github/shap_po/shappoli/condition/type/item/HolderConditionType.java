@@ -3,7 +3,7 @@ package com.github.shap_po.shappoli.condition.type.item;
 import com.github.shap_po.shappoli.Shappoli;
 import com.github.shap_po.shappoli.util.InventoryUtil;
 import io.github.apace100.apoli.condition.factory.ConditionTypeFactory;
-import io.github.apace100.apoli.condition.factory.ItemConditions;
+import io.github.apace100.apoli.condition.type.ItemConditionTypes;
 import io.github.apace100.apoli.data.ApoliDataTypes;
 import io.github.apace100.calio.data.SerializableData;
 import net.minecraft.entity.Entity;
@@ -29,7 +29,7 @@ public class HolderConditionType {
             (data, worldAndStack) -> condition(worldAndStack.getRight(), data.get("condition"))
         );
 
-        ItemConditions.ALIASES.addPathAlias("holder", factory.getSerializerId().getPath());
+        ItemConditionTypes.ALIASES.addPathAlias("holder", factory.getSerializerId().getPath());
         return factory;
     }
 }

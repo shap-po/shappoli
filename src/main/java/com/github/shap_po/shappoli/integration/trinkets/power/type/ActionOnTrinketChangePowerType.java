@@ -12,7 +12,7 @@ import io.github.apace100.apoli.component.PowerHolderComponent;
 import io.github.apace100.apoli.data.ApoliDataTypes;
 import io.github.apace100.apoli.power.Power;
 import io.github.apace100.apoli.power.factory.PowerTypeFactory;
-import io.github.apace100.apoli.power.factory.PowerTypes;
+import io.github.apace100.apoli.power.type.PowerTypes;
 import io.github.apace100.apoli.power.type.PowerType;
 import io.github.apace100.calio.data.SerializableData;
 import net.minecraft.entity.Entity;
@@ -101,7 +101,7 @@ public class ActionOnTrinketChangePowerType extends PowerType {
                 .add("item_condition", ApoliDataTypes.ITEM_CONDITION)
                 .add("slot", ShappoliTrinketsDataTypes.TRINKET_SLOT, null)
                 .add("slots", ShappoliTrinketsDataTypes.TRINKET_SLOTS, null)
-                .postProcessor(data -> MiscUtil.checkHasAtLeastOneField(data, "entity_action_on_equip", "item_action_on_equip", "entity_action_on_unequip", "item_action_on_unequip"))
+                .validate(data -> MiscUtil.checkAtLeastOneFieldExists(data, "entity_action_on_equip", "item_action_on_equip", "entity_action_on_unequip", "item_action_on_unequip"))
             ,
             data -> (type, player) -> new ActionOnTrinketChangePowerType(
                 type,

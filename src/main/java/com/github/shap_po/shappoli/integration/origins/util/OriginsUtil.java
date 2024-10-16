@@ -5,7 +5,7 @@ import io.github.apace100.origins.component.OriginComponent;
 import io.github.apace100.origins.origin.Origin;
 import io.github.apace100.origins.origin.OriginLayer;
 import io.github.apace100.origins.origin.OriginLayerManager;
-import io.github.apace100.origins.origin.OriginRegistry;
+import io.github.apace100.origins.origin.OriginManager;
 import io.github.apace100.origins.registry.ModComponents;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.Identifier;
@@ -41,7 +41,7 @@ public class OriginsUtil {
 
     public static @Nullable Origin getOrigin(Identifier id) {
         try {
-            return OriginRegistry.get(id);
+            return OriginManager.get(id);
         } catch (IllegalArgumentException e) {
             return null;
         }

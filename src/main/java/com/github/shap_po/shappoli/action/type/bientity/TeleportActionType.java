@@ -1,6 +1,7 @@
 package com.github.shap_po.shappoli.action.type.bientity;
 
 import com.github.shap_po.shappoli.Shappoli;
+import com.github.shap_po.shappoli.util.MiscUtil;
 import io.github.apace100.apoli.action.factory.ActionTypeFactory;
 import io.github.apace100.calio.data.SerializableData;
 import io.github.apace100.calio.data.SerializableDataTypes;
@@ -65,11 +66,7 @@ public class TeleportActionType {
                 .add("teleport_actor", SerializableDataTypes.BOOLEAN, false)
                 .add("teleport_target", SerializableDataTypes.BOOLEAN, true)
                 .add("rotate", SerializableDataTypes.BOOLEAN, false)
-                .postProcessor(data -> {
-                    if (!data.getBoolean("teleport_actor") && !data.getBoolean("teleport_target")) {
-                        throw new IllegalStateException("Any of 'teleport_actor' or 'teleport_target' fields must to true!");
-                    }
-                })
+                .validate(MiscUtil::checkAtLeastOneFieldIsTrue)
             ,
             (data, actorAndTarget) -> action(
                 actorAndTarget.getLeft(), actorAndTarget.getRight(),

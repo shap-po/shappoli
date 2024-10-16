@@ -9,7 +9,7 @@ import io.github.apace100.apoli.registry.ApoliRegistries;
 import net.minecraft.entity.Entity;
 import net.minecraft.registry.Registry;
 
-public class EntityConditions {
+public class EntityConditionTypes {
     public static void register() {
         register(CanUseShapeAbilityConditionType.getFactory());
         register(HasShapeAbilityConditionType.getFactory());

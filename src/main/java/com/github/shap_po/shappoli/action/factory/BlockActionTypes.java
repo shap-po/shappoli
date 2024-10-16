@@ -8,7 +8,7 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import org.apache.commons.lang3.tuple.Triple;
 
-public class BlockActions {
+public class BlockActionTypes {
     public static void register() {
     }
 

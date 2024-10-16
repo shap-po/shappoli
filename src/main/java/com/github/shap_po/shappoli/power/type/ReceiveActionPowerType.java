@@ -91,7 +91,7 @@ public class ReceiveActionPowerType extends PowerType {
                 .add("entity_condition", ApoliDataTypes.ENTITY_CONDITION, null)
                 .add("item_action", ApoliDataTypes.ITEM_ACTION, null)
                 .add("item_condition", ApoliDataTypes.ITEM_CONDITION, null)
-                .postProcessor(data -> MiscUtil.checkHasAtLeastOneField(data, "action", "bientity_action", "entity_action", "item_action"))
+                .validate(data -> MiscUtil.checkAtLeastOneFieldExists(data, "action", "bientity_action", "entity_action", "item_action"))
             ,
             data -> (type, entity) -> new ReceiveActionPowerType(type, entity,
                 data.get("action"),

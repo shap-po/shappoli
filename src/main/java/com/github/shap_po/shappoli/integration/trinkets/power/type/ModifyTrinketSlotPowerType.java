@@ -10,7 +10,7 @@ import com.google.common.collect.Multimap;
 import dev.emi.trinkets.api.TrinketsApi;
 import io.github.apace100.apoli.power.Power;
 import io.github.apace100.apoli.power.factory.PowerTypeFactory;
-import io.github.apace100.apoli.power.factory.PowerTypes;
+import io.github.apace100.apoli.power.type.PowerTypes;
 import io.github.apace100.apoli.power.type.PowerType;
 import io.github.apace100.calio.data.SerializableData;
 import net.minecraft.entity.LivingEntity;
@@ -91,7 +91,7 @@ public class ModifyTrinketSlotPowerType extends PowerType {
             new SerializableData()
                 .add("modifier", ShappoliTrinketsDataTypes.SLOT_ENTITY_ATTRIBUTE_MODIFIER, null)
                 .add("modifiers", ShappoliTrinketsDataTypes.SLOT_ENTITY_ATTRIBUTE_MODIFIERS, null)
-                .postProcessor(data -> MiscUtil.checkHasAtLeastOneField(data, "modifier", "modifiers"))
+                .validate(data -> MiscUtil.checkAtLeastOneFieldExists(data, "modifier", "modifiers"))
             ,
             data -> (type, player) -> {
                 ModifyTrinketSlotPowerType power = new ModifyTrinketSlotPowerType(type, player);

@@ -1,19 +1,19 @@
 package com.github.shap_po.shappoli.condition.factory;
 
-import com.github.shap_po.shappoli.power.type.ReceiveConditionPowerType;
 import com.github.shap_po.shappoli.condition.type.meta.SendConditionConditionType;
+import com.github.shap_po.shappoli.power.type.ReceiveConditionPowerType;
 import io.github.apace100.apoli.condition.factory.ConditionTypeFactory;
 import io.github.apace100.apoli.registry.ApoliRegistries;
 import net.minecraft.entity.Entity;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Pair;
 
-public class BiEntityConditions {
+public class BiEntityConditionTypes {
     public static void register() {
         register(SendConditionConditionType.getFactory(
             Pair::getLeft,
             ReceiveConditionPowerType::receiveBientity,
-            io.github.apace100.apoli.condition.factory.BiEntityConditions.ALIASES
+            io.github.apace100.apoli.condition.type.BiEntityConditionTypes.ALIASES
         ));
     }
 

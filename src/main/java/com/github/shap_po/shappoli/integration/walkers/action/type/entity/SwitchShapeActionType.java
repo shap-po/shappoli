@@ -3,7 +3,7 @@ package com.github.shap_po.shappoli.integration.walkers.action.type.entity;
 import com.github.shap_po.shappoli.Shappoli;
 import com.github.shap_po.shappoli.integration.walkers.util.WalkersUtil;
 import io.github.apace100.apoli.action.factory.ActionTypeFactory;
-import io.github.apace100.apoli.action.factory.EntityActions;
+import io.github.apace100.apoli.action.type.EntityActionTypes;
 import io.github.apace100.apoli.data.ApoliDataTypes;
 import io.github.apace100.calio.data.SerializableData;
 import io.github.apace100.calio.data.SerializableDataTypes;
@@ -47,8 +47,8 @@ public class SwitchShapeActionType {
             )
         );
 
-        EntityActions.ALIASES.addPathAlias("change_shape", factory.getSerializerId().getPath());
-        EntityActions.ALIASES.addPathAlias("morph", factory.getSerializerId().getPath());
+        EntityActionTypes.ALIASES.addPathAlias("change_shape", factory.getSerializerId().getPath());
+        EntityActionTypes.ALIASES.addPathAlias("morph", factory.getSerializerId().getPath());
         return factory;
     }
 }

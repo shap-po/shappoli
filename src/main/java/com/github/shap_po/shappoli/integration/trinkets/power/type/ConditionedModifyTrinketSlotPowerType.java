@@ -6,7 +6,7 @@ import com.github.shap_po.shappoli.integration.trinkets.data.SlotEntityAttribute
 import com.github.shap_po.shappoli.util.MiscUtil;
 import io.github.apace100.apoli.power.Power;
 import io.github.apace100.apoli.power.factory.PowerTypeFactory;
-import io.github.apace100.apoli.power.factory.PowerTypes;
+import io.github.apace100.apoli.power.type.PowerTypes;
 import io.github.apace100.calio.data.SerializableData;
 import io.github.apace100.calio.data.SerializableDataTypes;
 import net.minecraft.entity.LivingEntity;
@@ -55,7 +55,7 @@ public class ConditionedModifyTrinketSlotPowerType extends ModifyTrinketSlotPowe
                 .add("modifiers", ShappoliTrinketsDataTypes.SLOT_ENTITY_ATTRIBUTE_MODIFIERS, null)
                 .add("tick_rate", SerializableDataTypes.POSITIVE_INT, 20)
                 .add("apply_on_added", SerializableDataTypes.BOOLEAN, true)
-                .postProcessor(data -> MiscUtil.checkHasAtLeastOneField(data, "modifier", "modifiers"))
+                .validate(data -> MiscUtil.checkAtLeastOneFieldExists(data, "modifier", "modifiers"))
             ,
             data -> (type, player) -> {
                 ConditionedModifyTrinketSlotPowerType power = new ConditionedModifyTrinketSlotPowerType(type, player, data.getInt("tick_rate"), data.getBoolean("apply_on_added"));

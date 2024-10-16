@@ -10,7 +10,7 @@ public interface SuppressiblePower {
 
     boolean shappoli$hasConditions();
 
-    void shappoli$setHasConditions(boolean hasConditions);
+    void shappoli$setHasConditions(boolean hasConditionTypes);
 
     @SuppressWarnings({"unused"})
     @Nullable

@@ -35,8 +35,8 @@ public class PowerTypeMixin<T extends PowerType> implements SuppressiblePower {
     }
 
     @Override
-    public void shappoli$setHasConditions(boolean hasConditions) {
-        shappoli$hasConditions = hasConditions;
+    public void shappoli$setHasConditions(boolean hasConditionTypes) {
+        shappoli$hasConditions = hasConditionTypes;
     }
 
     @Override

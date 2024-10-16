@@ -39,7 +39,7 @@ public class SlotEntityAttributeModifier {
         return new SlotEntityAttributeModifier(attribute, modifier);
     }
 
-    public static SerializableData.Instance toData(SerializableData data, SlotEntityAttributeModifier instance) {
+    public static SerializableData.Instance toData(SlotEntityAttributeModifier instance,SerializableData data) {
         SerializableData.Instance dataInstance = data.new Instance();
         dataInstance.set("slot", instance.attribute.slot);
         dataInstance.set("id", instance.getModifier().id());

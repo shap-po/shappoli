@@ -9,7 +9,7 @@ import io.github.apace100.apoli.registry.ApoliRegistries;
 import net.minecraft.entity.Entity;
 import net.minecraft.registry.Registry;
 
-public class EntityActions {
+public class EntityActionTypes {
     public static void register() {
         register(ChangeShapeAbilityCooldownActionType.getFactory());
         register(ShapeActionActionType.getFactory());

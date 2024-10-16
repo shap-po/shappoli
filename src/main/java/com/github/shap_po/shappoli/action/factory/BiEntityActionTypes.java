@@ -10,7 +10,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Pair;
 
-public class BiEntityActions {
+public class BiEntityActionTypes {
     public static void register() {
         register(SuppressPowerActionType.getFactory());
         register(TeleportActionType.getFactory());
@@ -19,7 +19,7 @@ public class BiEntityActions {
             SendActionActionType.getFactory(
                 Pair::getLeft,
                 ReceiveActionPowerType::receiveBientityAction,
-                io.github.apace100.apoli.action.factory.BiEntityActions.ALIASES
+                io.github.apace100.apoli.action.type.BiEntityActionTypes.ALIASES
             )
         );
     }

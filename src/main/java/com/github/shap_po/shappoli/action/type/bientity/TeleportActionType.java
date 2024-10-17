@@ -66,7 +66,7 @@ public class TeleportActionType {
                 .add("teleport_actor", SerializableDataTypes.BOOLEAN, false)
                 .add("teleport_target", SerializableDataTypes.BOOLEAN, true)
                 .add("rotate", SerializableDataTypes.BOOLEAN, false)
-                .validate(MiscUtil::checkAtLeastOneFieldIsTrue)
+                .validate(data -> MiscUtil.checkAtLeastOneFieldIsTrue(data, "teleport_actor", "teleport_target"))
             ,
             (data, actorAndTarget) -> action(
                 actorAndTarget.getLeft(), actorAndTarget.getRight(),

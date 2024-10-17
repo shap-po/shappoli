@@ -40,7 +40,7 @@ public class CopyOriginActionType {
                 .add("layer", SerializableDataTypes.IDENTIFIER, OriginsUtil.ORIGIN_LAYER_ID)
                 .add("modify_actor", SerializableDataTypes.BOOLEAN, false)
                 .add("modify_target", SerializableDataTypes.BOOLEAN, true)
-                .validate(MiscUtil::checkAtLeastOneFieldIsTrue)
+                .validate(data -> MiscUtil.checkAtLeastOneFieldIsTrue(data, "modify_actor", "modify_target"))
             ,
             (data, actorAndTarget) -> action(
                 actorAndTarget.getLeft(), actorAndTarget.getRight(),

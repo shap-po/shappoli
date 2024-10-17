@@ -1,0 +1,11 @@
+{
+  "type": "shappoli:active_self",
+  "keys": [
+    "key.attack",
+    "key.sneak"
+  ],
+  "entity_action": {
+    "type": "apoli:execute_command",
+    "command": "say Yippie!"
+  }
+}

@@ -11,6 +11,7 @@ import java.util.function.Supplier;
 public class PowerTypes {
     public static void register() {
         register(ActionOnEntityCollisionPowerType::getFactory);
+        register(ActiveCooldownPowerType::getActiveSelfFactory);
         register(ModifyVillagerReputationPowerType::getFactory);
         register(ReceiveActionPowerType::getFactory);
         register(ReceiveConditionPowerType::getFactory);

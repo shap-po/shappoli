@@ -1,0 +1,7 @@
+{
+  "type": "shappoli:active_self",
+  "entity_action": {
+    "type": "apoli:execute_command",
+    "command": "say Yippie!"
+  }
+}

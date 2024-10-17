@@ -25,6 +25,9 @@
   "entrypoints": {
     "main": [
       "com.github.shap_po.shappoli.Shappoli"
+    ],
+    "client": [
+      "com.github.shap_po.shappoli.ShappoliClient"
     ]
   },
   "mixins": [

@@ -75,7 +75,7 @@ public class ModifyTrinketActionType {
             (data, entity) -> action(
                 entity,
                 TrinketSlotData.getSlots(data),
-                data.get("process_mode"),
+                data.<InventoryUtil.ProcessMode>get("process_mode").getProcessor(),
                 data.getInt("limit"),
                 data.get("entity_action"),
                 data.get("item_action"),

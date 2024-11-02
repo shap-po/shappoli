@@ -25,7 +25,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-public class ModifyTrinketActionType {
+public class ModifyTrinketInventoryActionType {
     public static void action(
         Entity entity,
         List<TrinketSlotData> slots,
@@ -62,7 +62,7 @@ public class ModifyTrinketActionType {
 
     public static ActionTypeFactory<Entity> getFactory() {
         ActionTypeFactory<Entity> factory = new ActionTypeFactory<>(
-            Shappoli.identifier("modify_trinket"),
+            Shappoli.identifier("modify_trinket_inventory"),
             new SerializableData()
                 .add("slot", ShappoliTrinketsDataTypes.TRINKET_SLOT, null)
                 .add("slots", ShappoliTrinketsDataTypes.TRINKET_SLOTS, null)
@@ -83,7 +83,9 @@ public class ModifyTrinketActionType {
             )
         );
 
+        EntityActionTypes.ALIASES.addPathAlias("modify_trinket", factory.getSerializerId().getPath());
         EntityActionTypes.ALIASES.addPathAlias("modify_trinkets", factory.getSerializerId().getPath());
+        EntityActionTypes.ALIASES.addPathAlias("modify_trinkets_inventory", factory.getSerializerId().getPath());
         return factory;
     }
 }

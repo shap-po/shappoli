@@ -2,6 +2,7 @@ package com.github.shap_po.shappoli.integration.trinkets.condition.factory;
 
 import com.github.shap_po.shappoli.integration.trinkets.condition.type.item.EquippableTrinketConditionType;
 import com.github.shap_po.shappoli.integration.trinkets.condition.type.item.EquippedTrinketCountConditionType;
+import com.github.shap_po.shappoli.integration.trinkets.condition.type.item.EquippedTrinketConditionType;
 import com.github.shap_po.shappoli.integration.trinkets.condition.type.item.TrinketConditionType;
 import io.github.apace100.apoli.condition.factory.ConditionTypeFactory;
 import io.github.apace100.apoli.registry.ApoliRegistries;
@@ -14,6 +15,7 @@ public class ItemConditionTypes {
     public static void register() {
         register(EquippableTrinketConditionType.getFactory());
         register(EquippedTrinketCountConditionType.getFactory());
+        register(EquippedTrinketConditionType.getFactory());
         register(TrinketConditionType.getFactory());
     }
 

@@ -1,0 +1,31 @@
+{
+  "type": "apoli:active_self",
+  "key": "key.attack",
+
+  "entity_action": {
+    "type": "shappoli:modify_trinket",
+    "item_action": {
+      "type": "apoli:nothing"
+    },
+    "entity_action": {
+      "type": "apoli:execute_command",
+      "command": "say found a trinket"
+    },
+    "item_condition": {
+      "type": "apoli:all_of",
+      "conditions": [
+        {
+          "type": "apoli:empty",
+          "inverted": true
+        },
+        {
+          "type": "shappoli:is_equipped_trinket",
+          "slot": {
+            "group": "feet",
+            "name": "shoes"
+          }
+        }
+      ]
+    }
+  }
+}

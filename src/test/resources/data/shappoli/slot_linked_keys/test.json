@@ -1,0 +1,18 @@
+{
+  "values": [
+    {
+      "slot": {
+        "group": "chest",
+        "name": "necklace"
+      },
+      "key": "key.attack"
+    },
+    {
+      "slot": {
+        "group": "shappoli",
+        "name": "slot"
+      },
+      "key": "key.use"
+    }
+  ]
+}

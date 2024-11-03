@@ -13,6 +13,7 @@ import io.github.apace100.calio.data.SerializableDataTypes;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Map;
@@ -20,7 +21,7 @@ import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 public class ActiveCooldownPowerType extends CooldownPowerType implements ActiveAny {
-    private final Consumer<Entity> activeFunction;
+    protected final @Nullable Consumer<Entity> activeFunction;
     private final List<Key> keys;
     private final List<String> categories;
     private final boolean boundOnly;
@@ -30,7 +31,7 @@ public class ActiveCooldownPowerType extends CooldownPowerType implements Active
         Power power, LivingEntity entity,
         int cooldownDuration,
         HudRender hudRender,
-        Consumer<Entity> activeFunction,
+        @Nullable Consumer<Entity> activeFunction,
         List<Key> keys,
         List<String> categories,
         boolean boundOnly,
@@ -82,7 +83,9 @@ public class ActiveCooldownPowerType extends CooldownPowerType implements Active
     @Override
     public void onUse() {
         if (canUse()) {
-            this.activeFunction.accept(this.entity);
+            if (activeFunction != null) {
+                this.activeFunction.accept(this.entity);
+            }
             use();
         }
     }

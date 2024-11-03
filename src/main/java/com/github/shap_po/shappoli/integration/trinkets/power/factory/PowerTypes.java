@@ -15,6 +15,7 @@ public class PowerTypes {
         register(ModifyTrinketSlotPowerType::getFactory);
         register(PreventTrinketEquipPowerType::getFactory);
         register(PreventTrinketUnequipPowerType::getFactory);
+        register(SlotLinkedActivePowerType::getFactory);
     }
 
     @SuppressWarnings("unchecked")

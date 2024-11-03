@@ -1,6 +1,7 @@
 package com.github.shap_po.shappoli;
 
 import com.github.shap_po.shappoli.event.ClientEventListener;
+import com.github.shap_po.shappoli.integration.ModIntegrationsClient;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -14,5 +15,6 @@ public class ShappoliClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         ClientEventListener.register();
+        ModIntegrationsClient.register();
     }
 }

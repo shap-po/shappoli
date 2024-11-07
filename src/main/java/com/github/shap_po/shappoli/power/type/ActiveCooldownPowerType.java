@@ -1,6 +1,7 @@
 package com.github.shap_po.shappoli.power.type;
 
 import com.github.shap_po.shappoli.Shappoli;
+import com.github.shap_po.shappoli.data.ShappoliDataTypes;
 import com.github.shap_po.shappoli.util.MiscUtil;
 import com.google.common.collect.Streams;
 import io.github.apace100.apoli.data.ApoliDataTypes;
@@ -23,7 +24,6 @@ import java.util.stream.Stream;
 public class ActiveCooldownPowerType extends CooldownPowerType implements ActiveAny {
     protected final @Nullable Consumer<Entity> activeFunction;
     private final List<Key> keys;
-    private final List<String> categories;
     private final boolean boundOnly;
     private final boolean continuous;
 
@@ -33,14 +33,12 @@ public class ActiveCooldownPowerType extends CooldownPowerType implements Active
         HudRender hudRender,
         @Nullable Consumer<Entity> activeFunction,
         List<Key> keys,
-        List<String> categories,
         boolean boundOnly,
         boolean continuous
     ) {
         super(power, entity, cooldownDuration, hudRender);
         this.activeFunction = activeFunction;
         this.keys = keys;
-        this.categories = categories;
         this.boundOnly = boundOnly;
         this.continuous = continuous;
     }
@@ -53,7 +51,7 @@ public class ActiveCooldownPowerType extends CooldownPowerType implements Active
     @Override
     public Stream<Key> getPressedKeys(List<KeyBinding> keyBindings, Map<String, Boolean> keybindingStates) {
         // if both keys and categories are empty, find all pressed keys
-        if (keys.isEmpty() && categories.isEmpty()) {
+        if (keys.isEmpty()) {
             return keyBindings.stream()
                 .filter(KeyBinding::isPressed)
                 .filter(keyBinding -> !boundOnly || !keyBinding.isUnbound())
@@ -62,11 +60,14 @@ public class ActiveCooldownPowerType extends CooldownPowerType implements Active
 
         // otherwise, find all pressed keys that match key ids or categories
         return Streams.concat(
-            keys.stream().filter(key -> keybindingStates.getOrDefault(key.key, false)),
+            keys.stream()
+                .filter(key -> key.key != null)
+                .filter(key -> keybindingStates.getOrDefault(key.key, false)),
             keyBindings.stream()
                 .filter(KeyBinding::isPressed)
-                .flatMap(keyBinding -> categories.stream()
-                    .filter(group -> keyBinding.getCategory().equals(group))
+                .flatMap(keyBinding -> keys.stream()
+                    .filter(key -> key.category != null)
+                    .filter(key -> keyBinding.getCategory().equals(key.category))
                     .map(group -> keyFromKeyBinding(keyBinding))
                 )
         );
@@ -75,13 +76,14 @@ public class ActiveCooldownPowerType extends CooldownPowerType implements Active
     private Key keyFromKeyBinding(KeyBinding keyBinding) {
         Key key = new Key();
         key.key = keyBinding.getTranslationKey();
+        key.category = keyBinding.getCategory();
         key.continuous = continuous;
         return key;
     }
 
 
     @Override
-    public void onUse() {
+    public void onUse(Key key) {
         if (canUse()) {
             if (activeFunction != null) {
                 this.activeFunction.accept(this.entity);
@@ -97,10 +99,8 @@ public class ActiveCooldownPowerType extends CooldownPowerType implements Active
                 .add("entity_action", ApoliDataTypes.ENTITY_ACTION)
                 .add("cooldown", SerializableDataTypes.INT, 1)
                 .add("hud_render", ApoliDataTypes.HUD_RENDER, HudRender.DONT_RENDER)
-                .add("key", ApoliDataTypes.BACKWARDS_COMPATIBLE_KEY, null)
-                .add("keys", ApoliDataTypes.BACKWARDS_COMPATIBLE_KEY.list(), null)
-                .add("category", SerializableDataTypes.STRING, null)
-                .add("categories", SerializableDataTypes.STRINGS, null)
+                .add("key", ShappoliDataTypes.ACTIVE_ANY_KEY, null)
+                .add("keys", ShappoliDataTypes.ACTIVE_ANY_KEY.list(), null)
                 .add("bound_only", SerializableDataTypes.BOOLEAN, true)
                 .add("continuous", SerializableDataTypes.BOOLEAN, false)
             ,
@@ -112,7 +112,6 @@ public class ActiveCooldownPowerType extends CooldownPowerType implements Active
                 MiscUtil.<Key>listFromData(data, "key", "keys")
                     // set the continuous flag for each key from the data
                     .stream().peek(key -> key.continuous = data.getBoolean("continuous")).toList(),
-                MiscUtil.listFromData(data, "category", "categories"),
                 data.getBoolean("bound_only"),
                 data.getBoolean("continuous")
             ))

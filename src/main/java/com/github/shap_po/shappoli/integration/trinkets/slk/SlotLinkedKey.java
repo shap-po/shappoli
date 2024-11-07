@@ -1,10 +1,10 @@
 package com.github.shap_po.shappoli.integration.trinkets.slk;
 
+import com.github.shap_po.shappoli.data.ShappoliDataTypes;
 import com.github.shap_po.shappoli.integration.trinkets.data.ShappoliTrinketsDataTypes;
 import com.github.shap_po.shappoli.integration.trinkets.data.TrinketSlotData;
+import com.github.shap_po.shappoli.power.type.ActiveAny;
 import com.github.shap_po.shappoli.util.MiscUtil;
-import io.github.apace100.apoli.data.ApoliDataTypes;
-import io.github.apace100.apoli.power.type.Active;
 import io.github.apace100.calio.data.SerializableData;
 import io.github.apace100.calio.data.SerializableDataType;
 import io.github.apace100.calio.data.SerializableDataTypes;
@@ -52,7 +52,7 @@ public class SlotLinkedKey {
         return values;
     }
 
-    public List<Active.Key> getKeys() {
+    public List<ActiveAny.Key> getKeys() {
         return values.stream().flatMap(entry -> entry.keys.stream()).toList();
     }
 
@@ -73,8 +73,8 @@ public class SlotLinkedKey {
             new SerializableData()
                 .add("slot", ShappoliTrinketsDataTypes.TRINKET_SLOT, null)
                 .add("slots", ShappoliTrinketsDataTypes.TRINKET_SLOTS, null)
-                .add("key", ApoliDataTypes.BACKWARDS_COMPATIBLE_KEY, null)
-                .add("keys", ApoliDataTypes.BACKWARDS_COMPATIBLE_KEY.list(), null)
+                .add("key", ShappoliDataTypes.ACTIVE_ANY_KEY, null)
+                .add("keys", ShappoliDataTypes.ACTIVE_ANY_KEY.list(), null)
             ,
             data -> new Entry(
                 MiscUtil.listFromData(data, "slot", "slots"),
@@ -86,9 +86,9 @@ public class SlotLinkedKey {
         );
 
         public final List<TrinketSlotData> slots;
-        public final List<Active.Key> keys;
+        public final List<ActiveAny.Key> keys;
 
-        public Entry(List<TrinketSlotData> slots, List<Active.Key> keys) {
+        public Entry(List<TrinketSlotData> slots, List<ActiveAny.Key> keys) {
             this.slots = slots;
             this.keys = keys;
         }

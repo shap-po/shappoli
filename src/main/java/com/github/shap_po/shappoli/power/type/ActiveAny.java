@@ -1,15 +1,16 @@
 package com.github.shap_po.shappoli.power.type;
 
 import com.github.shap_po.shappoli.ShappoliClient;
-import io.github.apace100.apoli.ApoliClient;
 import io.github.apace100.apoli.component.PowerHolderComponent;
 import io.github.apace100.apoli.mixin.KeyBindingAccessor;
-import io.github.apace100.apoli.power.type.Active;
 import io.github.apace100.apoli.power.type.PowerType;
+import io.github.apace100.calio.data.SerializableData;
+import io.github.apace100.calio.data.SerializableDataTypes;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.KeyBinding;
+import net.minecraft.util.Pair;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -17,20 +18,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
-public interface ActiveAny extends Active {
+/**
+ * A modified version of {@link io.github.apace100.apoli.power.type.Active} that allows listening to multiple keys
+ */
+public interface ActiveAny {
+    void onUse(Key key);
+
     List<Key> getKeys();
 
     Stream<Key> getPressedKeys(List<KeyBinding> keyBindings, Map<String, Boolean> keybindingStates);
-
-    @Override
-    default void setKey(Key key) {
-        // NO-OP
-    }
-
-    @Override
-    default Key getKey() {
-        return NullKey.INSTANCE;
-    }
 
     @Environment(EnvType.CLIENT)
     static void integrateCallback(MinecraftClient client) {
@@ -46,31 +42,62 @@ public interface ActiveAny extends Active {
             return;
         }
 
-        List<PowerType> triggeredPowers = new LinkedList<>();
+        List<Pair<PowerType, Key>> triggeredPowers = new LinkedList<>();
 
         List<KeyBinding> allKeyBindings = KeyBindingAccessor.getKeysById().values().stream().toList();
         Map<String, Boolean> currentKeybindingStates = allKeyBindings.stream()
             .collect(HashMap::new, (map, keyBinding) -> map.put(keyBinding.getTranslationKey(), keyBinding.isPressed()), HashMap::putAll);
 
         for (PowerType power : powers) {
-            if (((ActiveAny) power).getPressedKeys(allKeyBindings, currentKeybindingStates)
-                .anyMatch(key -> key.continuous || !ShappoliClient.lastKeyBindingStates.getOrDefault(key.key, false))) {
-                triggeredPowers.add(power);
+            if (!(power instanceof ActiveAny activePower)) {
+                continue;
             }
+            activePower.getPressedKeys(allKeyBindings, currentKeybindingStates)
+                .filter(key -> key.continuous || !ShappoliClient.lastKeyBindingStates.getOrDefault(key.key, false))
+                .findFirst()
+                .ifPresent(pressedKey -> triggeredPowers.add(new Pair<>(power, pressedKey)));
         }
 
         ShappoliClient.lastKeyBindingStates.putAll(currentKeybindingStates);
 
         if (!triggeredPowers.isEmpty()) {
-            ApoliClient.performActivePowers(triggeredPowers);
+            ShappoliClient.performActivePowers(triggeredPowers);
         }
     }
 
-    class NullKey extends Key {
-        static final NullKey INSTANCE = new NullKey();
-        /**
-         * Override default key value so that {@link ApoliClient#getKeyBinding} will return null and {@link Active#integrateCallback(MinecraftClient)} will not crash
-         */
-        public String key = null;
+    class Key {
+        public static final SerializableData DATA = new SerializableData()
+            .add("key", SerializableDataTypes.STRING, null)
+            .add("category", SerializableDataTypes.STRING, null)
+            .add("continuous", SerializableDataTypes.BOOLEAN, false);
+
+        String key;
+        String category;
+        public boolean continuous = false;
+
+        public static Key fromData(SerializableData.Instance dataInstance) {
+            Key key = new Key();
+            key.key = dataInstance.getString("key");
+            key.category = dataInstance.getString("category");
+            key.continuous = dataInstance.getBoolean("continuous");
+            return key;
+        }
+
+        public SerializableData.Instance toData(SerializableData data) {
+            SerializableData.Instance dataInstance = data.new Instance();
+            dataInstance.set("key", key);
+            dataInstance.set("category", category);
+            dataInstance.set("continuous", continuous);
+            return dataInstance;
+        }
+
+        @Override
+        public String toString() {
+            return "Key{" +
+                "key='" + key + '\'' +
+                ", category='" + category + '\'' +
+                ", continuous=" + continuous +
+                '}';
+        }
     }
 }

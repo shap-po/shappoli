@@ -2,6 +2,8 @@ package com.github.shap_po.shappoli;
 
 import com.github.shap_po.shappoli.command.ShappoliCommand;
 import com.github.shap_po.shappoli.integration.ModIntegrations;
+import com.github.shap_po.shappoli.networking.ModPackets;
+import com.github.shap_po.shappoli.networking.ModPacketsC2S;
 import com.github.shap_po.shappoli.registry.ModPowers;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
@@ -17,6 +19,9 @@ public class Shappoli implements ModInitializer {
     public void onInitialize() {
         ModPowers.register();
         ModIntegrations.register();
+
+        ModPackets.register();
+        ModPacketsC2S.register();
 
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
             ShappoliCommand.register(dispatcher);

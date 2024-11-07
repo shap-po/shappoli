@@ -3,8 +3,10 @@
   "slot_linked_key": "*:test",
 
   "item_condition": {
-    "type": "apoli:empty",
-    "inverted": true
+    "type": "apoli:ingredient",
+    "ingredient": {
+      "item": "minecraft:stone"
+    }
   },
 
   "entity_action": {

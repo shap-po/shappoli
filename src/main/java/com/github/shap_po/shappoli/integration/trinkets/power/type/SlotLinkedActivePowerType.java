@@ -20,7 +20,6 @@ import net.minecraft.util.Pair;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -60,7 +59,6 @@ public class SlotLinkedActivePowerType extends ActiveCooldownPowerType {
                 .peek(key -> key.continuous = continuous)
                 .toList(),
 
-            new ArrayList<>(),
             true,
             continuous
         );
@@ -73,9 +71,9 @@ public class SlotLinkedActivePowerType extends ActiveCooldownPowerType {
     }
 
     @Override
-    public void onUse() {
+    public void onUse(Key key) {
         if (canUse()) {
-            Shappoli.LOGGER.debug("Trying to use slot linked active power: {}", this.getPowerId());
+            Shappoli.LOGGER.debug("Trying to use slot linked active power: {} with key {}", this.getPowerId(), key);
             use();
         }
     }

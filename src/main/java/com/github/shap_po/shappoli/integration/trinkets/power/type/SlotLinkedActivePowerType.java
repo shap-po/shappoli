@@ -39,7 +39,7 @@ public class SlotLinkedActivePowerType extends ActiveCooldownPowerType {
         int cooldownDuration,
         HudRender hudRender,
 
-        Consumer<Entity> entityAction,
+        @Nullable Consumer<Entity> entityAction,
         @Nullable Consumer<Pair<World, StackReference>> itemAction,
         @Nullable Predicate<Pair<World, ItemStack>> itemCondition,
 
@@ -78,9 +78,11 @@ public class SlotLinkedActivePowerType extends ActiveCooldownPowerType {
             List<TrinketSlotData> slots = slotLinkedKeys.stream()
                 .flatMap(slotLinkedKeybinding -> slotLinkedKeybinding.getTriggeredSlots(key).stream())
                 .toList();
+
             if (slots.isEmpty()) {
                 return;
             }
+
             if (ModifyTrinketInventoryActionType.action(entity, slots, processor, limit, activeFunction, itemAction, itemCondition)) {
                 use();
             }
@@ -96,6 +98,8 @@ public class SlotLinkedActivePowerType extends ActiveCooldownPowerType {
 
                 .add("entity_action", ApoliDataTypes.ENTITY_ACTION, null)
                 .add("item_action", ApoliDataTypes.ITEM_ACTION, null)
+                .validate(data -> MiscUtil.checkAtLeastOneFieldExists(data, "entity_action", "item_action"))
+
                 .add("item_condition", ApoliDataTypes.ITEM_CONDITION, null)
 
                 .add("process_mode", ApoliDataTypes.PROCESS_MODE, InventoryUtil.ProcessMode.STACKS)
@@ -103,6 +107,8 @@ public class SlotLinkedActivePowerType extends ActiveCooldownPowerType {
 
                 .add("slot_linked_key", ShappoliTrinketsDataTypes.SLOT_LINKED_KEYBINDING, null)
                 .add("slot_linked_keys", ShappoliTrinketsDataTypes.SLOT_LINKED_KEYBINDINGS, null)
+                .validate(data -> MiscUtil.checkAtLeastOneFieldExists(data, "slot_linked_key", "slot_linked_keys"))
+
                 .add("continuous", SerializableDataTypes.BOOLEAN, false)
             ,
             data -> (power, player) -> new SlotLinkedActivePowerType(

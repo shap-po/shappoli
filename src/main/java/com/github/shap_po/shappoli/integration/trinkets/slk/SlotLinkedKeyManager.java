@@ -7,6 +7,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import com.mojang.serialization.JsonOps;
+import io.github.apace100.apoli.power.PowerManager;
 import io.github.apace100.apoli.util.PrioritizedEntry;
 import io.github.apace100.calio.CalioServer;
 import io.github.apace100.calio.data.IdentifiableMultiJsonDataLoader;
@@ -20,6 +21,7 @@ import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener;
 import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.resource.ResourceManager;
+import net.minecraft.resource.ResourceType;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
@@ -42,7 +44,10 @@ public class SlotLinkedKeyManager extends IdentifiableMultiJsonDataLoader implem
         .create();
 
     public SlotLinkedKeyManager() {
-        super(GSON, DIRECTORY);
+        super(GSON, DIRECTORY, ResourceType.SERVER_DATA);
+
+        // load before the power manager so powers can depend on slot linked keys
+        ServerLifecycleEvents.SYNC_DATA_PACK_CONTENTS.addPhaseOrdering(PowerManager.ID, ID);
         ServerLifecycleEvents.SYNC_DATA_PACK_CONTENTS.register(ID, (player, joined) -> send(player));
     }
 

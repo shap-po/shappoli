@@ -5,14 +5,18 @@
         "group": "chest",
         "name": "necklace"
       },
-      "key": "key.attack"
+      "key": {
+        "key": "key.attack"
+      }
     },
     {
       "slot": {
-        "group": "shappoli",
-        "name": "slot"
+        "group": "feet",
+        "name": "shoes"
       },
-      "key": "key.use"
+      "key": {
+        "key": "key.sneak"
+      }
     }
   ]
 }

@@ -12,10 +12,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.util.Pair;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Stream;
 
 /**
@@ -98,6 +95,26 @@ public interface ActiveAny {
                 ", category='" + category + '\'' +
                 ", continuous=" + continuous +
                 '}';
+        }
+
+        @Override
+        public boolean equals(final Object obj) {
+            if (obj == this) {
+                return true;
+            }
+
+            if (!(obj instanceof Key otherKey)) {
+                return false;
+            }
+
+            return Objects.equals(this.key, otherKey.key)
+                && Objects.equals(this.category, otherKey.category)
+                && this.continuous == otherKey.continuous;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(this.key, this.category, this.continuous);
         }
     }
 }

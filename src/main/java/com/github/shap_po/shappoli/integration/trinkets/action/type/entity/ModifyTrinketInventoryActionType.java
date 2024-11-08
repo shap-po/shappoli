@@ -26,17 +26,17 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 public class ModifyTrinketInventoryActionType {
-    public static void action(
+    public static boolean action(
         Entity entity,
         List<TrinketSlotData> slots,
         Function<ItemStack, Integer> processor,
         int limit,
         @Nullable Consumer<Entity> entityAction,
-        Consumer<Pair<World, StackReference>> itemAction,
+        @Nullable Consumer<Pair<World, StackReference>> itemAction,
         @Nullable Predicate<Pair<World, ItemStack>> itemCondition
     ) {
         if (!(entity instanceof LivingEntity livingEntity)) {
-            return;
+            return false;
         }
 
         int processedItems = 0;
@@ -49,8 +49,10 @@ public class ModifyTrinketInventoryActionType {
                 if (entityAction != null) {
                     entityAction.accept(entity);
                 }
+                if (itemAction != null) {
+                    itemAction.accept(TrinketsUtil.getItemActionPair(livingEntity, trinket.getLeft()));
+                }
 
-                itemAction.accept(TrinketsUtil.getItemActionPair(livingEntity, trinket.getLeft()));
                 ++processedItems;
 
                 if (limit > 0 && processedItems >= limit) {
@@ -58,6 +60,8 @@ public class ModifyTrinketInventoryActionType {
                 }
             }
         }
+
+        return processedItems > 0;
     }
 
     public static ActionTypeFactory<Entity> getFactory() {

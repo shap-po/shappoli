@@ -1,7 +1,9 @@
 package com.github.shap_po.shappoli.integration.trinkets.power.type;
 
 import com.github.shap_po.shappoli.Shappoli;
+import com.github.shap_po.shappoli.integration.trinkets.action.type.entity.ModifyTrinketInventoryActionType;
 import com.github.shap_po.shappoli.integration.trinkets.data.ShappoliTrinketsDataTypes;
+import com.github.shap_po.shappoli.integration.trinkets.data.TrinketSlotData;
 import com.github.shap_po.shappoli.integration.trinkets.slk.SlotLinkedKey;
 import com.github.shap_po.shappoli.power.type.ActiveCooldownPowerType;
 import com.github.shap_po.shappoli.util.MiscUtil;
@@ -38,8 +40,8 @@ public class SlotLinkedActivePowerType extends ActiveCooldownPowerType {
         HudRender hudRender,
 
         Consumer<Entity> entityAction,
-        Consumer<Pair<World, StackReference>> itemAction,
-        Predicate<Pair<World, ItemStack>> itemCondition,
+        @Nullable Consumer<Pair<World, StackReference>> itemAction,
+        @Nullable Predicate<Pair<World, ItemStack>> itemCondition,
 
         Function<ItemStack, Integer> processor,
         int limit,
@@ -55,7 +57,7 @@ public class SlotLinkedActivePowerType extends ActiveCooldownPowerType {
 
             // gather keys from slot linked keys
             slotLinkedKeys.stream()
-                .flatMap(slotLinkedKeybinding -> slotLinkedKeybinding.getKeys().stream())
+                .flatMap(slotLinkedKeybinding -> slotLinkedKeybinding.getAllKeys().stream())
                 .peek(key -> key.continuous = continuous)
                 .toList(),
 
@@ -73,8 +75,15 @@ public class SlotLinkedActivePowerType extends ActiveCooldownPowerType {
     @Override
     public void onUse(Key key) {
         if (canUse()) {
-            Shappoli.LOGGER.debug("Trying to use slot linked active power: {} with key {}", this.getPowerId(), key);
-            use();
+            List<TrinketSlotData> slots = slotLinkedKeys.stream()
+                .flatMap(slotLinkedKeybinding -> slotLinkedKeybinding.getTriggeredSlots(key).stream())
+                .toList();
+            if (slots.isEmpty()) {
+                return;
+            }
+            if (ModifyTrinketInventoryActionType.action(entity, slots, processor, limit, activeFunction, itemAction, itemCondition)) {
+                use();
+            }
         }
     }
 

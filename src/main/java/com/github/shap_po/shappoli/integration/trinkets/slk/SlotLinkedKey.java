@@ -52,8 +52,19 @@ public class SlotLinkedKey {
         return values;
     }
 
-    public List<ActiveAny.Key> getKeys() {
+    public List<ActiveAny.Key> getAllKeys() {
         return values.stream().flatMap(entry -> entry.keys.stream()).toList();
+    }
+
+    public List<TrinketSlotData> getAllSlots() {
+        return values.stream().flatMap(entry -> entry.slots.stream()).toList();
+    }
+
+    public List<TrinketSlotData> getTriggeredSlots(ActiveAny.Key key) {
+        return values.stream()
+            .filter(entry -> entry.keys.contains(key))
+            .flatMap(entry -> entry.slots.stream())
+            .toList();
     }
 
     public boolean shouldReplace() {

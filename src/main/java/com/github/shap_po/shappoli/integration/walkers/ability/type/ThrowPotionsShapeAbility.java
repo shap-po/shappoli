@@ -1,9 +1,12 @@
 package com.github.shap_po.shappoli.integration.walkers.ability.type;
 
 import com.github.shap_po.shappoli.integration.walkers.ability.factory.ShapeAbilityFactory;
+import com.github.shap_po.shappoli.util.MiscUtil;
 import io.github.apace100.calio.data.SerializableData;
+import io.github.apace100.calio.data.SerializableDataType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.potion.Potion;
+import net.minecraft.registry.Registries;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.network.ServerPlayerEntity;
 import tocraft.walkers.ability.impl.generic.ThrowPotionsAbility;
@@ -20,12 +23,20 @@ public class ThrowPotionsShapeAbility {
         return new ShapeAbilityFactory<>(
             ThrowPotionsAbility.ID,
             new SerializableData()
-            //TODO: add potions list
+                .add("potion", SerializableDataType.registryEntry(Registries.POTION), null)
+                .add("potions", SerializableDataType.registryEntry(Registries.POTION).list(), null)
             ,
-            (data, playerAndShape) -> useAbility(
-                playerAndShape.getLeft(), playerAndShape.getRight(),
-                ThrowPotionsAbility.VALID_POTIONS
-            )
+            (data, playerAndShape) -> {
+                List<RegistryEntry<Potion>> potions = MiscUtil.listFromData(data, "potion", "potions");
+                if (potions.isEmpty()) {
+                    potions = ThrowPotionsAbility.VALID_POTIONS;
+                }
+                
+                useAbility(
+                    playerAndShape.getLeft(), playerAndShape.getRight(),
+                    potions
+                );
+            }
         );
     }
 }

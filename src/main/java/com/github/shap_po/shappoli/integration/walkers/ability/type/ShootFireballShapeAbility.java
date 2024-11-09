@@ -1,6 +1,5 @@
 package com.github.shap_po.shappoli.integration.walkers.ability.type;
 
-import com.github.shap_po.shappoli.Shappoli;
 import com.github.shap_po.shappoli.integration.walkers.ability.factory.ShapeAbilityFactory;
 import io.github.apace100.calio.data.SerializableData;
 import io.github.apace100.calio.data.SerializableDataTypes;
@@ -16,7 +15,7 @@ public class ShootFireballShapeAbility {
 
     public static ShapeAbilityFactory<LivingEntity> getFactory() {
         return new ShapeAbilityFactory<>(
-            Shappoli.identifier("shoot_fireball"),
+            ShootFireballAbility.ID,
             new SerializableData()
                 .add("is_large", SerializableDataTypes.BOOLEAN, false)
             ,

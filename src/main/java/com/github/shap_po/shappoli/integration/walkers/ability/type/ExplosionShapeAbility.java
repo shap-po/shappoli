@@ -1,6 +1,5 @@
 package com.github.shap_po.shappoli.integration.walkers.ability.type;
 
-import com.github.shap_po.shappoli.Shappoli;
 import com.github.shap_po.shappoli.integration.walkers.ability.factory.ShapeAbilityFactory;
 import io.github.apace100.calio.data.SerializableData;
 import io.github.apace100.calio.data.SerializableDataTypes;
@@ -16,7 +15,7 @@ public class ExplosionShapeAbility {
 
     public static ShapeAbilityFactory<LivingEntity> getFactory() {
         return new ShapeAbilityFactory<>(
-            Shappoli.identifier("explosion"),
+            ExplosionAbility.ID,
             new SerializableData()
                 .add("explosion_radius", SerializableDataTypes.POSITIVE_DOUBLE, 3.0)
             ,

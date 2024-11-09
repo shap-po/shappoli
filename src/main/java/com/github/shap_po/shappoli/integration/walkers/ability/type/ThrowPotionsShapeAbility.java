@@ -1,6 +1,5 @@
 package com.github.shap_po.shappoli.integration.walkers.ability.type;
 
-import com.github.shap_po.shappoli.Shappoli;
 import com.github.shap_po.shappoli.integration.walkers.ability.factory.ShapeAbilityFactory;
 import io.github.apace100.calio.data.SerializableData;
 import net.minecraft.entity.LivingEntity;
@@ -19,7 +18,7 @@ public class ThrowPotionsShapeAbility {
 
     public static ShapeAbilityFactory<LivingEntity> getFactory() {
         return new ShapeAbilityFactory<>(
-            Shappoli.identifier("throw_potions"),
+            ThrowPotionsAbility.ID,
             new SerializableData()
             //TODO: add potions list
             ,

@@ -52,8 +52,8 @@ public class ActionOnShapeAbilityUsePowerType extends PowerType {
                 .add("bientity_action", ApoliDataTypes.BIENTITY_ACTION)
                 .add("bientity_condition", ApoliDataTypes.BIENTITY_CONDITION, null)
             ,
-            data -> (type1, player) -> new ActionOnShapeAbilityUsePowerType(
-                type1,
+            data -> (type, player) -> new ActionOnShapeAbilityUsePowerType(
+                type,
                 player,
                 data.get("bientity_action"),
                 data.get("bientity_condition")

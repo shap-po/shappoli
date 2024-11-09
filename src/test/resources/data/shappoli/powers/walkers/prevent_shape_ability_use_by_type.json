@@ -1,4 +1,4 @@
 {
   "type": "shappoli:prevent_shape_ability_use",
-  "ability": "shappoli:shoot_fireball"
+  "ability": "walkers:shoot_fireball"
 }

@@ -14,9 +14,7 @@
     "integration.trinkets.SlotEntityAttributeAccessor",
     "integration.trinkets.SurvivalTrinketSlotMixin",
     "integration.trinkets.TrinketInventoryMixin",
-    "integration.trinkets.TrinketSlotMixin",
-    "integration.walkers.PlayerAbilitiesMixin",
-    "integration.walkers.ServerNetworkingMixin"
+    "integration.trinkets.TrinketSlotMixin"
   ],
   "client": [
     "integration.trinkets.ItemStackMixinClient",

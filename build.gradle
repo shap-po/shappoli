@@ -159,8 +159,7 @@ modrinth {
 // configure the maven publication
 publishing {
     publications {
-        create("mavenJava", MavenPublication) {
-            artifactId = project.archives_base_name
+        maven(MavenPublication) {
             from components.java
         }
     }

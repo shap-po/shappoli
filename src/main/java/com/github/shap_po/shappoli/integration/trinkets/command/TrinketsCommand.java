@@ -1,5 +1,6 @@
 package com.github.shap_po.shappoli.integration.trinkets.command;
 
+import com.github.shap_po.shappoli.Shappoli;
 import com.github.shap_po.shappoli.command.ShappoliCommand;
 import com.github.shap_po.shappoli.integration.trinkets.util.TrinketsSlotModifierUtil;
 import com.github.shap_po.shappoli.integration.trinkets.util.TrinketsUtil;
@@ -17,6 +18,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.Pair;
 
 import java.util.Map;
@@ -38,6 +40,10 @@ public class TrinketsCommand {
     public static final Dynamic3CommandExceptionType SLOT_NOT_FOUND = new Dynamic3CommandExceptionType(
         (entity, group, slot) -> Text.translatable("commands.shappoli.shappoli.trinkets.fail.no_slot", entity, group, slot)
     );
+
+    public static Identifier getModifierId(TrinketInventory inventory) {
+        return Shappoli.identifier("command_slot_count_modifier/" + TrinketsUtil.getSlotId(inventory.getSlotType()));
+    }
 
     public static void register() {
         ShappoliCommand.registerSubCommand(
@@ -127,7 +133,7 @@ public class TrinketsCommand {
         Pair<LivingEntity, TrinketComponent> pair = getTrinketComponent(source, entity);
         TrinketInventory slotInventory = getSlot(pair, group, slot);
 
-        TrinketsSlotModifierUtil.modifySlotCount(slotInventory, amount);
+        TrinketsSlotModifierUtil.modifySlotCount(slotInventory, getModifierId(slotInventory), amount);
         source.sendFeedback(() -> Text.translatable("commands.shappoli.shappoli.trinkets.modify_slot_count", entity.getName(), group, slot, slotInventory.size()), true);
 
         return slotInventory.size();
@@ -137,7 +143,7 @@ public class TrinketsCommand {
         Pair<LivingEntity, TrinketComponent> pair = getTrinketComponent(source, entity);
         TrinketInventory slotInventory = getSlot(pair, group, slot);
 
-        TrinketsSlotModifierUtil.setSlotCountModifier(slotInventory, value);
+        TrinketsSlotModifierUtil.setSlotCountModifierValue(slotInventory, getModifierId(slotInventory), value);
         source.sendFeedback(() -> Text.translatable("commands.shappoli.shappoli.trinkets.set_slot_count", entity.getName(), group, slot, value, slotInventory.size()), true);
 
         return slotInventory.size();
@@ -147,7 +153,7 @@ public class TrinketsCommand {
         Pair<LivingEntity, TrinketComponent> pair = getTrinketComponent(source, entity);
         TrinketInventory slotInventory = getSlot(pair, group, slot);
 
-        TrinketsSlotModifierUtil.resetSlotCount(slotInventory);
+        TrinketsSlotModifierUtil.removeSlotCountModifier(slotInventory, getModifierId(slotInventory));
         source.sendFeedback(() -> Text.translatable("commands.shappoli.shappoli.trinkets.reset_slot_count", entity.getName(), group, slot, slotInventory.size()), true);
 
         return slotInventory.size();

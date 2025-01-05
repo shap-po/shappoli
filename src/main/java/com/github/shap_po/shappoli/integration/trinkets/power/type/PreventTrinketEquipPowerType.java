@@ -1,28 +1,29 @@
 package com.github.shap_po.shappoli.integration.trinkets.power.type;
 
 import com.github.shap_po.shappoli.integration.trinkets.data.TrinketSlotData;
-import io.github.apace100.apoli.power.Power;
-import io.github.apace100.apoli.power.factory.PowerTypeFactory;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Pair;
-import net.minecraft.world.World;
+import io.github.apace100.apoli.condition.EntityCondition;
+import io.github.apace100.apoli.condition.ItemCondition;
+import io.github.apace100.apoli.data.TypedDataObjectFactory;
+import io.github.apace100.apoli.power.PowerConfiguration;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
-import java.util.function.Predicate;
+import java.util.Optional;
 
-public class PreventTrinketEquipPowerType extends BasePreventTrinketChangePowerType {
+public class PreventTrinketEquipPowerType extends AbstractPreventTrinketChangePowerType {
+    public static final TypedDataObjectFactory<PreventTrinketEquipPowerType> DATA_FACTORY = AbstractPreventTrinketChangePowerType.createDataFactory(PreventTrinketEquipPowerType::new);
+
     public PreventTrinketEquipPowerType(
-        Power power,
-        LivingEntity entity,
-        Predicate<Pair<World, ItemStack>> itemCondition,
+        Optional<ItemCondition> itemCondition,
         List<TrinketSlotData> slots,
-        boolean allowCreative
+        boolean allowInCreative,
+        Optional<EntityCondition> condition
     ) {
-        super(power, entity, itemCondition, slots, allowCreative);
+        super(itemCondition, slots, allowInCreative, condition);
     }
 
-    public static PowerTypeFactory getFactory() {
-        return getFactory("prevent_trinket_equip", PreventTrinketEquipPowerType::new);
+    @Override
+    public @NotNull PowerConfiguration<?> getConfig() {
+        return ShappoliTrinketsPowerTypes.PREVENT_TRINKET_EQUIP;
     }
 }

@@ -1,49 +1,48 @@
 package com.github.shap_po.shappoli.power.type;
 
-import com.github.shap_po.shappoli.Shappoli;
-import io.github.apace100.apoli.data.ApoliDataTypes;
-import io.github.apace100.apoli.power.Power;
-import io.github.apace100.apoli.power.factory.PowerTypeFactory;
+import io.github.apace100.apoli.condition.BiEntityCondition;
+import io.github.apace100.apoli.condition.EntityCondition;
+import io.github.apace100.apoli.condition.context.BiEntityConditionContext;
+import io.github.apace100.apoli.data.TypedDataObjectFactory;
+import io.github.apace100.apoli.power.PowerConfiguration;
 import io.github.apace100.apoli.power.type.ValueModifyingPowerType;
 import io.github.apace100.apoli.util.modifier.Modifier;
 import io.github.apace100.calio.data.SerializableData;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.Pair;
-import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
-import java.util.function.Predicate;
+import java.util.Optional;
 
 public class ModifyVillagerReputationPowerType extends ValueModifyingPowerType {
-    private final @Nullable Predicate<Pair<Entity, Entity>> bientityCondition;
+    public static final TypedDataObjectFactory<ModifyVillagerReputationPowerType> DATA_FACTORY = createConditionedModifyingRequiredDataFactory(
+        new SerializableData()
+            .add("bientity_condition", BiEntityCondition.DATA_TYPE.optional(), Optional.empty())
+            .add("modifier", Modifier.DATA_TYPE, null)
+            .add("modifiers", Modifier.LIST_TYPE, null),
+        (data, modifiers, condition) -> new ModifyVillagerReputationPowerType(
+            data.get("bientity_condition"),
+            modifiers,
+            condition
+        ),
+        (powerType, serializableData) -> serializableData.instance()
+            .set("bientity_condition", powerType.biEntityCondition)
 
-    public ModifyVillagerReputationPowerType(
-        Power power, LivingEntity entity,
-        @Nullable Predicate<Pair<Entity, Entity>> bientityCondition
-    ) {
-        super(power, entity);
-        this.bientityCondition = bientityCondition;
+    );
+
+    private final Optional<BiEntityCondition> biEntityCondition;
+
+    public ModifyVillagerReputationPowerType(Optional<BiEntityCondition> biEntityCondition, List<Modifier> modifiers, Optional<EntityCondition> condition) {
+        super(modifiers, condition);
+        this.biEntityCondition = biEntityCondition;
     }
 
-    public boolean doesApply(Entity target) {
-        return bientityCondition == null || bientityCondition.test(new Pair<>(entity, target));
+    public boolean doesApply(Entity entity, Entity target) {
+        return biEntityCondition.map(biEntityCondition -> biEntityCondition.test(new BiEntityConditionContext(entity, target))).orElse(true);
     }
 
-    public static PowerTypeFactory getFactory() {
-        return new PowerTypeFactory<>(
-            Shappoli.identifier("modify_villager_reputation"),
-            new SerializableData()
-                .add("bientity_condition", ApoliDataTypes.BIENTITY_CONDITION, null)
-                .add("modifier", Modifier.DATA_TYPE, null)
-                .add("modifiers", Modifier.LIST_TYPE, null)
-            ,
-            data -> (type, player) -> {
-                ModifyVillagerReputationPowerType power = new ModifyVillagerReputationPowerType(type, player, data.get("bientity_condition"));
-                data.ifPresent("modifier", power::addModifier);
-                data.<List<Modifier>>ifPresent("modifiers", mods -> mods.forEach(power::addModifier));
-                return power;
-            }
-        ).allowCondition();
+    @Override
+    public @NotNull PowerConfiguration<?> getConfig() {
+        return ShappoliPowerTypes.MODIFY_VILLAGER_REPUTATION;
     }
 }

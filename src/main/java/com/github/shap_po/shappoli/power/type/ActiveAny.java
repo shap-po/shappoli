@@ -21,6 +21,10 @@ import java.util.stream.Stream;
 public interface ActiveAny {
     void onUse(Key key);
 
+    default boolean canTrigger() {
+        return true;
+    }
+
     List<Key> getKeys();
 
     Stream<Key> getPressedKeys(List<KeyBinding> keyBindings, Map<String, Boolean> keybindingStates);
@@ -31,9 +35,12 @@ public interface ActiveAny {
             return;
         }
 
-        List<PowerType> powers = PowerHolderComponent.KEY.get(client.player).getPowerTypes().stream()
-            .filter(ActiveAny.class::isInstance)
-            .toList();
+        List<PowerType> powers = PowerHolderComponent.getOptional(client.player)
+            .map(c -> c
+                .getPowerTypes().stream()
+                .filter(ActiveAny.class::isInstance)
+                .toList())
+            .orElse(List.of());
 
         if (powers.isEmpty()) {
             return;
@@ -46,7 +53,7 @@ public interface ActiveAny {
             .collect(HashMap::new, (map, keyBinding) -> map.put(keyBinding.getTranslationKey(), keyBinding.isPressed()), HashMap::putAll);
 
         for (PowerType power : powers) {
-            if (!(power instanceof ActiveAny activePower)) {
+            if (!(power instanceof ActiveAny activePower) || !activePower.canTrigger()) {
                 continue;
             }
             activePower.getPressedKeys(allKeyBindings, currentKeybindingStates)

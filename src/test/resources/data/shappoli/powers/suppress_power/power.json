@@ -6,7 +6,7 @@
     "power": "*:*_power_active1",
     "powers": [
       "*:*_power_hit",
-      "*:suppress_power_multiple_suppressed"
+      "*:suppress_power/multiple/suppressed"
     ],
     "condition": {
       "type": "apoli:sneaking"

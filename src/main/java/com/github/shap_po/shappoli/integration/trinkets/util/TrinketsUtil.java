@@ -4,36 +4,38 @@ import com.github.shap_po.shappoli.integration.trinkets.data.TrinketSlotData;
 import dev.emi.trinkets.TrinketPlayerScreenHandler;
 import dev.emi.trinkets.api.*;
 import dev.emi.trinkets.payload.SyncInventoryPayload;
+import io.github.apace100.apoli.action.context.ItemActionContext;
+import io.github.apace100.apoli.condition.ItemCondition;
+import io.github.apace100.apoli.condition.context.ItemConditionContext;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.inventory.StackReference;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Pair;
-import net.minecraft.world.World;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.function.Predicate;
+import java.util.*;
 import java.util.stream.Stream;
 
 public class TrinketsUtil {
-    public static Pair<World, StackReference> getItemActionPair(LivingEntity entity, SlotReference slotReference) {
-        return new Pair<>(entity.getWorld(), StackReference.of(slotReference.inventory(), slotReference.index()));
+    public static ItemActionContext getItemActionContext(Entity entity, SlotReference slotReference) {
+        return new ItemActionContext(entity.getWorld(), TrinketsUtil.getStackReference(slotReference));
     }
 
-    public static Pair<World, ItemStack> getItemConditionPair(LivingEntity entity, ItemStack item) {
-        return new Pair<>(entity.getWorld(), item);
+    public static ItemConditionContext getItemConditionContext(Entity entity, ItemStack item) {
+        return new ItemConditionContext(entity.getWorld(), item);
     }
 
+    public static StackReference getStackReference(SlotReference slotReference) {
+        return StackReference.of(slotReference.inventory(), slotReference.index());
+    }
 
     /**
      * @param entity The entity to get the trinkets from
-     * @return A stream of pairs of slot references and item stacks of the trinkets in the given slots.
+     * @return A stream of slot references and item stack pairs of the trinkets in the given slots.
      */
     public static Stream<Pair<SlotReference, ItemStack>> getTrinkets(LivingEntity entity) {
         return TrinketsApi.getTrinketComponent(entity).map(trinketComponent -> trinketComponent.getEquipped((i) -> true).stream()).orElse(Stream.empty());
@@ -54,8 +56,8 @@ public class TrinketsUtil {
      * @param itemCondition The condition that the item must meet to be included in the list.
      * @return A stream of pairs of slot references and item stacks of the trinkets in the given slots.
      */
-    public static Stream<Pair<SlotReference, ItemStack>> getTrinkets(LivingEntity entity, List<TrinketSlotData> slots, Predicate<Pair<World, ItemStack>> itemCondition) {
-        return TrinketsUtil.getTrinkets(entity, slots).filter(trinket -> itemCondition == null || itemCondition.test(TrinketsUtil.getItemConditionPair(entity, trinket.getRight())));
+    public static Stream<Pair<SlotReference, ItemStack>> getTrinkets(LivingEntity entity, List<TrinketSlotData> slots, Optional<ItemCondition> itemCondition) {
+        return TrinketsUtil.getTrinkets(entity, slots).filter(trinket -> itemCondition.map(condition -> condition.test(TrinketsUtil.getItemConditionContext(entity, trinket.getRight()))).orElse(true));
     }
 
     public static String getSlotId(SlotType slotType) {

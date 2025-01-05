@@ -1,11 +1,11 @@
 package com.github.shap_po.shappoli.integration.origins;
 
-import com.github.shap_po.shappoli.integration.origins.action.factory.BiEntityActionTypes;
-import com.github.shap_po.shappoli.integration.origins.action.factory.EntityActionTypes;
+import com.github.shap_po.shappoli.integration.origins.action.type.ShappoliOriginsBiEntityActionTypes;
+import com.github.shap_po.shappoli.integration.origins.action.type.ShappoliOriginsEntityActionTypes;
 
 public class OriginsIntegration {
     public static void register() {
-        BiEntityActionTypes.register();
-        EntityActionTypes.register();
+        ShappoliOriginsBiEntityActionTypes.register();
+        ShappoliOriginsEntityActionTypes.register();
     }
 }

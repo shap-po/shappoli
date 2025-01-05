@@ -15,13 +15,16 @@ import net.minecraft.util.Pair;
 public class ModPacketsC2S {
     public static void register() {
         ServerPlayConnectionEvents.INIT.register((handler, server) ->
-            ServerPlayNetworking.registerReceiver(handler, UseActiveAnyPowersC2SPacket.PACKET_ID, ModPacketsC2S::useActiveAnyPowers)
+            ServerPlayNetworking.registerReceiver(handler, UseActiveAnyPowersC2SPacket.PACKET_ID, ModPacketsC2S::onUseActiveAnyPowers)
         );
     }
 
-    private static void useActiveAnyPowers(UseActiveAnyPowersC2SPacket payload, ServerPlayNetworking.Context context) {
+    private static void onUseActiveAnyPowers(UseActiveAnyPowersC2SPacket payload, ServerPlayNetworking.Context context) {
         ServerPlayerEntity player = context.player();
-        PowerHolderComponent component = PowerHolderComponent.KEY.get(player);
+        PowerHolderComponent component = PowerHolderComponent.getNullable(player);
+        if (component == null) {
+            return;
+        }
 
         for (Pair<Identifier, ActiveAny.Key> powerAndKey : payload.powersAndKeys()) {
             Identifier powerTypeId = powerAndKey.getLeft();

@@ -1,72 +1,79 @@
 package com.github.shap_po.shappoli.power.type;
 
-import com.github.shap_po.shappoli.Shappoli;
+import io.github.apace100.apoli.action.BiEntityAction;
+import io.github.apace100.apoli.condition.BiEntityCondition;
+import io.github.apace100.apoli.condition.EntityCondition;
 import io.github.apace100.apoli.data.ApoliDataTypes;
-import io.github.apace100.apoli.power.Power;
-import io.github.apace100.apoli.power.factory.PowerTypeFactory;
+import io.github.apace100.apoli.data.TypedDataObjectFactory;
+import io.github.apace100.apoli.power.PowerConfiguration;
 import io.github.apace100.apoli.power.type.CooldownPowerType;
+import io.github.apace100.apoli.power.type.PowerType;
 import io.github.apace100.apoli.power.type.PreventEntityCollisionPowerType;
 import io.github.apace100.apoli.util.HudRender;
 import io.github.apace100.calio.data.SerializableData;
 import io.github.apace100.calio.data.SerializableDataTypes;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.Pair;
-import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
-import java.util.function.Consumer;
-import java.util.function.Predicate;
+import java.util.Optional;
 
 public class ActionOnEntityCollisionPowerType extends CooldownPowerType {
-    private final Consumer<Pair<Entity, Entity>> bientityAction;
-    private final @Nullable Predicate<Pair<Entity, Entity>> bientityCondition;
+    public static final TypedDataObjectFactory<ActionOnEntityCollisionPowerType> DATA_FACTORY = PowerType.createConditionedDataFactory(
+        new SerializableData()
+            .add("cooldown", SerializableDataTypes.INT, 1)
+            .add("hud_render", ApoliDataTypes.HUD_RENDER, HudRender.DONT_RENDER)
+            .add("bientity_action", BiEntityAction.DATA_TYPE)
+            .add("bientity_condition", BiEntityCondition.DATA_TYPE.optional(), Optional.empty()),
+        (data, condition) -> new ActionOnEntityCollisionPowerType(
+            data.get("cooldown"),
+            data.get("hud_render"),
+            data.get("bientity_action"),
+            data.get("bientity_condition"),
+            condition
+        ),
+        (powerType, serializableData) -> serializableData.instance()
+            .set("cooldown", powerType.getCooldown())
+            .set("hud_render", powerType.getRenderSettings())
+            .set("bientity_action", powerType.biEntityAction)
+            .set("bientity_condition", powerType.biEntityCondition)
+    );
+
+    private final BiEntityAction biEntityAction;
+    private final Optional<BiEntityCondition> biEntityCondition;
 
     public ActionOnEntityCollisionPowerType(
-        Power power, LivingEntity entity,
         int cooldownDuration, HudRender hudRender,
-        Consumer<Pair<Entity, Entity>> bientityAction,
-        @Nullable Predicate<Pair<Entity, Entity>> bientityCondition
+        BiEntityAction biEntityAction,
+        Optional<BiEntityCondition> biEntityCondition,
+        Optional<EntityCondition> condition
     ) {
-        super(power, entity, cooldownDuration, hudRender);
-        this.bientityAction = bientityAction;
-        this.bientityCondition = bientityCondition;
+        super(cooldownDuration, hudRender, condition);
+        this.biEntityAction = biEntityAction;
+        this.biEntityCondition = biEntityCondition;
     }
 
     public void apply() {
+        Entity entity = getHolder();
         List<Entity> collidingEntities = getCollidingEntities();
         for (Entity other : collidingEntities) {
             if (this.canUse() &&
                 !PreventEntityCollisionPowerType.doesApply(entity, other) &&
-                (bientityCondition == null || bientityCondition.test(new Pair<>(entity, other)))
+                biEntityCondition.map(biEntityCondition -> biEntityCondition.test(entity, other)).orElse(true)
             ) {
-                bientityAction.accept(new Pair<>(entity, other));
+                biEntityAction.execute(entity, other);
                 use();
             }
         }
     }
 
     private List<Entity> getCollidingEntities() {
+        Entity entity = getHolder();
         return entity.getWorld().getOtherEntities(entity, entity.getBoundingBox());
     }
 
-    public static PowerTypeFactory getFactory() {
-        return new PowerTypeFactory<>(
-            Shappoli.identifier("action_on_entity_collision"),
-            new SerializableData()
-                .add("bientity_action", ApoliDataTypes.BIENTITY_ACTION)
-                .add("bientity_condition", ApoliDataTypes.BIENTITY_CONDITION, null)
-                .add("cooldown", SerializableDataTypes.INT, 1)
-                .add("hud_render", ApoliDataTypes.HUD_RENDER, HudRender.DONT_RENDER)
-            ,
-            data -> (type, entity) -> new ActionOnEntityCollisionPowerType(
-                type,
-                entity,
-                data.getInt("cooldown"),
-                data.get("hud_render"),
-                data.get("bientity_action"),
-                data.get("bientity_condition")
-            )
-        ).allowCondition();
+    @Override
+    public @NotNull PowerConfiguration<?> getConfig() {
+        return ShappoliPowerTypes.ACTION_ON_ENTITY_COLLISION;
     }
 }

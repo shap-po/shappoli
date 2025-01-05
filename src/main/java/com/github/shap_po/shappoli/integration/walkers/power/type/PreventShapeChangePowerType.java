@@ -1,47 +1,41 @@
 package com.github.shap_po.shappoli.integration.walkers.power.type;
 
-import com.github.shap_po.shappoli.Shappoli;
-import io.github.apace100.apoli.data.ApoliDataTypes;
-import io.github.apace100.apoli.power.Power;
-import io.github.apace100.apoli.power.factory.PowerTypeFactory;
-import io.github.apace100.apoli.power.type.PowerTypes;
+import io.github.apace100.apoli.condition.BiEntityCondition;
+import io.github.apace100.apoli.condition.EntityCondition;
+import io.github.apace100.apoli.data.TypedDataObjectFactory;
+import io.github.apace100.apoli.power.PowerConfiguration;
 import io.github.apace100.apoli.power.type.PowerType;
 import io.github.apace100.calio.data.SerializableData;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.Pair;
-import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.function.Predicate;
+import java.util.Optional;
 
 public class PreventShapeChangePowerType extends PowerType {
-    private final @Nullable Predicate<Pair<Entity, Entity>> bientityCondition;
+    public static final TypedDataObjectFactory<PreventShapeChangePowerType> DATA_FACTORY = PowerType.createConditionedDataFactory(
+        new SerializableData()
+            .add("bientity_condition", BiEntityCondition.DATA_TYPE.optional(), Optional.empty()),
+        (data, condition) -> new PreventShapeChangePowerType(
+            data.get("bientity_condition"),
+            condition
+        ),
+        (powerType, serializableData) -> serializableData.instance()
+            .set("bientity_condition", powerType.biEntityCondition)
+    );
 
-    public PreventShapeChangePowerType(
-        Power type,
-        LivingEntity entity,
-        @Nullable Predicate<Pair<Entity, Entity>> bientityCondition
-    ) {
-        super(type, entity);
-        this.bientityCondition = bientityCondition;
+    private final Optional<BiEntityCondition> biEntityCondition;
+
+    public PreventShapeChangePowerType(Optional<BiEntityCondition> biEntityCondition, Optional<EntityCondition> condition) {
+        super(condition);
+        this.biEntityCondition = biEntityCondition;
     }
 
-    public boolean doesApply(Entity shape) {
-        return bientityCondition == null || bientityCondition.test(new Pair<>(entity, shape));
+    public boolean doesApply(LivingEntity shape) {
+        return biEntityCondition.map(biEntityCondition -> biEntityCondition.test(getHolder(), shape)).orElse(true);
     }
 
-    public static PowerTypeFactory getFactory() {
-        PowerTypeFactory<?> factory = new PowerTypeFactory<>(
-            Shappoli.identifier("prevent_shape_change"),
-            new SerializableData()
-                .add("bientity_condition", ApoliDataTypes.BIENTITY_CONDITION, null)
-            ,
-            data -> (type, player) -> new PreventShapeChangePowerType(type, player,
-                data.get("bientity_condition")
-            )
-        ).allowCondition();
-
-        PowerTypes.ALIASES.addPathAlias("prevent_morph", factory.getSerializerId().getPath());
-        return factory;
+    @Override
+    public @NotNull PowerConfiguration<?> getConfig() {
+        return ShappoliWalkersPowerTypes.PREVENT_SHAPE_CHANGE;
     }
 }

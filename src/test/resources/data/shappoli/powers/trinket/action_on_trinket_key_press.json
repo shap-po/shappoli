@@ -1,0 +1,16 @@
+{
+  "type": "shappoli:action_on_trinket_key_press",
+  "slot_linked_key": "*:test",
+
+  "item_condition": {
+    "type": "apoli:ingredient",
+    "ingredient": {
+      "item": "minecraft:cobblestone"
+    }
+  },
+
+  "entity_action": {
+    "type": "apoli:execute_command",
+    "command": "say Yippie!"
+  }
+}

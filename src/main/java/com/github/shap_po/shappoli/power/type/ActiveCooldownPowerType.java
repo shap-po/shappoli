@@ -1,51 +1,56 @@
 package com.github.shap_po.shappoli.power.type;
 
-import com.github.shap_po.shappoli.Shappoli;
-import com.github.shap_po.shappoli.data.ShappoliDataTypes;
-import com.github.shap_po.shappoli.util.MiscUtil;
 import com.google.common.collect.Streams;
-import io.github.apace100.apoli.data.ApoliDataTypes;
-import io.github.apace100.apoli.power.Power;
-import io.github.apace100.apoli.power.factory.PowerTypeFactory;
+import io.github.apace100.apoli.condition.EntityCondition;
 import io.github.apace100.apoli.power.type.CooldownPowerType;
 import io.github.apace100.apoli.util.HudRender;
-import io.github.apace100.calio.data.SerializableData;
-import io.github.apace100.calio.data.SerializableDataTypes;
 import net.minecraft.client.option.KeyBinding;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Map;
-import java.util.function.Consumer;
+import java.util.Optional;
 import java.util.stream.Stream;
 
-public class ActiveCooldownPowerType extends CooldownPowerType implements ActiveAny {
-    protected final @Nullable Consumer<Entity> activeFunction;
+public abstract class ActiveCooldownPowerType extends CooldownPowerType implements ActiveAny {
     private final List<Key> keys;
     private final boolean boundOnly;
     private final boolean continuous;
 
     public ActiveCooldownPowerType(
-        Power power, LivingEntity entity,
-        int cooldownDuration,
         HudRender hudRender,
-        @Nullable Consumer<Entity> activeFunction,
+        int cooldownDuration,
         List<Key> keys,
         boolean boundOnly,
-        boolean continuous
+        boolean continuous,
+        Optional<EntityCondition> condition
     ) {
-        super(power, entity, cooldownDuration, hudRender);
-        this.activeFunction = activeFunction;
+        super(cooldownDuration, hudRender, condition);
         this.keys = keys;
         this.boundOnly = boundOnly;
         this.continuous = continuous;
     }
 
+    public ActiveCooldownPowerType(
+        HudRender hudRender,
+        int cooldownDuration,
+        List<Key> keys,
+        boolean boundOnly,
+        boolean continuous
+    ) {
+        this(hudRender, cooldownDuration, keys, boundOnly, continuous, Optional.empty());
+    }
+
     @Override
     public List<Key> getKeys() {
         return keys;
+    }
+
+    public boolean isBoundOnly() {
+        return boundOnly;
+    }
+
+    public boolean isContinuous() {
+        return continuous;
     }
 
     @Override
@@ -81,40 +86,13 @@ public class ActiveCooldownPowerType extends CooldownPowerType implements Active
         return key;
     }
 
-
     @Override
     public void onUse(Key key) {
-        if (canUse()) {
-            if (activeFunction != null) {
-                this.activeFunction.accept(this.entity);
-            }
-            use();
-        }
+        use();
     }
 
-    public static PowerTypeFactory getActiveSelfFactory() {
-        return new PowerTypeFactory<>(
-            Shappoli.identifier("active_self"),
-            new SerializableData()
-                .add("entity_action", ApoliDataTypes.ENTITY_ACTION)
-                .add("cooldown", SerializableDataTypes.INT, 1)
-                .add("hud_render", ApoliDataTypes.HUD_RENDER, HudRender.DONT_RENDER)
-                .add("key", ShappoliDataTypes.ACTIVE_ANY_KEY, null)
-                .add("keys", ShappoliDataTypes.ACTIVE_ANY_KEY.list(), null)
-                .add("bound_only", SerializableDataTypes.BOOLEAN, true)
-                .add("continuous", SerializableDataTypes.BOOLEAN, false)
-            ,
-            data -> (power, player) -> new ActiveCooldownPowerType(
-                power, player,
-                data.getInt("cooldown"),
-                data.get("hud_render"),
-                data.get("entity_action"),
-                MiscUtil.<Key>listFromData(data, "key", "keys")
-                    // set the continuous flag for each key from the data
-                    .stream().peek(key -> key.continuous = data.getBoolean("continuous")).toList(),
-                data.getBoolean("bound_only"),
-                data.getBoolean("continuous")
-            ))
-            .allowCondition();
+    @Override
+    public boolean canTrigger() {
+        return super.isActive();
     }
 }

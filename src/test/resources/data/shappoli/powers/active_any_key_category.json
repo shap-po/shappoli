@@ -1,5 +1,5 @@
 {
-  "type": "shappoli:active_self",
+  "type": "shappoli:action_on_key_press",
   "key": {
     "category": "key.categories.movement"
   },

@@ -17,8 +17,7 @@ public class SlotLinkedKey {
         new SerializableData()
             .add("id", SerializableDataTypes.IDENTIFIER)
             .add("values", Entry.DATA_TYPE.list())
-            .add("replace", SerializableDataTypes.BOOLEAN, false)
-        ,
+            .add("replace", SerializableDataTypes.BOOLEAN, false),
         data -> new SlotLinkedKey(
             data.getId("id"),
             data.get("values"),
@@ -83,7 +82,7 @@ public class SlotLinkedKey {
         public static final SerializableDataType<Entry> DATA_TYPE = SerializableDataType.compound(
             new SerializableData()
                 .add("slot", ShappoliTrinketsDataTypes.TRINKET_SLOT, null)
-                .add("slots", ShappoliTrinketsDataTypes.TRINKET_SLOTS, null)
+                .add("slots", ShappoliTrinketsDataTypes.TRINKET_SLOT.list(), null)
                 .add("key", ShappoliDataTypes.ACTIVE_ANY_KEY, null)
                 .add("keys", ShappoliDataTypes.ACTIVE_ANY_KEY.list(), null)
             ,

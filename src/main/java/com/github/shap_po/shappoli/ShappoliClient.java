@@ -1,7 +1,7 @@
 package com.github.shap_po.shappoli;
 
 import com.github.shap_po.shappoli.event.ClientEventListener;
-import com.github.shap_po.shappoli.integration.ModIntegrationsClient;
+import com.github.shap_po.shappoli.integration.ModIntegrations;
 import com.github.shap_po.shappoli.networking.packet.c2s.UseActiveAnyPowersC2SPacket;
 import com.github.shap_po.shappoli.power.type.ActiveAny;
 import io.github.apace100.apoli.power.type.PowerType;
@@ -39,6 +39,6 @@ public class ShappoliClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         ClientEventListener.register();
-        ModIntegrationsClient.register();
+        ModIntegrations.registerClient();
     }
 }

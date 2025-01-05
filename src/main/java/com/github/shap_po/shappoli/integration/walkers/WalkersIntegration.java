@@ -1,22 +1,20 @@
 package com.github.shap_po.shappoli.integration.walkers;
 
-import com.github.shap_po.shappoli.integration.walkers.ability.factory.ShapeAbilities;
-import com.github.shap_po.shappoli.integration.walkers.action.factory.BiEntityActionTypes;
-import com.github.shap_po.shappoli.integration.walkers.action.factory.EntityActionTypes;
-import com.github.shap_po.shappoli.integration.walkers.condition.factory.EntityConditionTypes;
+import com.github.shap_po.shappoli.integration.walkers.action.type.ShappoliWalkersBiEntityActionTypes;
+import com.github.shap_po.shappoli.integration.walkers.action.type.ShappoliWalkersEntityActionTypes;
+import com.github.shap_po.shappoli.integration.walkers.condition.type.ShappoliWalkersEntityConditionTypes;
 import com.github.shap_po.shappoli.integration.walkers.events.ShapeEventHandler;
-import com.github.shap_po.shappoli.integration.walkers.power.factory.PowerTypes;
-import com.github.shap_po.shappoli.integration.walkers.registry.ShappoliWalkersShapeAbilityTypeRegistry;
+import com.github.shap_po.shappoli.integration.walkers.power.type.ShappoliWalkersPowerTypes;
+import com.github.shap_po.shappoli.integration.walkers.registry.ShappoliWalkersShapeAbilityClassRegistry;
 
 public class WalkersIntegration {
     public static void register() {
-        PowerTypes.register();
-        BiEntityActionTypes.register();
-        EntityActionTypes.register();
-        EntityConditionTypes.register();
+        ShappoliWalkersPowerTypes.register();
+        ShappoliWalkersBiEntityActionTypes.register();
+        ShappoliWalkersEntityActionTypes.register();
+        ShappoliWalkersEntityConditionTypes.register();
 
-        ShapeAbilities.register();
         ShapeEventHandler.register();
-        ShappoliWalkersShapeAbilityTypeRegistry.register();
+        ShappoliWalkersShapeAbilityClassRegistry.register();
     }
 }

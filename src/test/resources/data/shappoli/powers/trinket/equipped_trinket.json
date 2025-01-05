@@ -3,7 +3,7 @@
   "key": "key.attack",
 
   "entity_action": {
-    "type": "shappoli:modify_trinket",
+    "type": "shappoli:modify_trinkets_inventory",
     "item_action": {
       "type": "apoli:nothing"
     },
@@ -19,7 +19,7 @@
           "inverted": true
         },
         {
-          "type": "shappoli:is_equipped_trinket",
+          "type": "shappoli:equipped_trinket",
           "slot": {
             "group": "feet",
             "name": "shoes"

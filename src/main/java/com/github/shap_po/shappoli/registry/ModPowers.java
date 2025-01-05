@@ -1,25 +1,23 @@
 package com.github.shap_po.shappoli.registry;
 
-import com.github.shap_po.shappoli.power.factory.PowerTypes;
-import com.github.shap_po.shappoli.action.factory.BiEntityActionTypes;
-import com.github.shap_po.shappoli.action.factory.BlockActionTypes;
-import com.github.shap_po.shappoli.action.factory.EntityActionTypes;
-import com.github.shap_po.shappoli.action.factory.ItemActionTypes;
-import com.github.shap_po.shappoli.condition.factory.BiEntityConditionTypes;
-import com.github.shap_po.shappoli.condition.factory.EntityConditionTypes;
-import com.github.shap_po.shappoli.condition.factory.ItemConditionTypes;
+import com.github.shap_po.shappoli.action.type.ShappoliBiEntityActionTypes;
+import com.github.shap_po.shappoli.action.type.ShappoliEntityActionTypes;
+import com.github.shap_po.shappoli.action.type.ShappoliItemActionTypes;
+import com.github.shap_po.shappoli.condition.type.ShappoliBiEntityConditionTypes;
+import com.github.shap_po.shappoli.condition.type.ShappoliEntityConditionTypes;
+import com.github.shap_po.shappoli.condition.type.ShappoliItemConditionTypes;
+import com.github.shap_po.shappoli.power.type.ShappoliPowerTypes;
 
 public class ModPowers {
     public static void register() {
-        PowerTypes.register();
+        ShappoliPowerTypes.register();
 
-        BiEntityConditionTypes.register();
-        EntityConditionTypes.register();
-        ItemConditionTypes.register();
+        ShappoliBiEntityConditionTypes.register();
+        ShappoliEntityConditionTypes.register();
+        ShappoliItemConditionTypes.register();
 
-        BiEntityActionTypes.register();
-        BlockActionTypes.register();
-        EntityActionTypes.register();
-        ItemActionTypes.register();
+        ShappoliBiEntityActionTypes.register();
+        ShappoliEntityActionTypes.register();
+        ShappoliItemActionTypes.register();
     }
 }

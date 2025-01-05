@@ -1,50 +1,67 @@
 package com.github.shap_po.shappoli.integration.walkers.power.type;
 
-import com.github.shap_po.shappoli.Shappoli;
 import com.github.shap_po.shappoli.integration.walkers.registry.ShappoliWalkersRegistries;
 import com.github.shap_po.shappoli.integration.walkers.util.WalkersUtil;
 import com.github.shap_po.shappoli.util.MiscUtil;
-import io.github.apace100.apoli.data.ApoliDataTypes;
-import io.github.apace100.apoli.power.Power;
-import io.github.apace100.apoli.power.factory.PowerTypeFactory;
+import io.github.apace100.apoli.condition.BiEntityCondition;
+import io.github.apace100.apoli.condition.EntityCondition;
+import io.github.apace100.apoli.data.TypedDataObjectFactory;
+import io.github.apace100.apoli.power.PowerConfiguration;
 import io.github.apace100.apoli.power.type.PowerType;
 import io.github.apace100.calio.data.SerializableData;
 import io.github.apace100.calio.data.SerializableDataTypes;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.Pair;
-import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.NotNull;
 import tocraft.walkers.ability.AbilityRegistry;
 import tocraft.walkers.ability.ShapeAbility;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.function.Predicate;
+import java.util.Optional;
 
 public class PreventShapeAbilityUsePowerType extends PowerType {
-    private final @Nullable Predicate<Pair<Entity, Entity>> bientityCondition;
-    private final List<? extends Class<? extends ShapeAbility<?>>> abilities;
+    public static final TypedDataObjectFactory<PreventShapeAbilityUsePowerType> DATA_FACTORY = PowerType.createConditionedDataFactory(
+        new SerializableData()
+            .add("bientity_condition", BiEntityCondition.DATA_TYPE.optional(), Optional.empty())
+            .add("ability", SerializableDataTypes.IDENTIFIER, null)
+            .add("abilities", SerializableDataTypes.IDENTIFIERS, null),
+        (data, condition) -> new PreventShapeAbilityUsePowerType(
+            data.get("bientity_condition"),
+            MiscUtil.listFromData(data, "ability", "abilities"),
+            condition
+        ),
+        (powerType, serializableData) -> serializableData.instance()
+            .set("bientity_condition", powerType.bientityCondition)
+            .set("abilities", powerType.abilityIds)
+    );
+
+    private final Optional<BiEntityCondition> bientityCondition;
+    private final List<Identifier> abilityIds;
+    private final List<? extends Class<? extends ShapeAbility<?>>> abilityClasses;
 
     public PreventShapeAbilityUsePowerType(
-        Power type,
-        LivingEntity entity,
-        @Nullable Predicate<Pair<Entity, Entity>> bientityCondition,
-        List<? extends Class<? extends ShapeAbility<?>>> abilities
+        Optional<BiEntityCondition> biEntityCondition,
+        List<Identifier> abilityIds,
+        Optional<EntityCondition> condition
     ) {
-        super(type, entity);
-        this.bientityCondition = bientityCondition;
-        this.abilities = abilities;
+        super(condition);
+        this.bientityCondition = biEntityCondition;
+        this.abilityIds = abilityIds;
+        this.abilityClasses = abilityIds.stream()
+            .map(ShappoliWalkersRegistries.SHAPE_ABILITY_CLASS::get)
+            .filter(Objects::nonNull)
+            .toList();
     }
 
     public boolean doesApply() {
-        if (!(entity instanceof PlayerEntity player)) {
+        if (!(getHolder() instanceof PlayerEntity player)) {
             return false;
         }
 
         LivingEntity shape = WalkersUtil.getShape(player);
-        if (bientityCondition != null && bientityCondition.test(new Pair<>(entity, shape))) {
+        if (!bientityCondition.map(bientityCondition -> bientityCondition.test(player, shape)).orElse(false)) {
             return true;
         }
 
@@ -53,25 +70,11 @@ public class PreventShapeAbilityUsePowerType extends PowerType {
             return false;
         }
 
-        return abilities.stream().anyMatch(a -> a.isInstance(shapeAbility));
+        return abilityClasses.stream().anyMatch(a -> a.isInstance(shapeAbility));
     }
 
-    public static PowerTypeFactory getFactory() {
-        return new PowerTypeFactory<>(
-            Shappoli.identifier("prevent_shape_ability_use"),
-            new SerializableData()
-                .add("bientity_condition", ApoliDataTypes.BIENTITY_CONDITION, null)
-                .add("ability", SerializableDataTypes.IDENTIFIER, null)
-                .add("abilities", SerializableDataTypes.IDENTIFIERS, null)
-            ,
-            data -> (type, player) -> new PreventShapeAbilityUsePowerType(type, player,
-                data.get("bientity_condition"),
-                MiscUtil.<Identifier>listFromData(data, "ability", "abilities")
-                    .stream()
-                    .map(ShappoliWalkersRegistries.SHAPE_ABILITY_TYPE::get)
-                    .filter(Objects::nonNull)
-                    .toList()
-            )
-        ).allowCondition();
+    @Override
+    public @NotNull PowerConfiguration<?> getConfig() {
+        return ShappoliWalkersPowerTypes.PREVENT_SHAPE_ABILITY_USE;
     }
 }

@@ -5,18 +5,15 @@
   "entity_action": {
     "type": "apoli:if_else",
     "condition": {
-      "type": "shappoli:shape_condition",
-      "bientity_condition": {
-        "type": "apoli:equal"
-      }
+      "type": "shappoli:shaped"
     },
     "if_action": {
       "type": "apoli:execute_command",
-      "command": "say I am not morphed"
+      "command": "say I am morphed"
     },
     "else_action": {
       "type": "apoli:execute_command",
-      "command": "say I am morphed"
+      "command": "say I am not morphed"
     }
   }
 }

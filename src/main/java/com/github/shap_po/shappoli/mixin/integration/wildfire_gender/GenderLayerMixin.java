@@ -21,7 +21,7 @@ public abstract class GenderLayerMixin<T extends LivingEntity> {
         at = @At(value = "INVOKE", target = "Lnet/minecraft/util/math/ColorHelper$Argb;getArgb(IIII)I")
     )
     private int shappoli$modifyRenderBreastColor(int alpha, int red, int green, int blue, Operation<Integer> original, T entity) {
-        List<ModelColorPowerType> modelColorPowers = PowerHolderComponent.KEY.get(entity).getPowerTypes(ModelColorPowerType.class);
+        List<ModelColorPowerType> modelColorPowers = PowerHolderComponent.getOptional(entity).map(c -> c.getPowerTypes(ModelColorPowerType.class)).orElse(List.of());
 
         if (!modelColorPowers.isEmpty()) {
             red = shappoli$getNewColor(red, modelColorPowers, ModelColorPowerType::getRed, (a, b) -> a * b);

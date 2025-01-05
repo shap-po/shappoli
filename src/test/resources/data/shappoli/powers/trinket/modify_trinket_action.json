@@ -3,7 +3,7 @@
   "key": "key.attack",
 
   "entity_action": {
-    "type": "shappoli:modify_trinket",
+    "type": "shappoli:modify_trinket_inventory",
     "slot": {
       "group": "feet",
       "name": "shoes"

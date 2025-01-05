@@ -13,31 +13,13 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 
 @Mixin(PowerType.class)
-public class PowerTypeMixin<T extends PowerType> implements SuppressiblePower {
+public abstract class PowerTypeMixin implements SuppressiblePower {
     @Shadow
-    protected LivingEntity entity;
-
-    @Unique
-    @SuppressWarnings({"unchecked"})
-    T power = (T) (Object) this;
-
+    private LivingEntity holder;
     @Unique
     private Long shappoli$suppressedUntil;
     @Unique
     private Entity shappoli$supressingEntity;
-
-    @Unique
-    private boolean shappoli$hasConditions;
-
-    @Override
-    public boolean shappoli$hasConditions() {
-        return shappoli$hasConditions;
-    }
-
-    @Override
-    public void shappoli$setHasConditions(boolean hasConditionTypes) {
-        shappoli$hasConditions = hasConditionTypes;
-    }
 
     @Override
     public Entity shappoli$getSupressingEntity() {
@@ -46,7 +28,7 @@ public class PowerTypeMixin<T extends PowerType> implements SuppressiblePower {
 
     @Override
     public boolean shappoli$suppressFor(int duration, Entity supressingEntity) {
-        long newTime = getTime() + duration;
+        long newTime = shappoli$getTime() + duration;
         if (shappoli$suppressedUntil == null || newTime > shappoli$suppressedUntil) {
             shappoli$suppressedUntil = newTime;
             shappoli$supressingEntity = supressingEntity;
@@ -57,19 +39,24 @@ public class PowerTypeMixin<T extends PowerType> implements SuppressiblePower {
 
     @Override
     public boolean shappoli$isSuppressed() {
-        return shappoli$suppressedUntil == null || getTime() >= shappoli$suppressedUntil;
+        return shappoli$suppressedUntil == null || shappoli$getTime() >= shappoli$suppressedUntil;
     }
 
     @ModifyReturnValue(method = "isActive", at = @At("RETURN"), remap = false)
     private boolean shappoli$deactivatePower(boolean original) {
         return original &&
             shappoli$isSuppressed() &&
-            (power instanceof SuppressPowerPowerType ||
-                !PowerHolderComponent.hasPowerType(entity, SuppressPowerPowerType.class, p -> p.doesApply(power)));
+            (shappoli$getThis() instanceof SuppressPowerPowerType ||
+                !PowerHolderComponent.hasPowerType(holder, SuppressPowerPowerType.class, p -> p.doesApply(shappoli$getThis())));
     }
 
     @Unique
-    private long getTime() {
-        return entity.getEntityWorld().getTime();
+    private long shappoli$getTime() {
+        return holder.getEntityWorld().getTime();
+    }
+
+    @Unique
+    private PowerType shappoli$getThis() {
+        return (PowerType) (Object) this;
     }
 }

@@ -1,107 +1,109 @@
 package com.github.shap_po.shappoli.power.type;
 
-import com.github.shap_po.shappoli.Shappoli;
 import com.github.shap_po.shappoli.util.MiscUtil;
-import io.github.apace100.apoli.data.ApoliDataTypes;
-import io.github.apace100.apoli.power.Power;
-import io.github.apace100.apoli.power.factory.PowerTypeFactory;
+import io.github.apace100.apoli.action.BiEntityAction;
+import io.github.apace100.apoli.action.EntityAction;
+import io.github.apace100.apoli.action.ItemAction;
+import io.github.apace100.apoli.action.context.BiEntityActionContext;
+import io.github.apace100.apoli.action.context.EntityActionContext;
+import io.github.apace100.apoli.action.context.ItemActionContext;
+import io.github.apace100.apoli.condition.BiEntityCondition;
+import io.github.apace100.apoli.condition.EntityCondition;
+import io.github.apace100.apoli.condition.ItemCondition;
+import io.github.apace100.apoli.data.TypedDataObjectFactory;
+import io.github.apace100.apoli.power.PowerConfiguration;
 import io.github.apace100.apoli.power.type.PowerType;
 import io.github.apace100.calio.data.SerializableData;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.inventory.StackReference;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Pair;
-import net.minecraft.world.World;
-import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.function.Consumer;
-import java.util.function.Predicate;
+import java.util.Optional;
 
 public class ReceiveActionPowerType extends PowerType {
-    private final @Nullable Consumer<Entity> action;
-    private final @Nullable Consumer<Pair<Entity, Entity>> bientityAction;
-    private final @Nullable Predicate<Pair<Entity, Entity>> bientityCondition;
-    private final @Nullable Consumer<Entity> entityAction;
-    private final @Nullable Predicate<Entity> entityCondition;
-    private final @Nullable Consumer<Pair<World, StackReference>> itemAction;
-    private final @Nullable Predicate<Pair<World, ItemStack>> itemCondition;
+    public static final TypedDataObjectFactory<ReceiveActionPowerType> DATA_FACTORY = PowerType.createConditionedDataFactory(
+        new SerializableData()
+            .add("action", EntityAction.DATA_TYPE.optional(), Optional.empty())
+            .add("bientity_action", BiEntityAction.DATA_TYPE.optional(), Optional.empty())
+            .add("bientity_condition", BiEntityCondition.DATA_TYPE.optional(), Optional.empty())
+            .add("entity_action", EntityAction.DATA_TYPE.optional(), Optional.empty())
+            .add("entity_condition", EntityCondition.DATA_TYPE.optional(), Optional.empty())
+            .add("item_action", ItemAction.DATA_TYPE.optional(), Optional.empty())
+            .add("item_condition", ItemCondition.DATA_TYPE.optional(), Optional.empty())
+            .validate(data -> MiscUtil.checkAtLeastOneFieldExists(data, "action", "bientity_action", "entity_action", "item_action")),
+        (data, condition) -> new ReceiveActionPowerType(
+            data.get("action"),
+            data.get("bientity_action"),
+            data.get("bientity_condition"),
+            data.get("entity_action"),
+            data.get("entity_condition"),
+            data.get("item_action"),
+            data.get("item_condition"),
+            condition
+        ),
+        (powerType, serializableData) -> serializableData.instance()
+            .set("action", powerType.action)
+            .set("bientity_action", powerType.biEntityAction)
+            .set("bientity_condition", powerType.biEntityCondition)
+            .set("entity_action", powerType.entityAction)
+            .set("entity_condition", powerType.entityCondition)
+            .set("item_action", powerType.itemAction)
+            .set("item_condition", powerType.itemCondition)
+    );
+
+    private final Optional<EntityAction> action;
+    private final Optional<BiEntityAction> biEntityAction;
+    private final Optional<BiEntityCondition> biEntityCondition;
+    private final Optional<EntityAction> entityAction;
+    private final Optional<EntityCondition> entityCondition;
+    private final Optional<ItemAction> itemAction;
+    private final Optional<ItemCondition> itemCondition;
 
     public ReceiveActionPowerType(
-        Power type,
-        LivingEntity entity,
-        @Nullable Consumer<Entity> action,
-        @Nullable Consumer<Pair<Entity, Entity>> bientityAction,
-        @Nullable Predicate<Pair<Entity, Entity>> bientityCondition,
-        @Nullable Consumer<Entity> entityAction,
-        @Nullable Predicate<Entity> entityCondition,
-        @Nullable Consumer<Pair<World, StackReference>> itemAction,
-        @Nullable Predicate<Pair<World, ItemStack>> itemCondition
+        Optional<EntityAction> action,
+        Optional<BiEntityAction> biEntityAction,
+        Optional<BiEntityCondition> biEntityCondition,
+        Optional<EntityAction> entityAction,
+        Optional<EntityCondition> entityCondition,
+        Optional<ItemAction> itemAction,
+        Optional<ItemCondition> itemCondition,
+        Optional<EntityCondition> condition
     ) {
-        super(type, entity);
+        super(condition);
         this.action = action;
-        this.bientityAction = bientityAction;
-        this.bientityCondition = bientityCondition;
+        this.biEntityAction = biEntityAction;
+        this.biEntityCondition = biEntityCondition;
         this.entityAction = entityAction;
         this.entityCondition = entityCondition;
         this.itemAction = itemAction;
         this.itemCondition = itemCondition;
     }
 
-
-    public void receiveBientityAction(Pair<Entity, Entity> entities) {
-        if (bientityCondition == null || bientityCondition.test(entities)) {
-            maybeAccept(bientityAction, entities);
+    public void receiveBiEntityAction(BiEntityActionContext context) {
+        if (biEntityCondition.map(biEntityCondition -> biEntityCondition.test(context.forCondition())).orElse(true)) {
+            biEntityAction.ifPresent(biEntityAction -> biEntityAction.accept(context));
             receiveAnyAction();
         }
     }
 
-    public void receiveEntityAction(Entity entity) {
-        if (entityCondition == null || entityCondition.test(entity)) {
-            maybeAccept(entityAction, entity);
+    public void receiveEntityAction(EntityActionContext context) {
+        if (entityCondition.map(entityCondition -> entityCondition.test(context.forCondition())).orElse(true)) {
+            entityAction.ifPresent(entityAction -> entityAction.accept(context));
             receiveAnyAction();
         }
     }
 
-    public void receiveItemAction(Pair<World, StackReference> worldAndStack) {
-        if (itemCondition == null || itemCondition.test(new Pair<>(worldAndStack.getLeft(), worldAndStack.getRight().get()))) {
-            maybeAccept(itemAction, worldAndStack);
+    public void receiveItemAction(ItemActionContext context) {
+        if (itemCondition.map(itemCondition -> itemCondition.test(context.forCondition())).orElse(true)) {
+            itemAction.ifPresent(itemAction -> itemAction.accept(context));
             receiveAnyAction();
         }
     }
 
-    public void receiveAnyAction() {
-        maybeAccept(action, this.entity);
+    private void receiveAnyAction() {
+        action.ifPresent(action -> action.execute(getHolder()));
     }
 
-    private <T> void maybeAccept(Consumer<T> consumer, T t) {
-        if (consumer != null && t != null) {
-            consumer.accept(t);
-        }
-    }
-
-    public static PowerTypeFactory getFactory() {
-        return new PowerTypeFactory<>(
-            Shappoli.identifier("receive_action"),
-            new SerializableData()
-                .add("action", ApoliDataTypes.ENTITY_ACTION, null)
-                .add("bientity_action", ApoliDataTypes.BIENTITY_ACTION, null)
-                .add("bientity_condition", ApoliDataTypes.BIENTITY_CONDITION, null)
-                .add("entity_action", ApoliDataTypes.ENTITY_ACTION, null)
-                .add("entity_condition", ApoliDataTypes.ENTITY_CONDITION, null)
-                .add("item_action", ApoliDataTypes.ITEM_ACTION, null)
-                .add("item_condition", ApoliDataTypes.ITEM_CONDITION, null)
-                .validate(data -> MiscUtil.checkAtLeastOneFieldExists(data, "action", "bientity_action", "entity_action", "item_action"))
-            ,
-            data -> (type, entity) -> new ReceiveActionPowerType(type, entity,
-                data.get("action"),
-                data.get("bientity_action"),
-                data.get("bientity_condition"),
-                data.get("entity_action"),
-                data.get("entity_condition"),
-                data.get("item_action"),
-                data.get("item_condition")
-            )
-        ).allowCondition();
+    @Override
+    public @NotNull PowerConfiguration<?> getConfig() {
+        return ShappoliPowerTypes.RECEIVE_ACTION;
     }
 }

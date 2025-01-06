@@ -47,7 +47,7 @@ public class SlotLinkedKeyManager extends IdentifiableMultiJsonDataLoader implem
         super(GSON, DIRECTORY, ResourceType.SERVER_DATA);
 
         // load before the power manager so powers can depend on slot linked keys
-        ServerLifecycleEvents.SYNC_DATA_PACK_CONTENTS.addPhaseOrdering(PowerManager.ID, ID);
+        ServerLifecycleEvents.SYNC_DATA_PACK_CONTENTS.addPhaseOrdering(ID, PowerManager.ID);
         ServerLifecycleEvents.SYNC_DATA_PACK_CONTENTS.register(ID, (player, joined) -> send(player));
     }
 

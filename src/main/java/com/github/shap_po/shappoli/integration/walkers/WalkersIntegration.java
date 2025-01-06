@@ -1,5 +1,6 @@
 package com.github.shap_po.shappoli.integration.walkers;
 
+import com.github.shap_po.shappoli.integration.walkers.ability.type.ShapeAbilityTypes;
 import com.github.shap_po.shappoli.integration.walkers.action.type.ShappoliWalkersBiEntityActionTypes;
 import com.github.shap_po.shappoli.integration.walkers.action.type.ShappoliWalkersEntityActionTypes;
 import com.github.shap_po.shappoli.integration.walkers.condition.type.ShappoliWalkersEntityConditionTypes;
@@ -13,6 +14,8 @@ public class WalkersIntegration {
         ShappoliWalkersBiEntityActionTypes.register();
         ShappoliWalkersEntityActionTypes.register();
         ShappoliWalkersEntityConditionTypes.register();
+
+        ShapeAbilityTypes.register();
 
         ShapeEventHandler.register();
         ShappoliWalkersShapeAbilityClassRegistry.register();

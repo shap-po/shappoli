@@ -29,3 +29,4 @@
 - `[trinkets]` Renamed some stuff. Old names left as aliases:
     - `shappoli:modify_trinket_inventory` entity action type to `shappoli:modify_trinkets_inventory`
     - `shappoli:modify_trinket_slot` and `shappoli:conditioned_modify_trinket_slot` power type to `shappoli:modify_trinkets_slot` and `shappoli:conditioned_modify_trinkets_slot`
+- `[base]` Made `shappoli:action_on_entity_collision` ticking power instead of using a Mixin. This also allows tweaking the tick interval.

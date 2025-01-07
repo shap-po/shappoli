@@ -1,0 +1,24 @@
+{
+  "type": "shappoli:action_on_entity_collision",
+  "tick_rate": 20,
+  "cooldown": 0,
+  "bientity_action": {
+    "type": "apoli:and",
+    "actions": [
+      {
+        "type": "apoli:actor_action",
+        "action": {
+          "type": "apoli:execute_command",
+          "command": "say I just collided with someone"
+        }
+      },
+      {
+        "type": "apoli:target_action",
+        "action": {
+          "type": "apoli:execute_command",
+          "command": "say I was collided with"
+        }
+      }
+    ]
+  }
+}

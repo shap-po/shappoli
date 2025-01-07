@@ -24,12 +24,14 @@ public class ActionOnEntityCollisionPowerType extends CooldownPowerType {
             .add("cooldown", SerializableDataTypes.INT, 1)
             .add("hud_render", ApoliDataTypes.HUD_RENDER, HudRender.DONT_RENDER)
             .add("bientity_action", BiEntityAction.DATA_TYPE)
-            .add("bientity_condition", BiEntityCondition.DATA_TYPE.optional(), Optional.empty()),
+            .add("bientity_condition", BiEntityCondition.DATA_TYPE.optional(), Optional.empty())
+            .add("tick_rate", SerializableDataTypes.POSITIVE_INT, 20),
         (data, condition) -> new ActionOnEntityCollisionPowerType(
             data.get("cooldown"),
             data.get("hud_render"),
             data.get("bientity_action"),
             data.get("bientity_condition"),
+            data.get("tick_rate"),
             condition
         ),
         (powerType, serializableData) -> serializableData.instance()
@@ -37,31 +39,39 @@ public class ActionOnEntityCollisionPowerType extends CooldownPowerType {
             .set("hud_render", powerType.getRenderSettings())
             .set("bientity_action", powerType.biEntityAction)
             .set("bientity_condition", powerType.biEntityCondition)
+            .set("tick_rate", powerType.tickRate)
     );
 
     private final BiEntityAction biEntityAction;
     private final Optional<BiEntityCondition> biEntityCondition;
+    private final int tickRate;
 
     public ActionOnEntityCollisionPowerType(
         int cooldownDuration, HudRender hudRender,
         BiEntityAction biEntityAction,
         Optional<BiEntityCondition> biEntityCondition,
+        int tickRate,
         Optional<EntityCondition> condition
     ) {
         super(cooldownDuration, hudRender, condition);
         this.biEntityAction = biEntityAction;
         this.biEntityCondition = biEntityCondition;
+        this.tickRate = tickRate;
+        this.setTicking();
     }
 
-    public void apply() {
-        Entity entity = getHolder();
-        List<Entity> collidingEntities = getCollidingEntities();
-        for (Entity other : collidingEntities) {
-            if (this.canUse() &&
-                !PreventEntityCollisionPowerType.doesApply(entity, other) &&
-                biEntityCondition.map(biEntityCondition -> biEntityCondition.test(entity, other)).orElse(true)
+    @Override
+    public void commonTick() {
+        if (!canUse() || getHolder().age % tickRate != 0) {
+            return;
+        }
+
+        for (Entity other : getCollidingEntities()) {
+            if (canUse() &&
+                !PreventEntityCollisionPowerType.doesApply(getHolder(), other) &&
+                biEntityCondition.map(biEntityCondition -> biEntityCondition.test(getHolder(), other)).orElse(true)
             ) {
-                biEntityAction.execute(entity, other);
+                biEntityAction.execute(getHolder(), other);
                 use();
             }
         }

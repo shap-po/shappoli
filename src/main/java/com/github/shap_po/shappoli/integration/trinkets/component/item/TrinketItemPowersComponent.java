@@ -145,7 +145,7 @@ public class TrinketItemPowersComponent {
         Identifier sourceId = Shappoli.identifier("item/" + slot.getId());
 
         List<Power> grantedPowers = new ObjectArrayList<>();
-        TrinketItemPowersComponent currStackPowers = stack.getOrDefault(ShappoliTrinketsDataComponentTypes.POWERS, DEFAULT);
+        TrinketItemPowersComponent currStackPowers = stack.getOrDefault(ShappoliTrinketsDataComponentTypes.TRINKET_POWERS, DEFAULT);
 
         for (TrinketItemPowersComponent.Entry currEntry : currStackPowers.entries) {
             PowerManager.getOptional(currEntry.powerId()).ifPresent(grantedPowers::add);
@@ -170,7 +170,7 @@ public class TrinketItemPowersComponent {
     }
 
     public static boolean hasPower(ItemStack stack, Identifier powerId) {
-        return stack.getOrDefault(ShappoliTrinketsDataComponentTypes.POWERS, TrinketItemPowersComponent.DEFAULT)
+        return stack.getOrDefault(ShappoliTrinketsDataComponentTypes.TRINKET_POWERS, TrinketItemPowersComponent.DEFAULT)
             .stream()
             .anyMatch(entry -> entry.powerId().equals(powerId));
     }

@@ -40,7 +40,7 @@ public abstract class ItemStackMixinClient implements ComponentHolder {
             return;
         }
 
-        TrinketItemPowersComponent itemPowers = this.get(ShappoliTrinketsDataComponentTypes.POWERS);
+        TrinketItemPowersComponent itemPowers = this.get(ShappoliTrinketsDataComponentTypes.TRINKET_POWERS);
         if (itemPowers == null || itemPowers.isEmpty()) {
             return;
         }

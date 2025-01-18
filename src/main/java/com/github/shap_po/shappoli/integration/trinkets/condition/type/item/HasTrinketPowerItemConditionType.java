@@ -30,7 +30,7 @@ public class HasTrinketPowerItemConditionType extends ItemConditionType {
 
     @Override
     public boolean test(World world, ItemStack stack) {
-        return stack.getOrDefault(ShappoliTrinketsDataComponentTypes.POWERS, TrinketItemPowersComponent.DEFAULT)
+        return stack.getOrDefault(ShappoliTrinketsDataComponentTypes.TRINKET_POWERS, TrinketItemPowersComponent.DEFAULT)
             .stream()
             .map(TrinketItemPowersComponent.Entry::powerId)
             .anyMatch(power.id()::equals);

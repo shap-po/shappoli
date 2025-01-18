@@ -6,12 +6,12 @@ import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 
 public class ShappoliTrinketsDataComponentTypes {
-    public static final ComponentType<TrinketItemPowersComponent> POWERS = ComponentType.<TrinketItemPowersComponent>builder()
+    public static final ComponentType<TrinketItemPowersComponent> TRINKET_POWERS = ComponentType.<TrinketItemPowersComponent>builder()
         .codec(TrinketItemPowersComponent.CODEC)
         .packetCodec(TrinketItemPowersComponent.PACKET_CODEC)
         .build();
 
     public static void register() {
-        Registry.register(Registries.DATA_COMPONENT_TYPE, Shappoli.identifier("powers"), POWERS);
+        Registry.register(Registries.DATA_COMPONENT_TYPE, Shappoli.identifier("trinket_powers"), TRINKET_POWERS);
     }
 }

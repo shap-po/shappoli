@@ -160,7 +160,7 @@ public class SlotLinkedKeyManager extends IdentifiableMultiJsonDataLoader implem
     public static void receive(SyncSlotLinkedKeysS2CPacket packet) {
         startBuilding();
 
-        SLOT_LINKED_KEYS_BY_ID.putAll(packet.essenceById());
+        SLOT_LINKED_KEYS_BY_ID.putAll(packet.slotLinkedKeyMap());
 
         endBuilding();
     }

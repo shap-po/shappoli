@@ -14,7 +14,7 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public record SyncSlotLinkedKeysS2CPacket(Map<Identifier, SlotLinkedKey> essenceById) implements CustomPayload {
+public record SyncSlotLinkedKeysS2CPacket(Map<Identifier, SlotLinkedKey> slotLinkedKeyMap) implements CustomPayload {
     public static final Id<SyncSlotLinkedKeysS2CPacket> PACKET_ID = new Id<>(Shappoli.identifier("s2c/sync_slot_essence_keys_registry"));
     public static final PacketCodec<RegistryByteBuf, SyncSlotLinkedKeysS2CPacket> PACKET_CODEC = PacketCodec.of(SyncSlotLinkedKeysS2CPacket::write, SyncSlotLinkedKeysS2CPacket::read);
 
@@ -44,7 +44,7 @@ public record SyncSlotLinkedKeysS2CPacket(Map<Identifier, SlotLinkedKey> essence
     }
 
     public void write(RegistryByteBuf buf) {
-        Collection<SlotLinkedKey> slotLinkedKeys = this.essenceById().values();
+        Collection<SlotLinkedKey> slotLinkedKeys = this.slotLinkedKeyMap().values();
         buf.writeVarInt(slotLinkedKeys.size());
 
         slotLinkedKeys.forEach(essence -> SlotLinkedKey.DATA_TYPE.send(buf, essence));

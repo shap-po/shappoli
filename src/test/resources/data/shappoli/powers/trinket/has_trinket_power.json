@@ -1,0 +1,24 @@
+{
+  "type": "apoli:active_self",
+  "key": "key.attack",
+
+  "entity_action": {
+    "type": "apoli:if_else",
+    "condition": {
+      "type": "apoli:inventory",
+      "slot": "weapon.mainhand",
+      "item_condition": {
+        "type": "shappoli:has_trinket_power",
+        "power": "*:is_block"
+      }
+    },
+    "if_action": {
+      "type": "apoli:execute_command",
+      "command": "say Item has trinket power"
+    },
+    "else_action": {
+      "type": "apoli:execute_command",
+      "command": "say Item does not have trinket power"
+    }
+  }
+}

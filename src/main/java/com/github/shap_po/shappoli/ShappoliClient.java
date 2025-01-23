@@ -4,6 +4,7 @@ import com.github.shap_po.shappoli.event.ClientEventListener;
 import com.github.shap_po.shappoli.integration.ModIntegrations;
 import com.github.shap_po.shappoli.networking.packet.c2s.UseActiveAnyPowersC2SPacket;
 import com.github.shap_po.shappoli.power.type.ActiveAny;
+import com.github.shap_po.shappoli.util.ShappoliKeyBindingReference;
 import io.github.apace100.apoli.power.type.PowerType;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
@@ -20,11 +21,11 @@ import java.util.List;
 public class ShappoliClient implements ClientModInitializer {
     public static final HashMap<String, Boolean> lastKeyBindingStates = new HashMap<>();
 
-    public static void performActivePowers(List<Pair<PowerType, ActiveAny.Key>> triggeredPowers) {
-        List<Pair<Identifier, ActiveAny.Key>> powersAndKeys = new LinkedList<>();
-        for (Pair<PowerType, ActiveAny.Key> pair : triggeredPowers) {
+    public static void performActivePowers(List<Pair<PowerType, ShappoliKeyBindingReference>> triggeredPowers) {
+        List<Pair<Identifier, ShappoliKeyBindingReference>> powersAndKeys = new LinkedList<>();
+        for (Pair<PowerType, ShappoliKeyBindingReference> pair : triggeredPowers) {
             PowerType powerType = pair.getLeft();
-            ActiveAny.Key key = pair.getRight();
+            ShappoliKeyBindingReference key = pair.getRight();
 
             if (powerType instanceof ActiveAny activePower) {
                 activePower.onUse(key);

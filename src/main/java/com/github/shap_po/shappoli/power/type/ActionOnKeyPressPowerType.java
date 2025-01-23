@@ -1,6 +1,7 @@
 package com.github.shap_po.shappoli.power.type;
 
 import com.github.shap_po.shappoli.data.ShappoliDataTypes;
+import com.github.shap_po.shappoli.util.ShappoliKeyBindingReference;
 import com.github.shap_po.shappoli.util.MiscUtil;
 import io.github.apace100.apoli.action.EntityAction;
 import io.github.apace100.apoli.condition.EntityCondition;
@@ -50,7 +51,7 @@ public class ActionOnKeyPressPowerType extends ActiveCooldownPowerType {
         Optional<EntityAction> entityAction,
         HudRender hudRender,
         int cooldownDuration,
-        List<Key> keys,
+        List<ShappoliKeyBindingReference> keys,
         boolean boundOnly,
         boolean continuous,
         Optional<EntityCondition> condition
@@ -65,7 +66,7 @@ public class ActionOnKeyPressPowerType extends ActiveCooldownPowerType {
     }
 
     @Override
-    public void onUse(Key key) {
+    public void onUse(ShappoliKeyBindingReference key) {
         super.onUse(key);
         entityAction.ifPresent(entityAction -> entityAction.execute(getHolder()));
     }

@@ -5,6 +5,7 @@ import com.github.shap_po.shappoli.integration.trinkets.data.ShappoliTrinketsDat
 import com.github.shap_po.shappoli.integration.trinkets.data.TrinketSlotData;
 import com.github.shap_po.shappoli.integration.trinkets.slk.SlotLinkedKey;
 import com.github.shap_po.shappoli.power.type.ActionOnKeyPressPowerType;
+import com.github.shap_po.shappoli.util.ShappoliKeyBindingReference;
 import com.github.shap_po.shappoli.util.MiscUtil;
 import io.github.apace100.apoli.action.EntityAction;
 import io.github.apace100.apoli.action.ItemAction;
@@ -118,7 +119,7 @@ public class ActionOnTrinketKeyPressPowerType extends ActionOnKeyPressPowerType 
     }
 
     @Override
-    public void onUse(Key key) {
+    public void onUse(ShappoliKeyBindingReference key) {
         List<TrinketSlotData> slots = slotLinkedKeys.stream()
             .flatMap(slotLinkedKeybinding -> slotLinkedKeybinding.getTriggeredSlots(key).stream())
             .toList();

@@ -1,5 +1,6 @@
 package com.github.shap_po.shappoli.power.type;
 
+import com.github.shap_po.shappoli.util.ShappoliKeyBindingReference;
 import com.google.common.collect.Streams;
 import io.github.apace100.apoli.condition.EntityCondition;
 import io.github.apace100.apoli.power.type.CooldownPowerType;
@@ -12,14 +13,14 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 public abstract class ActiveCooldownPowerType extends CooldownPowerType implements ActiveAny {
-    private final List<Key> keys;
+    private final List<ShappoliKeyBindingReference> keys;
     private final boolean boundOnly;
     private final boolean continuous;
 
     public ActiveCooldownPowerType(
         HudRender hudRender,
         int cooldownDuration,
-        List<Key> keys,
+        List<ShappoliKeyBindingReference> keys,
         boolean boundOnly,
         boolean continuous,
         Optional<EntityCondition> condition
@@ -33,7 +34,7 @@ public abstract class ActiveCooldownPowerType extends CooldownPowerType implemen
     public ActiveCooldownPowerType(
         HudRender hudRender,
         int cooldownDuration,
-        List<Key> keys,
+        List<ShappoliKeyBindingReference> keys,
         boolean boundOnly,
         boolean continuous
     ) {
@@ -41,7 +42,7 @@ public abstract class ActiveCooldownPowerType extends CooldownPowerType implemen
     }
 
     @Override
-    public List<Key> getKeys() {
+    public List<ShappoliKeyBindingReference> getKeys() {
         return keys;
     }
 
@@ -54,13 +55,13 @@ public abstract class ActiveCooldownPowerType extends CooldownPowerType implemen
     }
 
     @Override
-    public Stream<Key> getPressedKeys(List<KeyBinding> keyBindings, Map<String, Boolean> keybindingStates) {
+    public Stream<ShappoliKeyBindingReference> getPressedKeys(List<KeyBinding> keyBindings, Map<String, Boolean> keybindingStates) {
         // if both keys and categories are empty, find all pressed keys
         if (keys.isEmpty()) {
             return keyBindings.stream()
                 .filter(KeyBinding::isPressed)
                 .filter(keyBinding -> !boundOnly || !keyBinding.isUnbound())
-                .map(this::keyFromKeyBinding);
+                .map(keyBinding -> ShappoliKeyBindingReference.fromKeyBinding(keyBinding, continuous));
         }
 
         // otherwise, find all pressed keys that match key ids or categories
@@ -73,21 +74,13 @@ public abstract class ActiveCooldownPowerType extends CooldownPowerType implemen
                 .flatMap(keyBinding -> keys.stream()
                     .filter(key -> key.category != null)
                     .filter(key -> keyBinding.getCategory().equals(key.category))
-                    .map(group -> keyFromKeyBinding(keyBinding))
+                    .map(group -> ShappoliKeyBindingReference.fromKeyBinding(keyBinding, continuous))
                 )
         );
     }
 
-    private Key keyFromKeyBinding(KeyBinding keyBinding) {
-        Key key = new Key();
-        key.key = keyBinding.getTranslationKey();
-        key.category = keyBinding.getCategory();
-        key.continuous = continuous;
-        return key;
-    }
-
     @Override
-    public void onUse(Key key) {
+    public void onUse(ShappoliKeyBindingReference key) {
         use();
     }
 

@@ -2,7 +2,7 @@ package com.github.shap_po.shappoli.networking.packet.c2s;
 
 import com.github.shap_po.shappoli.Shappoli;
 import com.github.shap_po.shappoli.data.ShappoliDataTypes;
-import com.github.shap_po.shappoli.power.type.ActiveAny;
+import com.github.shap_po.shappoli.util.ShappoliKeyBindingReference;
 import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.network.codec.PacketCodecs;
@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public record UseActiveAnyPowersC2SPacket(
-    List<Pair<Identifier, ActiveAny.Key>> powersAndKeys) implements CustomPayload {
+    List<Pair<Identifier, ShappoliKeyBindingReference>> powersAndKeys) implements CustomPayload {
     public static final Id<UseActiveAnyPowersC2SPacket> PACKET_ID = new Id<>(Shappoli.identifier("c2s/use_active_powers"));
     public static final PacketCodec<RegistryByteBuf, UseActiveAnyPowersC2SPacket> PACKET_CODEC = PacketCodec.tuple(
         PacketCodecs.collection(ArrayList::new, PacketCodec.ofStatic(

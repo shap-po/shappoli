@@ -3,6 +3,7 @@ package com.github.shap_po.shappoli.networking;
 import com.github.shap_po.shappoli.Shappoli;
 import com.github.shap_po.shappoli.networking.packet.c2s.UseActiveAnyPowersC2SPacket;
 import com.github.shap_po.shappoli.power.type.ActiveAny;
+import com.github.shap_po.shappoli.util.ShappoliKeyBindingReference;
 import io.github.apace100.apoli.component.PowerHolderComponent;
 import io.github.apace100.apoli.power.PowerManager;
 import io.github.apace100.apoli.power.type.PowerType;
@@ -26,9 +27,9 @@ public class ModPacketsC2S {
             return;
         }
 
-        for (Pair<Identifier, ActiveAny.Key> powerAndKey : payload.powersAndKeys()) {
+        for (Pair<Identifier, ShappoliKeyBindingReference> powerAndKey : payload.powersAndKeys()) {
             Identifier powerTypeId = powerAndKey.getLeft();
-            ActiveAny.Key key = powerAndKey.getRight();
+            ShappoliKeyBindingReference key = powerAndKey.getRight();
 
             PowerType powerType = PowerManager.getOptional(powerTypeId)
                 .map(component::getPowerType)

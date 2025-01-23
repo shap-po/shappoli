@@ -1,8 +1,8 @@
 package com.github.shap_po.shappoli.data;
 
-import com.github.shap_po.shappoli.power.type.ActiveAny;
+import com.github.shap_po.shappoli.util.ShappoliKeyBindingReference;
 import io.github.apace100.calio.data.SerializableDataType;
 
 public class ShappoliDataTypes {
-    public static final SerializableDataType<ActiveAny.Key> ACTIVE_ANY_KEY = SerializableDataType.compound(ActiveAny.Key.DATA, ActiveAny.Key::fromData, ActiveAny.Key::toData);
+    public static final SerializableDataType<ShappoliKeyBindingReference> ACTIVE_ANY_KEY = ShappoliKeyBindingReference.DATA_FACTORY.getDataType();
 }

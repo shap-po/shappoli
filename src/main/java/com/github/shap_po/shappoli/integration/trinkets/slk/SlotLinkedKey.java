@@ -3,7 +3,7 @@ package com.github.shap_po.shappoli.integration.trinkets.slk;
 import com.github.shap_po.shappoli.data.ShappoliDataTypes;
 import com.github.shap_po.shappoli.integration.trinkets.data.ShappoliTrinketsDataTypes;
 import com.github.shap_po.shappoli.integration.trinkets.data.TrinketSlotData;
-import com.github.shap_po.shappoli.power.type.ActiveAny;
+import com.github.shap_po.shappoli.util.ShappoliKeyBindingReference;
 import com.github.shap_po.shappoli.util.MiscUtil;
 import io.github.apace100.calio.data.SerializableData;
 import io.github.apace100.calio.data.SerializableDataType;
@@ -51,7 +51,7 @@ public class SlotLinkedKey {
         return values;
     }
 
-    public List<ActiveAny.Key> getAllKeys() {
+    public List<ShappoliKeyBindingReference> getAllKeys() {
         return values.stream().flatMap(entry -> entry.keys.stream()).toList();
     }
 
@@ -59,7 +59,7 @@ public class SlotLinkedKey {
         return values.stream().flatMap(entry -> entry.slots.stream()).toList();
     }
 
-    public List<TrinketSlotData> getTriggeredSlots(ActiveAny.Key key) {
+    public List<TrinketSlotData> getTriggeredSlots(ShappoliKeyBindingReference key) {
         return values.stream()
             .filter(entry -> entry.keys.contains(key))
             .flatMap(entry -> entry.slots.stream())
@@ -96,9 +96,9 @@ public class SlotLinkedKey {
         );
 
         public final List<TrinketSlotData> slots;
-        public final List<ActiveAny.Key> keys;
+        public final List<ShappoliKeyBindingReference> keys;
 
-        public Entry(List<TrinketSlotData> slots, List<ActiveAny.Key> keys) {
+        public Entry(List<TrinketSlotData> slots, List<ShappoliKeyBindingReference> keys) {
             this.slots = slots;
             this.keys = keys;
         }

@@ -1,6 +1,6 @@
 {
   "type": "shappoli:action_on_trinket_key_press",
-  "slot_linked_key": "*:test",
+  "key": "*:test",
 
   "item_condition": {
     "type": "apoli:ingredient",

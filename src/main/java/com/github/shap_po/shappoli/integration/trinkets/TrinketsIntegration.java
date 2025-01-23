@@ -9,7 +9,7 @@ import com.github.shap_po.shappoli.integration.trinkets.event.TrinketsEventListe
 import com.github.shap_po.shappoli.integration.trinkets.networking.ShappoliTrinketsPackets;
 import com.github.shap_po.shappoli.integration.trinkets.networking.ShappoliTrinketsPacketsS2C;
 import com.github.shap_po.shappoli.integration.trinkets.power.type.ShappoliTrinketsPowerTypes;
-import com.github.shap_po.shappoli.integration.trinkets.slk.SlotLinkedKeyManager;
+import com.github.shap_po.shappoli.integration.trinkets.keybinding.TrinketKeyBindingManager;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
@@ -29,8 +29,7 @@ public class TrinketsIntegration {
 
         ShappoliTrinketsPackets.register();
 
-        SlotLinkedKeyManager slotLinkedKeyManager = new SlotLinkedKeyManager();
-        ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(slotLinkedKeyManager);
+        ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new TrinketKeyBindingManager());
     }
 
     @Environment(EnvType.CLIENT)

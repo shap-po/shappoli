@@ -8,7 +8,7 @@
 - `[trinkets]` Added `shappoli:trinket_powers` component for trinkets. This component works similar to the `apoli:powers` component, but works with trinkets
 - `[trinkets]` Added `shappoli:has_trinket_power` item condition. This condition checks if the item has a trinket power
 - `[trinkets]` Added `shappoli:equipped_trinket` item condition. This condition checks if the item is equipped by the player as a trinket
-- `[trinkets]` Added `shappoli:slot_linked_active` power type and `slot_linked_key` data type. This power type allows creating active powers assigned to specific trinkets; a key for the power to activate is specified by the slot where the trinket is equipped
+- `[trinkets]` Added `shappoli:action_on_trinket_key_press` power type and `trinket_keybinding` data type. This power type allows creating active powers assigned to specific trinkets; a key for the power to activate is specified by the slot where the trinket is equipped
 - `[walkers]` Added `shappoli:shaped` entity condition type. This condition type checks if the player has their shape changed
 - **(dev)** Added config for jitpack
 

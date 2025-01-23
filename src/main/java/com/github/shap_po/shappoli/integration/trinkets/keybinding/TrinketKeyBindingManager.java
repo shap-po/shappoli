@@ -1,7 +1,7 @@
-package com.github.shap_po.shappoli.integration.trinkets.slk;
+package com.github.shap_po.shappoli.integration.trinkets.keybinding;
 
 import com.github.shap_po.shappoli.Shappoli;
-import com.github.shap_po.shappoli.integration.trinkets.networking.s2c.SyncSlotLinkedKeysS2CPacket;
+import com.github.shap_po.shappoli.integration.trinkets.networking.s2c.SyncTrinketKeyBindingsS2CPacket;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
@@ -31,12 +31,11 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class SlotLinkedKeyManager extends IdentifiableMultiJsonDataLoader implements IdentifiableResourceReloadListener {
-    public static final String DIRECTORY = "slot_linked_keys";
+public class TrinketKeyBindingManager extends IdentifiableMultiJsonDataLoader implements IdentifiableResourceReloadListener {
     public static final Set<Identifier> DEPENDENCIES = new HashSet<>();
-    public static final Identifier ID = Shappoli.identifier(DIRECTORY);
+    public static final Identifier ID = Shappoli.identifier("trinket_keybindings");
 
-    private static final Object2ObjectOpenHashMap<Identifier, SlotLinkedKey> SLOT_LINKED_KEYS_BY_ID = new Object2ObjectOpenHashMap<>();
+    private static final Object2ObjectOpenHashMap<Identifier, TrinketKeyBinding> TRINKET_KEY_BINDINGS_BY_ID = new Object2ObjectOpenHashMap<>();
     private static final Object2ObjectOpenHashMap<Identifier, Integer> LOADING_PRIORITIES = new Object2ObjectOpenHashMap<>();
 
     private static final Gson GSON = new GsonBuilder()
@@ -44,10 +43,10 @@ public class SlotLinkedKeyManager extends IdentifiableMultiJsonDataLoader implem
         .setPrettyPrinting()
         .create();
 
-    public SlotLinkedKeyManager() {
-        super(GSON, DIRECTORY, ResourceType.SERVER_DATA);
+    public TrinketKeyBindingManager() {
+        super(GSON, "trinket_keybindings", ResourceType.SERVER_DATA);
 
-        // load before the power manager so powers can depend on slot linked keys
+        // load before the power manager so powers can depend on trinket keybindings
         PowerManager.DEPENDENCIES.add(ID);
         ServerLifecycleEvents.SYNC_DATA_PACK_CONTENTS.addPhaseOrdering(ID, PowerManager.ID);
         ServerLifecycleEvents.SYNC_DATA_PACK_CONTENTS.register(ID, (player, joined) -> send(player));
@@ -55,18 +54,18 @@ public class SlotLinkedKeyManager extends IdentifiableMultiJsonDataLoader implem
 
     @Override
     protected void apply(MultiJsonDataContainer prepared, ResourceManager manager, Profiler profiler) {
-        Shappoli.LOGGER.info("Reading slot linked keys data from data packs...");
+        Shappoli.LOGGER.info("Reading trinket keybindings data from data packs...");
 
         DynamicRegistryManager dynamicRegistries = CalioServer.getDynamicRegistries().orElse(null);
         startBuilding();
 
         if (dynamicRegistries == null) {
-            Shappoli.LOGGER.error("Can't read slot linked keys from data packs without access to dynamic registries!");
+            Shappoli.LOGGER.error("Can't read trinket keybindings from data packs without access to dynamic registries!");
             endBuilding();
             return;
         }
 
-        Map<Identifier, List<PrioritizedEntry<SlotLinkedKey>>> loadedSLK = new Object2ObjectOpenHashMap<>();
+        Map<Identifier, List<PrioritizedEntry<TrinketKeyBinding>>> loadedSLK = new Object2ObjectOpenHashMap<>();
         prepared.forEach((packName, id, jsonElement) -> {
             try {
                 SerializableData.CURRENT_NAMESPACE = id.getNamespace();
@@ -78,50 +77,50 @@ public class SlotLinkedKeyManager extends IdentifiableMultiJsonDataLoader implem
 
                 jsonObject.addProperty("id", id.toString());
 
-                SlotLinkedKey slotLinkedKey = SlotLinkedKey.DATA_TYPE.read(dynamicRegistries.getOps(JsonOps.INSTANCE), jsonObject).getOrThrow();
+                TrinketKeyBinding trinketKeybinding = TrinketKeyBinding.DATA_TYPE.read(dynamicRegistries.getOps(JsonOps.INSTANCE), jsonObject).getOrThrow();
                 int currLoadingPriority = JsonHelper.getInt(jsonObject, "loading_priority", 0);
 
-                PrioritizedEntry<SlotLinkedKey> entry = new PrioritizedEntry<>(slotLinkedKey, currLoadingPriority);
+                PrioritizedEntry<TrinketKeyBinding> entry = new PrioritizedEntry<>(trinketKeybinding, currLoadingPriority);
                 int prevLoadingPriority = LOADING_PRIORITIES.getOrDefault(id, Integer.MIN_VALUE);
 
-                if (slotLinkedKey.shouldReplace() && currLoadingPriority <= prevLoadingPriority) {
-                    Shappoli.LOGGER.warn("Ignoring slot linked key \"{}\" with 'replace' set to true from data pack [{}]. Its loading priority ({}) must be higher than {} to replace it!", id, packName, currLoadingPriority, prevLoadingPriority);
+                if (trinketKeybinding.shouldReplace() && currLoadingPriority <= prevLoadingPriority) {
+                    Shappoli.LOGGER.warn("Ignoring trinket keybinding \"{}\" with 'replace' set to true from data pack [{}]. Its loading priority ({}) must be higher than {} to replace it!", id, packName, currLoadingPriority, prevLoadingPriority);
                     return; // break
                 }
 
-                if (slotLinkedKey.shouldReplace()) {
-                    Shappoli.LOGGER.info("Slot linked key \"{}\" has been replaced by data pack [{}]!", id, packName);
+                if (trinketKeybinding.shouldReplace()) {
+                    Shappoli.LOGGER.info("trinket keybinding \"{}\" has been replaced by data pack [{}]!", id, packName);
                 }
 
                 loadedSLK.computeIfAbsent(id, k -> new LinkedList<>()).add(entry);
                 LOADING_PRIORITIES.put(id, currLoadingPriority);
 
             } catch (Exception e) {
-                Shappoli.LOGGER.error("There was a problem reading slot linked key \"{}\": {}", id, e.getMessage());
+                Shappoli.LOGGER.error("There was a problem reading trinket keybinding \"{}\": {}", id, e.getMessage());
             }
         });
 
         SerializableData.CURRENT_NAMESPACE = null;
         SerializableData.CURRENT_PATH = null;
 
-        Shappoli.LOGGER.info("Finished reading {} slot linked keys. Merging similar ones...", loadedSLK.size());
+        Shappoli.LOGGER.info("Finished reading {} trinket keybindings. Merging similar ones...", loadedSLK.size());
         loadedSLK.forEach((id, entries) -> {
-            AtomicReference<SlotLinkedKey> currentSlotLinkedKeys = new AtomicReference<>();
+            AtomicReference<TrinketKeyBinding> currentTrinketKeyBindings = new AtomicReference<>();
             entries.sort(Comparator.comparing(PrioritizedEntry::priority));
 
-            for (PrioritizedEntry<SlotLinkedKey> entry : entries) {
-                if (currentSlotLinkedKeys.get() == null) {
-                    currentSlotLinkedKeys.set(entry.value());
+            for (PrioritizedEntry<TrinketKeyBinding> entry : entries) {
+                if (currentTrinketKeyBindings.get() == null) {
+                    currentTrinketKeyBindings.set(entry.value());
                 } else {
-                    currentSlotLinkedKeys.accumulateAndGet(entry.value(), SlotLinkedKey::merge);
+                    currentTrinketKeyBindings.accumulateAndGet(entry.value(), TrinketKeyBinding::merge);
                 }
             }
 
-            SLOT_LINKED_KEYS_BY_ID.put(id, currentSlotLinkedKeys.get());
+            TRINKET_KEY_BINDINGS_BY_ID.put(id, currentTrinketKeyBindings.get());
         });
 
         endBuilding();
-        Shappoli.LOGGER.info("Finished merging similar slot linked keys. Total count: {}", size());
+        Shappoli.LOGGER.info("Finished merging similar trinket keybindings. Total count: {}", size());
     }
 
     @Override
@@ -136,38 +135,38 @@ public class SlotLinkedKeyManager extends IdentifiableMultiJsonDataLoader implem
 
     private static void startBuilding() {
         LOADING_PRIORITIES.clear();
-        SLOT_LINKED_KEYS_BY_ID.clear();
+        TRINKET_KEY_BINDINGS_BY_ID.clear();
     }
 
     private static void endBuilding() {
         LOADING_PRIORITIES.clear();
-        SLOT_LINKED_KEYS_BY_ID.trim();
+        TRINKET_KEY_BINDINGS_BY_ID.trim();
     }
 
     public static int size() {
-        return SLOT_LINKED_KEYS_BY_ID.size();
+        return TRINKET_KEY_BINDINGS_BY_ID.size();
     }
 
     @Nullable
-    public static SlotLinkedKey getNullable(Identifier id) {
-        return SLOT_LINKED_KEYS_BY_ID.get(id);
+    public static TrinketKeyBinding getNullable(Identifier id) {
+        return TRINKET_KEY_BINDINGS_BY_ID.get(id);
     }
 
-    public static Collection<SlotLinkedKey> values() {
-        return SLOT_LINKED_KEYS_BY_ID.values();
+    public static Collection<TrinketKeyBinding> values() {
+        return TRINKET_KEY_BINDINGS_BY_ID.values();
     }
 
     public static void send(ServerPlayerEntity player) {
         if (player.server.isDedicated()) {
-            ServerPlayNetworking.send(player, new SyncSlotLinkedKeysS2CPacket(SLOT_LINKED_KEYS_BY_ID));
+            ServerPlayNetworking.send(player, new SyncTrinketKeyBindingsS2CPacket(TRINKET_KEY_BINDINGS_BY_ID));
         }
     }
 
     @Environment(EnvType.CLIENT)
-    public static void receive(SyncSlotLinkedKeysS2CPacket packet) {
+    public static void receive(SyncTrinketKeyBindingsS2CPacket packet) {
         startBuilding();
 
-        SLOT_LINKED_KEYS_BY_ID.putAll(packet.slotLinkedKeyMap());
+        TRINKET_KEY_BINDINGS_BY_ID.putAll(packet.trinketKeyBindingMap());
 
         endBuilding();
     }

@@ -1,4 +1,4 @@
-package com.github.shap_po.shappoli.integration.trinkets.slk;
+package com.github.shap_po.shappoli.integration.trinkets.keybinding;
 
 import com.github.shap_po.shappoli.data.ShappoliDataTypes;
 import com.github.shap_po.shappoli.integration.trinkets.data.ShappoliTrinketsDataTypes;
@@ -12,13 +12,13 @@ import net.minecraft.util.Identifier;
 
 import java.util.List;
 
-public class SlotLinkedKey {
-    public static final SerializableDataType<SlotLinkedKey> DATA_TYPE = SerializableDataType.compound(
+public class TrinketKeyBinding {
+    public static final SerializableDataType<TrinketKeyBinding> DATA_TYPE = SerializableDataType.compound(
         new SerializableData()
             .add("id", SerializableDataTypes.IDENTIFIER)
             .add("values", Entry.DATA_TYPE.list())
             .add("replace", SerializableDataTypes.BOOLEAN, false),
-        data -> new SlotLinkedKey(
+        data -> new TrinketKeyBinding(
             data.getId("id"),
             data.get("values"),
             data.getBoolean("replace")
@@ -33,7 +33,7 @@ public class SlotLinkedKey {
     private final List<Entry> values;
     private final boolean replace;
 
-    public SlotLinkedKey(
+    public TrinketKeyBinding(
         Identifier id,
         List<Entry> values,
         boolean replace
@@ -70,12 +70,12 @@ public class SlotLinkedKey {
         return replace;
     }
 
-    public static SlotLinkedKey merge(SlotLinkedKey oldSlotLinkedKey, SlotLinkedKey newSlotLinkedKey) {
-        if (newSlotLinkedKey.shouldReplace()) {
-            return newSlotLinkedKey;
+    public static TrinketKeyBinding merge(TrinketKeyBinding oldTrinketKeyBinding, TrinketKeyBinding newTrinketKeyBinding) {
+        if (newTrinketKeyBinding.shouldReplace()) {
+            return newTrinketKeyBinding;
         }
-        oldSlotLinkedKey.values.addAll(newSlotLinkedKey.values);
-        return newSlotLinkedKey;
+        oldTrinketKeyBinding.values.addAll(newTrinketKeyBinding.values);
+        return newTrinketKeyBinding;
     }
 
     public static class Entry {

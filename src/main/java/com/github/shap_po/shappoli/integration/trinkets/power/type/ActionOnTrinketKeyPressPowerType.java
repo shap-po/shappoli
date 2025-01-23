@@ -3,10 +3,10 @@ package com.github.shap_po.shappoli.integration.trinkets.power.type;
 import com.github.shap_po.shappoli.integration.trinkets.action.type.entity.ModifyTrinketsInventoryEntityActionType;
 import com.github.shap_po.shappoli.integration.trinkets.data.ShappoliTrinketsDataTypes;
 import com.github.shap_po.shappoli.integration.trinkets.data.TrinketSlotFilter;
-import com.github.shap_po.shappoli.integration.trinkets.slk.SlotLinkedKey;
+import com.github.shap_po.shappoli.integration.trinkets.keybinding.TrinketKeyBinding;
 import com.github.shap_po.shappoli.power.type.ActionOnKeyPressPowerType;
-import com.github.shap_po.shappoli.util.ShappoliKeyBindingReference;
 import com.github.shap_po.shappoli.util.MiscUtil;
+import com.github.shap_po.shappoli.util.ShappoliKeyBindingReference;
 import io.github.apace100.apoli.action.EntityAction;
 import io.github.apace100.apoli.action.ItemAction;
 import io.github.apace100.apoli.condition.EntityCondition;
@@ -39,9 +39,7 @@ public class ActionOnTrinketKeyPressPowerType extends ActionOnKeyPressPowerType 
             .add("process_mode", ApoliDataTypes.PROCESS_MODE, InventoryUtil.ProcessMode.STACKS)
             .add("limit", SerializableDataTypes.INT, 0)
 
-            .add("slot_linked_key", ShappoliTrinketsDataTypes.SLOT_LINKED_KEYBINDING, null)
-            .add("slot_linked_keys", ShappoliTrinketsDataTypes.SLOT_LINKED_KEYBINDING.list(), null)
-            .validate(data -> MiscUtil.checkAtLeastOneFieldExists(data, "slot_linked_key", "slot_linked_keys"))
+            .add("key", ShappoliTrinketsDataTypes.TRINKET_KEYBINDING)
 
             .add("continuous", SerializableDataTypes.BOOLEAN, false),
         (data, condition) -> new ActionOnTrinketKeyPressPowerType(
@@ -55,7 +53,7 @@ public class ActionOnTrinketKeyPressPowerType extends ActionOnKeyPressPowerType 
             data.get("process_mode"),
             data.getInt("limit"),
 
-            MiscUtil.listFromData(data, "slot_linked_key", "slot_linked_keys"),
+            data.get("key"),
             data.getBoolean("continuous"),
             condition
         ),
@@ -70,7 +68,7 @@ public class ActionOnTrinketKeyPressPowerType extends ActionOnKeyPressPowerType 
             .set("process_mode", powerType.processMode)
             .set("limit", powerType.limit)
 
-            .set("slot_linked_keys", powerType.slotLinkedKeys)
+            .set("key", powerType.trinketKeyBinding)
 
             .set("continuous", powerType.isContinuous())
     );
@@ -79,7 +77,7 @@ public class ActionOnTrinketKeyPressPowerType extends ActionOnKeyPressPowerType 
     private final Optional<ItemCondition> itemCondition;
     private final InventoryUtil.ProcessMode processMode;
     private final int limit;
-    private final List<SlotLinkedKey> slotLinkedKeys;
+    private final TrinketKeyBinding trinketKeyBinding;
 
     public ActionOnTrinketKeyPressPowerType(
         HudRender hudRender,
@@ -92,7 +90,7 @@ public class ActionOnTrinketKeyPressPowerType extends ActionOnKeyPressPowerType 
         InventoryUtil.ProcessMode processMode,
         int limit,
 
-        List<SlotLinkedKey> slotLinkedKeys,
+        TrinketKeyBinding trinketKeyBinding,
         boolean continuous,
 
         Optional<EntityCondition> condition
@@ -101,11 +99,7 @@ public class ActionOnTrinketKeyPressPowerType extends ActionOnKeyPressPowerType 
             entityAction,
             hudRender,
             cooldownDuration,
-
-            slotLinkedKeys.stream()
-                .flatMap(slotLinkedKeybinding -> slotLinkedKeybinding.getAllKeys().stream())
-                .toList(),
-
+            trinketKeyBinding.getAllKeys(),
             true,
             continuous,
             condition
@@ -115,24 +109,19 @@ public class ActionOnTrinketKeyPressPowerType extends ActionOnKeyPressPowerType 
         this.itemCondition = itemCondition;
         this.processMode = processMode;
         this.limit = limit;
-        this.slotLinkedKeys = slotLinkedKeys;
+        this.trinketKeyBinding = trinketKeyBinding;
     }
 
     @Override
     public void onUse(ShappoliKeyBindingReference key) {
-        List<TrinketSlotFilter> slots = slotLinkedKeys.stream()
-            .flatMap(slotLinkedKeybinding -> slotLinkedKeybinding.getTriggeredSlots(key).stream())
-            .toList();
-
+        List<TrinketSlotFilter> slots = trinketKeyBinding.getTriggeredSlots(key);
         if (slots.isEmpty()) {
             return;
         }
 
         // use modify trinket inventory action and use power if success
         ModifyTrinketsInventoryEntityActionType action = new ModifyTrinketsInventoryEntityActionType(
-            slotLinkedKeys.stream()
-                .flatMap(slotLinkedKeybinding -> slotLinkedKeybinding.getTriggeredSlots(key).stream())
-                .toList(),
+            slots,
             processMode, limit,
             entityAction, itemAction, itemCondition);
         if (action.modify(getHolder())) {

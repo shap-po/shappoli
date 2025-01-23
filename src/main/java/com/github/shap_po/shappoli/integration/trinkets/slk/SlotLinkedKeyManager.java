@@ -33,6 +33,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class SlotLinkedKeyManager extends IdentifiableMultiJsonDataLoader implements IdentifiableResourceReloadListener {
     public static final String DIRECTORY = "slot_linked_keys";
+    public static final Set<Identifier> DEPENDENCIES = new HashSet<>();
     public static final Identifier ID = Shappoli.identifier(DIRECTORY);
 
     private static final Object2ObjectOpenHashMap<Identifier, SlotLinkedKey> SLOT_LINKED_KEYS_BY_ID = new Object2ObjectOpenHashMap<>();
@@ -47,13 +48,9 @@ public class SlotLinkedKeyManager extends IdentifiableMultiJsonDataLoader implem
         super(GSON, DIRECTORY, ResourceType.SERVER_DATA);
 
         // load before the power manager so powers can depend on slot linked keys
+        PowerManager.DEPENDENCIES.add(ID);
         ServerLifecycleEvents.SYNC_DATA_PACK_CONTENTS.addPhaseOrdering(ID, PowerManager.ID);
         ServerLifecycleEvents.SYNC_DATA_PACK_CONTENTS.register(ID, (player, joined) -> send(player));
-    }
-
-    @Override
-    public Identifier getFabricId() {
-        return ID;
     }
 
     @Override
@@ -125,6 +122,16 @@ public class SlotLinkedKeyManager extends IdentifiableMultiJsonDataLoader implem
 
         endBuilding();
         Shappoli.LOGGER.info("Finished merging similar slot linked keys. Total count: {}", size());
+    }
+
+    @Override
+    public Identifier getFabricId() {
+        return ID;
+    }
+
+    @Override
+    public Collection<Identifier> getFabricDependencies() {
+        return DEPENDENCIES;
     }
 
     private static void startBuilding() {

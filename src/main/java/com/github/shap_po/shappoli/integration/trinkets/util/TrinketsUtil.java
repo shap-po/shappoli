@@ -1,6 +1,6 @@
 package com.github.shap_po.shappoli.integration.trinkets.util;
 
-import com.github.shap_po.shappoli.integration.trinkets.data.TrinketSlotData;
+import com.github.shap_po.shappoli.integration.trinkets.data.TrinketSlotFilter;
 import dev.emi.trinkets.TrinketPlayerScreenHandler;
 import dev.emi.trinkets.api.*;
 import dev.emi.trinkets.payload.SyncInventoryPayload;
@@ -47,7 +47,7 @@ public class TrinketsUtil {
      * @param slots  The slots to get the trinkets from. If empty, all trinkets will be returned.
      * @return A stream of pairs of slot references and item stacks of the trinkets in the given slots.
      */
-    public static Stream<Pair<SlotReference, ItemStack>> getTrinkets(LivingEntity entity, List<TrinketSlotData> slots) {
+    public static Stream<Pair<SlotReference, ItemStack>> getTrinkets(LivingEntity entity, List<TrinketSlotFilter> slots) {
         return TrinketsUtil.getTrinkets(entity).filter(trinket -> slots.isEmpty() || slots.stream().anyMatch(slot -> slot.test(trinket.getLeft())));
     }
 
@@ -57,7 +57,7 @@ public class TrinketsUtil {
      * @param itemCondition The condition that the item must meet to be included in the list.
      * @return A stream of pairs of slot references and item stacks of the trinkets in the given slots.
      */
-    public static Stream<Pair<SlotReference, ItemStack>> getTrinkets(LivingEntity entity, List<TrinketSlotData> slots, Optional<ItemCondition> itemCondition) {
+    public static Stream<Pair<SlotReference, ItemStack>> getTrinkets(LivingEntity entity, List<TrinketSlotFilter> slots, Optional<ItemCondition> itemCondition) {
         return TrinketsUtil.getTrinkets(entity, slots).filter(trinket -> itemCondition.map(condition -> condition.test(TrinketsUtil.getItemConditionContext(entity, trinket.getRight()))).orElse(true));
     }
 
@@ -87,18 +87,18 @@ public class TrinketsUtil {
     }
 
     /**
-     * Get all slot references of the given entity that match the given slot data.
+     * Get all slot references of the given entity that match the given slot filters.
      *
      * @param entity The entity to get the slots from.
-     * @param slots  List of slot data to filter the slots.
+     * @param slots  List of filters to filter the slots.
      * @return A stream of slot references.
      */
-    public static Stream<SlotReference> getSlots(LivingEntity entity, List<TrinketSlotData> slots) {
+    public static Stream<SlotReference> getSlots(LivingEntity entity, List<TrinketSlotFilter> slots) {
         return getSlots(entity).filter(slot -> slots.stream().anyMatch(trinketSlotData -> trinketSlotData.test(slot)));
     }
 
     /**
-     * Based on the ${@link dev.emi.trinkets.mixin.LivingEntityMixin#tick()} method.
+     * Based on the {@link dev.emi.trinkets.mixin.LivingEntityMixin#tick()} method.
      */
     public static void updateInventories(TrinketComponent trinket) {
         LivingEntity entity = trinket.getEntity();

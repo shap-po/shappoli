@@ -2,7 +2,7 @@ package com.github.shap_po.shappoli.integration.trinkets.power.type;
 
 import com.github.shap_po.shappoli.integration.trinkets.action.type.entity.ModifyTrinketsInventoryEntityActionType;
 import com.github.shap_po.shappoli.integration.trinkets.data.ShappoliTrinketsDataTypes;
-import com.github.shap_po.shappoli.integration.trinkets.data.TrinketSlotData;
+import com.github.shap_po.shappoli.integration.trinkets.data.TrinketSlotFilter;
 import com.github.shap_po.shappoli.integration.trinkets.slk.SlotLinkedKey;
 import com.github.shap_po.shappoli.power.type.ActionOnKeyPressPowerType;
 import com.github.shap_po.shappoli.util.ShappoliKeyBindingReference;
@@ -120,7 +120,7 @@ public class ActionOnTrinketKeyPressPowerType extends ActionOnKeyPressPowerType 
 
     @Override
     public void onUse(ShappoliKeyBindingReference key) {
-        List<TrinketSlotData> slots = slotLinkedKeys.stream()
+        List<TrinketSlotFilter> slots = slotLinkedKeys.stream()
             .flatMap(slotLinkedKeybinding -> slotLinkedKeybinding.getTriggeredSlots(key).stream())
             .toList();
 

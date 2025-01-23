@@ -2,7 +2,7 @@ package com.github.shap_po.shappoli.integration.trinkets.condition.type.item;
 
 import com.github.shap_po.shappoli.integration.trinkets.condition.type.ShappoliTrinketsItemConditionTypes;
 import com.github.shap_po.shappoli.integration.trinkets.data.ShappoliTrinketsDataTypes;
-import com.github.shap_po.shappoli.integration.trinkets.data.TrinketSlotData;
+import com.github.shap_po.shappoli.integration.trinkets.data.TrinketSlotFilter;
 import com.github.shap_po.shappoli.integration.trinkets.util.TrinketsUtil;
 import com.github.shap_po.shappoli.util.InventoryUtil;
 import com.github.shap_po.shappoli.util.MiscUtil;
@@ -16,8 +16,6 @@ import io.github.apace100.calio.data.SerializableData;
 import io.github.apace100.calio.data.SerializableDataTypes;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -40,11 +38,11 @@ public class EquippedTrinketCountItemConditionType extends ItemConditionType {
             .set("compare_to", conditionType.compareTo)
     );
 
-    private final List<TrinketSlotData> slots;
+    private final List<TrinketSlotFilter> slots;
     private final Comparison comparison;
     private final int compareTo;
 
-    public EquippedTrinketCountItemConditionType(List<TrinketSlotData> slots, Comparison comparison, int compareTo) {
+    public EquippedTrinketCountItemConditionType(List<TrinketSlotFilter> slots, Comparison comparison, int compareTo) {
         this.slots = slots;
         this.comparison = comparison;
         this.compareTo = compareTo;

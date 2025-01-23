@@ -2,7 +2,7 @@ package com.github.shap_po.shappoli.integration.trinkets.action.type.entity;
 
 import com.github.shap_po.shappoli.integration.trinkets.action.type.ShappoliTrinketsEntityActionTypes;
 import com.github.shap_po.shappoli.integration.trinkets.data.ShappoliTrinketsDataTypes;
-import com.github.shap_po.shappoli.integration.trinkets.data.TrinketSlotData;
+import com.github.shap_po.shappoli.integration.trinkets.data.TrinketSlotFilter;
 import com.github.shap_po.shappoli.integration.trinkets.util.TrinketsUtil;
 import com.github.shap_po.shappoli.util.MiscUtil;
 import dev.emi.trinkets.api.SlotReference;
@@ -54,7 +54,7 @@ public class ModifyTrinketsInventoryEntityActionType extends EntityActionType {
             .set("item_condition", actionType.itemCondition)
     );
 
-    private final List<TrinketSlotData> slots;
+    private final List<TrinketSlotFilter> slots;
     private final InventoryUtil.ProcessMode processMode;
     private final int limit;
     private final Optional<EntityAction> entityAction;
@@ -62,7 +62,7 @@ public class ModifyTrinketsInventoryEntityActionType extends EntityActionType {
     private final Optional<ItemCondition> itemCondition;
 
     public ModifyTrinketsInventoryEntityActionType(
-        List<TrinketSlotData> slots,
+        List<TrinketSlotFilter> slots,
         InventoryUtil.ProcessMode processMode,
         int limit,
         Optional<EntityAction> entityAction,

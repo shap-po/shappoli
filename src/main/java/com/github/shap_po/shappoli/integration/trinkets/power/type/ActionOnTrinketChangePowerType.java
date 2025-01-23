@@ -2,7 +2,7 @@ package com.github.shap_po.shappoli.integration.trinkets.power.type;
 
 import com.github.shap_po.shappoli.integration.trinkets.access.SyncingTrinketInventory;
 import com.github.shap_po.shappoli.integration.trinkets.data.ShappoliTrinketsDataTypes;
-import com.github.shap_po.shappoli.integration.trinkets.data.TrinketSlotData;
+import com.github.shap_po.shappoli.integration.trinkets.data.TrinketSlotFilter;
 import com.github.shap_po.shappoli.integration.trinkets.util.TrinketsUtil;
 import com.github.shap_po.shappoli.util.MiscUtil;
 import dev.emi.trinkets.api.SlotReference;
@@ -58,7 +58,7 @@ public class ActionOnTrinketChangePowerType extends PowerType {
     private final Optional<EntityAction> entityActionOnUnequip;
     private final Optional<ItemAction> itemActionOnUnequip;
     private final ItemCondition itemCondition;
-    private final List<TrinketSlotData> slots;
+    private final List<TrinketSlotFilter> slots;
 
     public ActionOnTrinketChangePowerType(
         Optional<EntityAction> entityActionOnEquip,
@@ -66,7 +66,7 @@ public class ActionOnTrinketChangePowerType extends PowerType {
         Optional<EntityAction> entityActionOnUnequip,
         Optional<ItemAction> itemActionOnUnequip,
         ItemCondition itemCondition,
-        List<TrinketSlotData> slots,
+        List<TrinketSlotFilter> slots,
         Optional<EntityCondition> condition
     ) {
         super(condition);

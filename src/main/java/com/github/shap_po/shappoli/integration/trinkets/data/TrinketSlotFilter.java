@@ -7,13 +7,13 @@ import io.github.apace100.calio.data.SerializableDataType;
 import io.github.apace100.calio.data.SerializableDataTypes;
 import org.jetbrains.annotations.Nullable;
 
-public class TrinketSlotData {
-    public static final SerializableDataType<TrinketSlotData> DATA_TYPE = SerializableDataType.compound(
+public record TrinketSlotFilter(@Nullable String name, @Nullable String group, @Nullable Integer index) {
+    public static final SerializableDataType<TrinketSlotFilter> DATA_TYPE = SerializableDataType.compound(
         new SerializableData()
             .add("name", SerializableDataTypes.STRING, null)
             .add("group", SerializableDataTypes.STRING, null)
             .add("index", SerializableDataTypes.INT, null),
-        (data) -> new TrinketSlotData(
+        (data) -> new TrinketSlotFilter(
             data.get("name"),
             data.get("group"),
             data.isPresent("index") ? data.getInt("index") : null
@@ -23,16 +23,6 @@ public class TrinketSlotData {
             .set("group", slot.group)
             .set("index", slot.index)
     );
-
-    public final @Nullable String name;
-    public final @Nullable String group;
-    public final @Nullable Integer index;
-
-    public TrinketSlotData(@Nullable String name, @Nullable String group, @Nullable Integer index) {
-        this.name = name;
-        this.group = group;
-        this.index = index;
-    }
 
     public boolean test(SlotReference slotReference) {
         SlotType slotType = slotReference.inventory().getSlotType();

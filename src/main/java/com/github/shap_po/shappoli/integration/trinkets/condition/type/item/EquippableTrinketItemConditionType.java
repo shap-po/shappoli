@@ -2,7 +2,7 @@ package com.github.shap_po.shappoli.integration.trinkets.condition.type.item;
 
 import com.github.shap_po.shappoli.integration.trinkets.condition.type.ShappoliTrinketsItemConditionTypes;
 import com.github.shap_po.shappoli.integration.trinkets.data.ShappoliTrinketsDataTypes;
-import com.github.shap_po.shappoli.integration.trinkets.data.TrinketSlotData;
+import com.github.shap_po.shappoli.integration.trinkets.data.TrinketSlotFilter;
 import com.github.shap_po.shappoli.integration.trinkets.util.TrinketsUtil;
 import com.github.shap_po.shappoli.util.InventoryUtil;
 import com.github.shap_po.shappoli.util.MiscUtil;
@@ -15,8 +15,6 @@ import io.github.apace100.calio.data.SerializableData;
 import io.github.apace100.calio.data.SerializableDataTypes;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -36,10 +34,10 @@ public class EquippableTrinketItemConditionType extends ItemConditionType {
             .set("only_empty", conditionType.onlyEmpty)
     );
 
-    private final List<TrinketSlotData> slots;
+    private final List<TrinketSlotFilter> slots;
     private final boolean onlyEmpty;
 
-    public EquippableTrinketItemConditionType(List<TrinketSlotData> slots, boolean onlyEmpty) {
+    public EquippableTrinketItemConditionType(List<TrinketSlotFilter> slots, boolean onlyEmpty) {
         this.slots = slots;
         this.onlyEmpty = onlyEmpty;
     }

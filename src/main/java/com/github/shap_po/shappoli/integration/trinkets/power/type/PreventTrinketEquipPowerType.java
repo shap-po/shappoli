@@ -1,6 +1,6 @@
 package com.github.shap_po.shappoli.integration.trinkets.power.type;
 
-import com.github.shap_po.shappoli.integration.trinkets.data.TrinketSlotData;
+import com.github.shap_po.shappoli.integration.trinkets.data.TrinketSlotFilter;
 import io.github.apace100.apoli.condition.EntityCondition;
 import io.github.apace100.apoli.condition.ItemCondition;
 import io.github.apace100.apoli.data.TypedDataObjectFactory;
@@ -15,7 +15,7 @@ public class PreventTrinketEquipPowerType extends AbstractPreventTrinketChangePo
 
     public PreventTrinketEquipPowerType(
         Optional<ItemCondition> itemCondition,
-        List<TrinketSlotData> slots,
+        List<TrinketSlotFilter> slots,
         boolean allowInCreative,
         Optional<EntityCondition> condition
     ) {

@@ -1,7 +1,7 @@
 package com.github.shap_po.shappoli.integration.trinkets.power.type;
 
 import com.github.shap_po.shappoli.integration.trinkets.data.ShappoliTrinketsDataTypes;
-import com.github.shap_po.shappoli.integration.trinkets.data.TrinketSlotData;
+import com.github.shap_po.shappoli.integration.trinkets.data.TrinketSlotFilter;
 import com.github.shap_po.shappoli.integration.trinkets.util.TrinketsUtil;
 import com.github.shap_po.shappoli.util.MiscUtil;
 import dev.emi.trinkets.api.SlotReference;
@@ -20,12 +20,12 @@ import java.util.Optional;
 
 public abstract class AbstractPreventTrinketChangePowerType extends PowerType {
     protected final Optional<ItemCondition> itemCondition;
-    protected final List<TrinketSlotData> slots;
+    protected final List<TrinketSlotFilter> slots;
     protected final boolean allowInCreative;
 
     public AbstractPreventTrinketChangePowerType(
         Optional<ItemCondition> itemCondition,
-        List<TrinketSlotData> slots,
+        List<TrinketSlotFilter> slots,
         boolean allowInCreative,
         Optional<EntityCondition> condition
     ) {
@@ -47,7 +47,7 @@ public abstract class AbstractPreventTrinketChangePowerType extends PowerType {
         return itemCondition;
     }
 
-    public List<TrinketSlotData> getSlots() {
+    public List<TrinketSlotFilter> getSlots() {
         return slots;
     }
 
@@ -59,7 +59,7 @@ public abstract class AbstractPreventTrinketChangePowerType extends PowerType {
     public interface Constructor<T extends AbstractPreventTrinketChangePowerType> {
         T create(
             Optional<ItemCondition> itemCondition,
-            List<TrinketSlotData> slots,
+            List<TrinketSlotFilter> slots,
             boolean allowInCreative,
             Optional<EntityCondition> condition
         );

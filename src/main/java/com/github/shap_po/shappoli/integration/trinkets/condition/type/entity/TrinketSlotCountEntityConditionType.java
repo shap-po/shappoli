@@ -2,7 +2,7 @@ package com.github.shap_po.shappoli.integration.trinkets.condition.type.entity;
 
 import com.github.shap_po.shappoli.integration.trinkets.condition.type.ShappoliTrinketsEntityConditionTypes;
 import com.github.shap_po.shappoli.integration.trinkets.data.ShappoliTrinketsDataTypes;
-import com.github.shap_po.shappoli.integration.trinkets.data.TrinketSlotData;
+import com.github.shap_po.shappoli.integration.trinkets.data.TrinketSlotFilter;
 import com.github.shap_po.shappoli.integration.trinkets.util.TrinketsUtil;
 import com.github.shap_po.shappoli.util.MiscUtil;
 import io.github.apace100.apoli.condition.ConditionConfiguration;
@@ -36,11 +36,11 @@ public class TrinketSlotCountEntityConditionType extends EntityConditionType {
             .set("compare_to", conditionType.compareTo)
     );
 
-    private final List<TrinketSlotData> slots;
+    private final List<TrinketSlotFilter> slots;
     private final Comparison comparison;
     private final int compareTo;
 
-    public TrinketSlotCountEntityConditionType(List<TrinketSlotData> slots, Comparison comparison, int compareTo) {
+    public TrinketSlotCountEntityConditionType(List<TrinketSlotFilter> slots, Comparison comparison, int compareTo) {
         this.slots = slots;
         this.comparison = comparison;
         this.compareTo = compareTo;

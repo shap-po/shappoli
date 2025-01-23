@@ -10,7 +10,7 @@
 - `[trinkets]` Added `shappoli:equipped_trinket` item condition. This condition checks if the item is equipped by the player as a trinket
 - `[trinkets]` Added `shappoli:slot_linked_active` power type and `slot_linked_key` data type. This power type allows creating active powers assigned to specific trinkets; a key for the power to activate is specified by the slot where the trinket is equipped
 - `[walkers]` Added `shappoli:shaped` entity condition type. This condition type checks if the player has their shape changed
-- Added config for jitpack
+- **(dev)** Added config for jitpack
 
 ### Fixes
 
@@ -20,12 +20,13 @@
 
 ### Changes
 
-- `[walkers]` Improved `shappoli:has_shape_ability` entity condition and `shappoli:prevent_shape_ability_use` power. Both of them now can check for specific shape abilities
-- `[walkers]` Replaced Mixins with event handlers for `shappoli:prevent_shape_change`, `shappoli:action_on_shape_change`, `shappoli:prevent_shape_ability_use` powers
-- `[walkers]` All shape abilities now use `walkers` as the ability namespace
-- `[trinkets]` The `TrinketsSlotModifierUtil` now allows specifying the modifier id. This allows other mods to use this utility for easy trinket slot addition/removal
 - Updated the mod to work with Apoli `v2.12.0-alpha.15+mc.1.21.1` (Origins `v1.13.0-alpha.12+mc.1.21.1`)
+- `[walkers]` Improved `shappoli:has_shape_ability` entity condition and `shappoli:prevent_shape_ability_use` power. Both of them now can check for specific shape abilities
+- `[walkers]` All shape abilities now use `walkers` as the ability namespace
 - `[trinkets]` Renamed some stuff. Old names left as aliases:
     - `shappoli:modify_trinket_inventory` entity action type to `shappoli:modify_trinkets_inventory`
     - `shappoli:modify_trinket_slot` and `shappoli:conditioned_modify_trinket_slot` power type to `shappoli:modify_trinkets_slot` and `shappoli:conditioned_modify_trinkets_slot`
-- `[base]` Made `shappoli:action_on_entity_collision` ticking power instead of using a Mixin. This also allows tweaking the tick interval.
+- `[base]` Made `shappoli:action_on_entity_collision` ticking power instead of using a Mixin. This also allows tweaking the tick interval by changing `tick_rate` field (defaults to 20).
+- `[walkers]` **(dev)** Replaced Mixins with event handlers for `shappoli:prevent_shape_change`, `shappoli:action_on_shape_change`, `shappoli:prevent_shape_ability_use` powers
+- `[trinkets]` **(dev)** Renamed `TrinketSlotData` to `TrinketSlotFilter` to better represent what it does
+- `[trinkets]` **(dev)** The `TrinketsSlotModifierUtil` now allows specifying the modifier id. This allows other mods to use this utility for easy trinket slot addition/removal

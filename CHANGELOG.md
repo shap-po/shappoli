@@ -9,7 +9,6 @@
 - `[trinkets]` Added `shappoli:has_trinket_power` item condition. This condition checks if the item has a trinket power
 - `[trinkets]` Added `shappoli:equipped_trinket` item condition. This condition checks if the item is equipped by the player as a trinket
 - `[trinkets]` Added `shappoli:slot_linked_active` power type and `slot_linked_key` data type. This power type allows creating active powers assigned to specific trinkets; a key for the power to activate is specified by the slot where the trinket is equipped
-- `[walkers]` Added `shappoli:execute_shape_ability` entity action type. This action type allows executing a specific shape ability
 - `[walkers]` Added `shappoli:shaped` entity condition type. This condition type checks if the player has their shape changed
 - Added config for jitpack
 

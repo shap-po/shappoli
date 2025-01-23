@@ -9,15 +9,15 @@ import io.github.apace100.apoli.action.type.AbstractActionType;
 import io.github.apace100.apoli.data.ApoliDataTypes;
 import io.github.apace100.apoli.power.PowerReference;
 import io.github.apace100.apoli.power.type.PowerType;
-import io.github.apace100.apoli.util.context.TypeActionContext;
+import io.github.apace100.apoli.util.context.ActionContext;
 import io.github.apace100.calio.data.SerializableData;
 import net.minecraft.entity.Entity;
 
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
-public interface SendActionMetaActionType<T extends TypeActionContext<?>, A extends AbstractAction<T, ? extends AbstractActionType<T, A>>> extends AbstractSender {
-    static <T extends TypeActionContext<?>> void send(
+public interface SendActionMetaActionType<T extends ActionContext<?>, A extends AbstractAction<T, ? extends AbstractActionType<T, A>>> extends AbstractSender {
+    static <T extends ActionContext<?>> void send(
         Entity entity,
         T actionContext,
         PowerReference receiver,
@@ -41,7 +41,7 @@ public interface SendActionMetaActionType<T extends TypeActionContext<?>, A exte
         }
     }
 
-    static <T extends TypeActionContext<?>, A extends AbstractAction<T, AT>, AT extends AbstractActionType<T, A>, M extends AbstractActionType<T, A> & SendActionMetaActionType<T, A>> ActionConfiguration<M> createConfiguration(Function<PowerReference, M> constructor) {
+    static <T extends ActionContext<?>, A extends AbstractAction<T, AT>, AT extends AbstractActionType<T, A>, M extends AbstractActionType<T, A> & SendActionMetaActionType<T, A>> ActionConfiguration<M> createConfiguration(Function<PowerReference, M> constructor) {
         return ActionConfiguration.of(
             Shappoli.identifier("send_action"),
             new SerializableData()

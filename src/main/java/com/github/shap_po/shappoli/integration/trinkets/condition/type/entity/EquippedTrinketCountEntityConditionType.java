@@ -7,13 +7,13 @@ import com.github.shap_po.shappoli.integration.trinkets.util.TrinketsUtil;
 import com.github.shap_po.shappoli.util.MiscUtil;
 import io.github.apace100.apoli.condition.ConditionConfiguration;
 import io.github.apace100.apoli.condition.ItemCondition;
+import io.github.apace100.apoli.condition.context.EntityConditionContext;
 import io.github.apace100.apoli.condition.type.EntityConditionType;
 import io.github.apace100.apoli.data.ApoliDataTypes;
 import io.github.apace100.apoli.data.TypedDataObjectFactory;
 import io.github.apace100.apoli.util.Comparison;
 import io.github.apace100.calio.data.SerializableData;
 import io.github.apace100.calio.data.SerializableDataTypes;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import org.jetbrains.annotations.NotNull;
 
@@ -36,7 +36,6 @@ public class EquippedTrinketCountEntityConditionType extends EntityConditionType
         ),
         (conditionType, serializableData) -> serializableData.instance()
             .set("item_condition", conditionType.itemCondition)
-            .set("slot", conditionType.slots)
             .set("slots", conditionType.slots)
             .set("comparison", conditionType.comparison)
             .set("compare_to", conditionType.compareTo)
@@ -55,8 +54,8 @@ public class EquippedTrinketCountEntityConditionType extends EntityConditionType
     }
 
     @Override
-    public boolean test(Entity entity) {
-        if (!(entity instanceof LivingEntity livingEntity)) {
+    public boolean test(EntityConditionContext context) {
+        if (!(context.entity() instanceof LivingEntity livingEntity)) {
             return false;
         }
 

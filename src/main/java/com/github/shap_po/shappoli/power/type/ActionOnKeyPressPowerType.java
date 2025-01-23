@@ -19,7 +19,7 @@ import java.util.Optional;
 public class ActionOnKeyPressPowerType extends ActiveCooldownPowerType {
     public static final TypedDataObjectFactory<ActionOnKeyPressPowerType> DATA_FACTORY = PowerType.createConditionedDataFactory(
         new SerializableData()
-            .add("entity_action", EntityAction.DATA_TYPE)
+            .add("entity_action", EntityAction.DATA_TYPE.optional())
             .add("hud_render", ApoliDataTypes.HUD_RENDER, HudRender.DONT_RENDER)
             .add("cooldown", SerializableDataTypes.INT, 1)
             .add("key", ShappoliDataTypes.ACTIVE_ANY_KEY, null)
@@ -27,7 +27,7 @@ public class ActionOnKeyPressPowerType extends ActiveCooldownPowerType {
             .add("bound_only", SerializableDataTypes.BOOLEAN, true)
             .add("continuous", SerializableDataTypes.BOOLEAN, false),
         (data, condition) -> new ActionOnKeyPressPowerType(
-            data.<EntityAction>get("entity_action"),
+            data.get("entity_action"),
             data.get("hud_render"),
             data.getInt("cooldown"),
             MiscUtil.listFromData(data, "key", "keys"),
@@ -57,18 +57,6 @@ public class ActionOnKeyPressPowerType extends ActiveCooldownPowerType {
     ) {
         super(hudRender, cooldownDuration, keys.stream().peek(key -> key.continuous = continuous).toList(), boundOnly, continuous, condition);
         this.entityAction = entityAction;
-    }
-
-    public ActionOnKeyPressPowerType(
-        EntityAction entityAction,
-        HudRender hudRender,
-        int cooldownDuration,
-        List<Key> keys,
-        boolean boundOnly,
-        boolean continuous,
-        Optional<EntityCondition> condition
-    ) {
-        this(Optional.of(entityAction), hudRender, cooldownDuration, keys, boundOnly, continuous, condition);
     }
 
     @Override

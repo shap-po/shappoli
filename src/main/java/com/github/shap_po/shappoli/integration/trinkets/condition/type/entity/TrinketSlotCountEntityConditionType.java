@@ -6,13 +6,13 @@ import com.github.shap_po.shappoli.integration.trinkets.data.TrinketSlotData;
 import com.github.shap_po.shappoli.integration.trinkets.util.TrinketsUtil;
 import com.github.shap_po.shappoli.util.MiscUtil;
 import io.github.apace100.apoli.condition.ConditionConfiguration;
+import io.github.apace100.apoli.condition.context.EntityConditionContext;
 import io.github.apace100.apoli.condition.type.EntityConditionType;
 import io.github.apace100.apoli.data.ApoliDataTypes;
 import io.github.apace100.apoli.data.TypedDataObjectFactory;
 import io.github.apace100.apoli.util.Comparison;
 import io.github.apace100.calio.data.SerializableData;
 import io.github.apace100.calio.data.SerializableDataTypes;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import org.jetbrains.annotations.NotNull;
 
@@ -23,8 +23,8 @@ public class TrinketSlotCountEntityConditionType extends EntityConditionType {
         new SerializableData()
             .add("slot", ShappoliTrinketsDataTypes.TRINKET_SLOT, null)
             .add("slots", ShappoliTrinketsDataTypes.TRINKET_SLOT.list(), null)
-            .add("comparison", ApoliDataTypes.COMPARISON, Comparison.GREATER_THAN)
-            .add("compare_to", SerializableDataTypes.INT, 0),
+            .add("comparison", ApoliDataTypes.COMPARISON, Comparison.GREATER_THAN_OR_EQUAL)
+            .add("compare_to", SerializableDataTypes.INT, 1),
         data -> new TrinketSlotCountEntityConditionType(
             MiscUtil.listFromData(data, "slot", "slots"),
             data.get("comparison"),
@@ -47,8 +47,8 @@ public class TrinketSlotCountEntityConditionType extends EntityConditionType {
     }
 
     @Override
-    public boolean test(Entity entity) {
-        if (!(entity instanceof LivingEntity livingEntity)) {
+    public boolean test(EntityConditionContext context) {
+        if (!(context.entity() instanceof LivingEntity livingEntity)) {
             return false;
         }
 

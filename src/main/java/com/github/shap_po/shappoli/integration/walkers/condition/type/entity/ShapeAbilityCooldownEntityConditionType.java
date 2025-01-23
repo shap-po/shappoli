@@ -2,6 +2,7 @@ package com.github.shap_po.shappoli.integration.walkers.condition.type.entity;
 
 import com.github.shap_po.shappoli.integration.walkers.condition.type.ShappoliWalkersEntityConditionTypes;
 import io.github.apace100.apoli.condition.ConditionConfiguration;
+import io.github.apace100.apoli.condition.context.EntityConditionContext;
 import io.github.apace100.apoli.condition.type.EntityConditionType;
 import io.github.apace100.apoli.data.ApoliDataTypes;
 import io.github.apace100.apoli.data.TypedDataObjectFactory;
@@ -36,8 +37,8 @@ public class ShapeAbilityCooldownEntityConditionType extends EntityConditionType
     }
 
     @Override
-    public boolean test(Entity entity) {
-        if (!(entity instanceof PlayerEntity player)) {
+    public boolean test(EntityConditionContext context) {
+        if (!(context.entity() instanceof PlayerEntity player)) {
             return false;
         }
 

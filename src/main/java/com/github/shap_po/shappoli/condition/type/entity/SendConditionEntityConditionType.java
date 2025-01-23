@@ -25,8 +25,8 @@ public class SendConditionEntityConditionType extends EntityConditionType implem
     }
 
     @Override
-    public boolean test(Entity entity) {
-        return SendConditionMetaConditionType.send(entity, new EntityConditionContext(entity), receiver, ReceiveConditionPowerType::receiveEntity);
+    public boolean test(EntityConditionContext context) {
+        return SendConditionMetaConditionType.send(context.entity(), context, receiver, ReceiveConditionPowerType::receiveEntity);
     }
 
     @Override

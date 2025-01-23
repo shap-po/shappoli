@@ -27,8 +27,8 @@ public class SendConditionItemConditionType extends ItemConditionType implements
     }
 
     @Override
-    public boolean test(World world, ItemStack stack) {
-        return SendConditionMetaConditionType.send(InventoryUtil.getHolder(stack), new ItemConditionContext(world, stack), receiver, ReceiveConditionPowerType::receiveItem);
+    public boolean test(ItemConditionContext context) {
+        return SendConditionMetaConditionType.send(InventoryUtil.getHolder(context.stack()), context, receiver, ReceiveConditionPowerType::receiveItem);
     }
 
     @Override

@@ -25,8 +25,8 @@ public class SendConditionBiEntityConditionType extends BiEntityConditionType im
     }
 
     @Override
-    public boolean test(Entity actor, Entity target) {
-        return SendConditionMetaConditionType.send(actor, new BiEntityConditionContext(actor, target), receiver, ReceiveConditionPowerType::receiveBientity);
+    public boolean test(BiEntityConditionContext context) {
+        return SendConditionMetaConditionType.send(context.actor(), context, receiver, ReceiveConditionPowerType::receiveBientity);
     }
 
     @Override

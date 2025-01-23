@@ -7,6 +7,7 @@ import com.github.shap_po.shappoli.util.MiscUtil;
 import com.google.common.collect.Streams;
 import io.github.apace100.apoli.action.ActionConfiguration;
 import io.github.apace100.apoli.action.BiEntityAction;
+import io.github.apace100.apoli.action.context.BiEntityActionContext;
 import io.github.apace100.apoli.action.type.BiEntityActionType;
 import io.github.apace100.apoli.component.PowerHolderComponent;
 import io.github.apace100.apoli.data.ApoliDataTypes;
@@ -100,17 +101,17 @@ public class SuppressPowerBiEntityActionType extends BiEntityActionType {
     }
 
     @Override
-    public void execute(Entity actor, Entity target) {
-        Iterator<PowerType> powers = getPowerTypes(target).iterator();
+    public void accept(BiEntityActionContext context) {
+        Iterator<PowerType> powers = getPowerTypes(context.target()).iterator();
 
         boolean suppressed = false;
         while (powers.hasNext()) {
-            boolean result = suppressPower(powers.next(), actor);
+            boolean result = suppressPower(powers.next(), context.actor());
             suppressed = suppressed || result;
         }
 
         if (suppressed) {
-            biEntityAction.ifPresent(action -> action.execute(actor, target));
+            biEntityAction.ifPresent(action -> action.accept(context));
         }
     }
 

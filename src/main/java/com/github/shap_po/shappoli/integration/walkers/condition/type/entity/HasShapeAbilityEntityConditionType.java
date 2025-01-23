@@ -5,6 +5,7 @@ import com.github.shap_po.shappoli.integration.walkers.registry.ShappoliWalkersR
 import com.github.shap_po.shappoli.integration.walkers.util.WalkersUtil;
 import com.github.shap_po.shappoli.util.MiscUtil;
 import io.github.apace100.apoli.condition.ConditionConfiguration;
+import io.github.apace100.apoli.condition.context.EntityConditionContext;
 import io.github.apace100.apoli.condition.type.EntityConditionType;
 import io.github.apace100.apoli.data.TypedDataObjectFactory;
 import io.github.apace100.calio.data.SerializableData;
@@ -42,8 +43,8 @@ public class HasShapeAbilityEntityConditionType extends EntityConditionType {
     }
 
     @Override
-    public boolean test(Entity entity) {
-        if (!(entity instanceof LivingEntity livingEntity)) {
+    public boolean test(EntityConditionContext context) {
+        if (!(context.entity() instanceof LivingEntity livingEntity)) {
             return false;
         }
 

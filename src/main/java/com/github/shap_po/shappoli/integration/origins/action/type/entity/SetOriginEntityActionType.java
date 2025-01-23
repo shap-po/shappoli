@@ -4,6 +4,7 @@ import com.github.shap_po.shappoli.Shappoli;
 import com.github.shap_po.shappoli.integration.origins.action.type.ShappoliOriginsEntityActionTypes;
 import com.github.shap_po.shappoli.integration.origins.util.OriginsUtil;
 import io.github.apace100.apoli.action.ActionConfiguration;
+import io.github.apace100.apoli.action.context.EntityActionContext;
 import io.github.apace100.apoli.action.type.EntityActionType;
 import io.github.apace100.apoli.data.TypedDataObjectFactory;
 import io.github.apace100.calio.data.SerializableData;
@@ -37,8 +38,8 @@ public class SetOriginEntityActionType extends EntityActionType {
     }
 
     @Override
-    public void execute(Entity entity) {
-        if (entity.getEntityWorld().isClient) {
+    public void accept(EntityActionContext context) {
+        if (context.entity().getEntityWorld().isClient) {
             return;
         }
 
@@ -54,7 +55,7 @@ public class SetOriginEntityActionType extends EntityActionType {
             return;
         }
 
-        OriginsUtil.setOrigin(entity, layer, origin);
+        OriginsUtil.setOrigin(context.entity(), layer, origin);
     }
 
     @Override

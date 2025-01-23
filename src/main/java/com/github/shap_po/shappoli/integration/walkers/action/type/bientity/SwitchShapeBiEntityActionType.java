@@ -4,6 +4,7 @@ import com.github.shap_po.shappoli.integration.walkers.action.type.ShappoliWalke
 import com.github.shap_po.shappoli.integration.walkers.util.WalkersUtil;
 import io.github.apace100.apoli.action.ActionConfiguration;
 import io.github.apace100.apoli.action.BiEntityAction;
+import io.github.apace100.apoli.action.context.BiEntityActionContext;
 import io.github.apace100.apoli.action.type.BiEntityActionType;
 import io.github.apace100.apoli.data.TypedDataObjectFactory;
 import io.github.apace100.calio.data.SerializableData;
@@ -38,17 +39,17 @@ public class SwitchShapeBiEntityActionType extends BiEntityActionType {
     }
 
     @Override
-    public void execute(Entity actor, Entity target) {
-        if (!(actor instanceof ServerPlayerEntity player)) {
+    public void accept(BiEntityActionContext context) {
+        if (!(context.actor() instanceof ServerPlayerEntity player)) {
             return;
         }
-        if (!(target instanceof LivingEntity livingEntity)) {
+        if (!(context.target() instanceof LivingEntity livingEntity)) {
             return;
         }
 
         boolean result = WalkersUtil.switchShape(player, livingEntity, ignoreNbt);
         if (result) {
-            actionOnSuccess.ifPresent(action -> action.execute(actor, target));
+            actionOnSuccess.ifPresent(action -> action.accept(context));
         }
     }
 

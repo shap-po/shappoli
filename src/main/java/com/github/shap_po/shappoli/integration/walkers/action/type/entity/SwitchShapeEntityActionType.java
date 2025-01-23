@@ -4,6 +4,7 @@ import com.github.shap_po.shappoli.integration.walkers.action.type.ShappoliWalke
 import com.github.shap_po.shappoli.integration.walkers.util.WalkersUtil;
 import io.github.apace100.apoli.action.ActionConfiguration;
 import io.github.apace100.apoli.action.EntityAction;
+import io.github.apace100.apoli.action.context.EntityActionContext;
 import io.github.apace100.apoli.action.type.EntityActionType;
 import io.github.apace100.apoli.data.TypedDataObjectFactory;
 import io.github.apace100.calio.data.SerializableData;
@@ -44,15 +45,15 @@ public class SwitchShapeEntityActionType extends EntityActionType {
     }
 
     @Override
-    public void execute(Entity entity) {
-        if (!(entity instanceof ServerPlayerEntity player)) {
+    public void accept(EntityActionContext context) {
+        if (!(context.entity() instanceof ServerPlayerEntity player)) {
             return;
         }
 
         boolean result = WalkersUtil.switchShape(player, shape, tag);
 
         if (result) {
-            actionOnSuccess.ifPresent(action -> action.execute(entity));
+            actionOnSuccess.ifPresent(action -> action.accept(context));
         }
     }
 

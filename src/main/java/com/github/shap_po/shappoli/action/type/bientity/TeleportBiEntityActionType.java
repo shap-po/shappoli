@@ -3,6 +3,7 @@ package com.github.shap_po.shappoli.action.type.bientity;
 import com.github.shap_po.shappoli.action.type.ShappoliBiEntityActionTypes;
 import com.github.shap_po.shappoli.util.MiscUtil;
 import io.github.apace100.apoli.action.ActionConfiguration;
+import io.github.apace100.apoli.action.context.BiEntityActionContext;
 import io.github.apace100.apoli.action.type.BiEntityActionType;
 import io.github.apace100.apoli.data.TypedDataObjectFactory;
 import io.github.apace100.calio.data.SerializableData;
@@ -42,19 +43,19 @@ public class TeleportBiEntityActionType extends BiEntityActionType {
     }
 
     @Override
-    public void execute(Entity actor, Entity target) {
-        if (actor.getEntityWorld().isClient) {
+    public void accept(BiEntityActionContext context) {
+        if (context.actor().getEntityWorld().isClient) {
             return;
         }
 
-        CachedPosition actorPosition = new CachedPosition(actor);
-        CachedPosition targetPosition = new CachedPosition(target);
+        CachedPosition actorPosition = new CachedPosition(context.actor());
+        CachedPosition targetPosition = new CachedPosition(context.target());
 
         if (teleportActor) {
-            targetPosition.teleport(actor, rotate);
+            targetPosition.teleport(context.actor(), rotate);
         }
         if (teleportTarget) {
-            actorPosition.teleport(target, rotate);
+            actorPosition.teleport(context.target(), rotate);
         }
     }
 

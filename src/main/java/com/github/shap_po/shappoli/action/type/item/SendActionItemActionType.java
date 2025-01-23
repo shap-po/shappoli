@@ -26,8 +26,8 @@ public class SendActionItemActionType extends ItemActionType implements SendActi
     }
 
     @Override
-    public void execute(World world, StackReference stackReference) {
-        SendActionMetaActionType.send(InventoryUtil.getHolder(stackReference.get()), new ItemActionContext(world, stackReference), power, ReceiveActionPowerType::receiveItemAction);
+    public void accept(ItemActionContext context) {
+        SendActionMetaActionType.send(InventoryUtil.getHolder(context.stackReference().get()), context, power, ReceiveActionPowerType::receiveItemAction);
     }
 
     @Override

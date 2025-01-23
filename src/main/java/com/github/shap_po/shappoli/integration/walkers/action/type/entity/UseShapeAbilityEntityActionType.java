@@ -2,6 +2,7 @@ package com.github.shap_po.shappoli.integration.walkers.action.type.entity;
 
 import com.github.shap_po.shappoli.integration.walkers.action.type.ShappoliWalkersEntityActionTypes;
 import io.github.apace100.apoli.action.ActionConfiguration;
+import io.github.apace100.apoli.action.context.EntityActionContext;
 import io.github.apace100.apoli.action.type.EntityActionType;
 import io.github.apace100.apoli.data.TypedDataObjectFactory;
 import io.github.apace100.calio.data.SerializableData;
@@ -40,8 +41,8 @@ public class UseShapeAbilityEntityActionType extends EntityActionType {
     }
 
     @Override
-    public void execute(Entity entity) {
-        if (!(entity instanceof ServerPlayerEntity player)) {
+    public void accept(EntityActionContext context) {
+        if (!(context.entity() instanceof ServerPlayerEntity player)) {
             return;
         }
 

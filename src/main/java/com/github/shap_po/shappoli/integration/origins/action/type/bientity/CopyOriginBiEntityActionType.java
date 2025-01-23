@@ -5,13 +5,13 @@ import com.github.shap_po.shappoli.integration.origins.action.type.ShappoliOrigi
 import com.github.shap_po.shappoli.integration.origins.util.OriginsUtil;
 import com.github.shap_po.shappoli.util.MiscUtil;
 import io.github.apace100.apoli.action.ActionConfiguration;
+import io.github.apace100.apoli.action.context.BiEntityActionContext;
 import io.github.apace100.apoli.action.type.BiEntityActionType;
 import io.github.apace100.apoli.data.TypedDataObjectFactory;
 import io.github.apace100.calio.data.SerializableData;
 import io.github.apace100.calio.data.SerializableDataTypes;
 import io.github.apace100.origins.origin.Origin;
 import io.github.apace100.origins.origin.OriginLayer;
-import net.minecraft.entity.Entity;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.NotNull;
 
@@ -45,8 +45,8 @@ public class CopyOriginBiEntityActionType extends BiEntityActionType {
     }
 
     @Override
-    public void execute(Entity actor, Entity target) {
-        if (actor.getEntityWorld().isClient) {
+    public void accept(BiEntityActionContext context) {
+        if (context.actor().getEntityWorld().isClient) {
             return;
         }
 
@@ -57,14 +57,14 @@ public class CopyOriginBiEntityActionType extends BiEntityActionType {
             return;
         }
 
-        Origin actorOrigin = OriginsUtil.getOrigin(actor, layer);
-        Origin targetOrigin = OriginsUtil.getOrigin(target, layer);
+        Origin actorOrigin = OriginsUtil.getOrigin(context.actor(), layer);
+        Origin targetOrigin = OriginsUtil.getOrigin(context.target(), layer);
 
         if (modifyActor) {
-            OriginsUtil.setOrigin(actor, layer, targetOrigin);
+            OriginsUtil.setOrigin(context.actor(), layer, targetOrigin);
         }
         if (modifyTarget) {
-            OriginsUtil.setOrigin(target, layer, actorOrigin);
+            OriginsUtil.setOrigin(context.target(), layer, actorOrigin);
         }
     }
 

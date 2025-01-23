@@ -9,6 +9,7 @@ import dev.emi.trinkets.api.SlotReference;
 import io.github.apace100.apoli.action.ActionConfiguration;
 import io.github.apace100.apoli.action.EntityAction;
 import io.github.apace100.apoli.action.ItemAction;
+import io.github.apace100.apoli.action.context.EntityActionContext;
 import io.github.apace100.apoli.action.type.EntityActionType;
 import io.github.apace100.apoli.condition.ItemCondition;
 import io.github.apace100.apoli.data.ApoliDataTypes;
@@ -103,8 +104,8 @@ public class ModifyTrinketsInventoryEntityActionType extends EntityActionType {
     }
 
     @Override
-    public void execute(Entity entity) {
-        modify(entity);
+    public void accept(EntityActionContext context) {
+        modify(context.entity());
     }
 
     @Override

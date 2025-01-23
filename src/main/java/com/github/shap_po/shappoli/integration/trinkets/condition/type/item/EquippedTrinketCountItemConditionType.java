@@ -7,6 +7,7 @@ import com.github.shap_po.shappoli.integration.trinkets.util.TrinketsUtil;
 import com.github.shap_po.shappoli.util.InventoryUtil;
 import com.github.shap_po.shappoli.util.MiscUtil;
 import io.github.apace100.apoli.condition.ConditionConfiguration;
+import io.github.apace100.apoli.condition.context.ItemConditionContext;
 import io.github.apace100.apoli.condition.type.ItemConditionType;
 import io.github.apace100.apoli.data.ApoliDataTypes;
 import io.github.apace100.apoli.data.TypedDataObjectFactory;
@@ -50,14 +51,14 @@ public class EquippedTrinketCountItemConditionType extends ItemConditionType {
     }
 
     @Override
-    public boolean test(World world, ItemStack stack) {
-        Entity entity = InventoryUtil.getHolder(stack);
+    public boolean test(ItemConditionContext context) {
+        Entity entity = InventoryUtil.getHolder(context.stack());
         if (!(entity instanceof LivingEntity livingEntity)) {
             return false;
         }
 
         int count = TrinketsUtil.getTrinkets(livingEntity, slots)
-            .filter(trinket -> trinket.getRight().getItem().equals(stack.getItem()))
+            .filter(trinket -> trinket.getRight().getItem().equals(context.stack().getItem()))
             .mapToInt(trinket -> 1).sum();
         return comparison.compare(count, compareTo);
     }

@@ -4,6 +4,7 @@ import com.github.shap_po.shappoli.integration.walkers.action.type.ShappoliWalke
 import com.github.shap_po.shappoli.integration.walkers.util.WalkersUtil;
 import io.github.apace100.apoli.action.ActionConfiguration;
 import io.github.apace100.apoli.action.BiEntityAction;
+import io.github.apace100.apoli.action.context.EntityActionContext;
 import io.github.apace100.apoli.action.type.EntityActionType;
 import io.github.apace100.apoli.data.TypedDataObjectFactory;
 import io.github.apace100.calio.data.SerializableData;
@@ -29,11 +30,11 @@ public class ShapeActionEntityActionType extends EntityActionType {
     }
 
     @Override
-    public void execute(Entity entity) {
-        if (!(entity instanceof ServerPlayerEntity player)) {
+    public void accept(EntityActionContext context) {
+        if (!(context.entity() instanceof ServerPlayerEntity player)) {
             return;
         }
-        biEntityAction.execute(entity, WalkersUtil.getShape(player));
+        biEntityAction.execute(context.entity(), WalkersUtil.getShape(player));
     }
 
     @Override

@@ -24,8 +24,8 @@ public class SendActionBiEntityActionType extends BiEntityActionType implements 
     }
 
     @Override
-    public void execute(Entity actor, Entity target) {
-        SendActionMetaActionType.send(actor, new BiEntityActionContext(actor, target), power, ReceiveActionPowerType::receiveBiEntityAction);
+    public void accept(BiEntityActionContext context) {
+        SendActionMetaActionType.send(context.actor(), context, power, ReceiveActionPowerType::receiveBiEntityAction);
     }
 
     @Override

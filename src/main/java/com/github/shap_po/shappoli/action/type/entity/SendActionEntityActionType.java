@@ -24,8 +24,8 @@ public class SendActionEntityActionType extends EntityActionType implements Send
     }
 
     @Override
-    public void execute(Entity entity) {
-        SendActionMetaActionType.send(entity, new EntityActionContext(entity), power, ReceiveActionPowerType::receiveEntityAction);
+    public void accept(EntityActionContext context) {
+        SendActionMetaActionType.send(context.entity(), context, power, ReceiveActionPowerType::receiveEntityAction);
     }
 
     @Override

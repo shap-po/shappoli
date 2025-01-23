@@ -4,6 +4,7 @@ import com.github.shap_po.shappoli.condition.type.ShappoliItemConditionTypes;
 import com.github.shap_po.shappoli.util.InventoryUtil;
 import io.github.apace100.apoli.condition.ConditionConfiguration;
 import io.github.apace100.apoli.condition.EntityCondition;
+import io.github.apace100.apoli.condition.context.ItemConditionContext;
 import io.github.apace100.apoli.condition.type.ItemConditionType;
 import io.github.apace100.apoli.data.TypedDataObjectFactory;
 import io.github.apace100.calio.data.SerializableData;
@@ -27,8 +28,8 @@ public class HolderItemConditionType extends ItemConditionType {
     }
 
     @Override
-    public boolean test(World world, ItemStack stack) {
-        Entity holder = InventoryUtil.getHolder(stack);
+    public boolean test(ItemConditionContext context) {
+        Entity holder = InventoryUtil.getHolder(context.stack());
         return holder != null && condition.test(holder);
     }
 

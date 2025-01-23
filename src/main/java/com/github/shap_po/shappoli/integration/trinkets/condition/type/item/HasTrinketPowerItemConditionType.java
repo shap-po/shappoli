@@ -4,6 +4,7 @@ import com.github.shap_po.shappoli.integration.trinkets.component.item.ShappoliT
 import com.github.shap_po.shappoli.integration.trinkets.component.item.TrinketItemPowersComponent;
 import com.github.shap_po.shappoli.integration.trinkets.condition.type.ShappoliTrinketsItemConditionTypes;
 import io.github.apace100.apoli.condition.ConditionConfiguration;
+import io.github.apace100.apoli.condition.context.ItemConditionContext;
 import io.github.apace100.apoli.condition.type.ItemConditionType;
 import io.github.apace100.apoli.data.ApoliDataTypes;
 import io.github.apace100.apoli.data.TypedDataObjectFactory;
@@ -29,8 +30,8 @@ public class HasTrinketPowerItemConditionType extends ItemConditionType {
     }
 
     @Override
-    public boolean test(World world, ItemStack stack) {
-        return stack.getOrDefault(ShappoliTrinketsDataComponentTypes.TRINKET_POWERS, TrinketItemPowersComponent.DEFAULT)
+    public boolean test(ItemConditionContext context) {
+        return context.stack().getOrDefault(ShappoliTrinketsDataComponentTypes.TRINKET_POWERS, TrinketItemPowersComponent.DEFAULT)
             .stream()
             .map(TrinketItemPowersComponent.Entry::powerId)
             .anyMatch(power.id()::equals);

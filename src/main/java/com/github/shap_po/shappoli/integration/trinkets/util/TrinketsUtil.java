@@ -15,6 +15,7 @@ import net.minecraft.inventory.StackReference;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Pair;
 
 import java.util.*;
@@ -22,7 +23,7 @@ import java.util.stream.Stream;
 
 public class TrinketsUtil {
     public static ItemActionContext getItemActionContext(Entity entity, SlotReference slotReference) {
-        return new ItemActionContext(entity.getWorld(), TrinketsUtil.getStackReference(slotReference));
+        return new ItemActionContext((ServerWorld) entity.getWorld(), TrinketsUtil.getStackReference(slotReference));
     }
 
     public static ItemConditionContext getItemConditionContext(Entity entity, ItemStack item) {

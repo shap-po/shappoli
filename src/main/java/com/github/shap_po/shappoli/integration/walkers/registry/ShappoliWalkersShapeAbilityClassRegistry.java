@@ -1,12 +1,23 @@
 package com.github.shap_po.shappoli.integration.walkers.registry;
 
+import com.github.shap_po.shappoli.Shappoli;
+import io.github.apace100.apoli.Apoli;
+import io.github.apace100.apoli.power.PowerConfiguration;
+import io.github.apace100.apoli.power.type.PowerType;
+import io.github.apace100.apoli.registry.ApoliRegistries;
+import io.github.apace100.calio.data.SerializableDataType;
+import io.github.apace100.calio.util.IdentifierAlias;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
+import tocraft.walkers.Walkers;
 import tocraft.walkers.ability.ShapeAbility;
 import tocraft.walkers.ability.impl.generic.*;
 import tocraft.walkers.ability.impl.specific.*;
 
 public class ShappoliWalkersShapeAbilityClassRegistry {
+    public static final IdentifierAlias ALIASES = new IdentifierAlias();
+    public static final SerializableDataType<Class<? extends ShapeAbility<?>>> DATA_TYPE = SerializableDataType.registry(ShappoliWalkersRegistries.SHAPE_ABILITY_CLASS, Walkers.MODID, ALIASES, (clazz, id) -> "Shape ability " + id + "is undefined!");
+
     public static void register() {
         register(ClearEffectsAbility.ID, ClearEffectsAbility.class);
         register(ExplosionAbility.ID, ExplosionAbility.class);
@@ -34,6 +45,8 @@ public class ShappoliWalkersShapeAbilityClassRegistry {
         register(TurtleAbility.ID, TurtleAbility.class);
         register(WardenAbility.ID, WardenAbility.class);
         register(WitherAbility.ID, WitherAbility.class);
+
+        ALIASES.addNamespaceAlias(Shappoli.MOD_ID, Walkers.MODID);
     }
 
     private static <T extends ShapeAbility<?>> void register(Identifier id, Class<T> abilityClass) {

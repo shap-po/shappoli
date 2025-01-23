@@ -22,7 +22,7 @@
 
 - Updated the mod to work with Apoli `v2.12.0-alpha.15+mc.1.21.1` (Origins `v1.13.0-alpha.12+mc.1.21.1`)
 - `[walkers]` Improved `shappoli:has_shape_ability` entity condition and `shappoli:prevent_shape_ability_use` power. Both of them now can check for specific shape abilities
-- `[walkers]` All shape abilities now use `walkers` as the ability namespace
+- `[walkers]` All shape abilities now use `walkers` as the ability namespace (`shappoli` can be used as alias)
 - `[trinkets]` Renamed some stuff. Old names left as aliases:
     - `shappoli:modify_trinket_inventory` entity action type to `shappoli:modify_trinkets_inventory`
     - `shappoli:modify_trinket_slot` and `shappoli:conditioned_modify_trinket_slot` power type to `shappoli:modify_trinkets_slot` and `shappoli:conditioned_modify_trinkets_slot`

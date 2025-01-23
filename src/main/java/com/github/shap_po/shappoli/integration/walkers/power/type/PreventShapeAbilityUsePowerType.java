@@ -1,6 +1,6 @@
 package com.github.shap_po.shappoli.integration.walkers.power.type;
 
-import com.github.shap_po.shappoli.integration.walkers.registry.ShappoliWalkersRegistries;
+import com.github.shap_po.shappoli.integration.walkers.registry.ShappoliWalkersShapeAbilityClassRegistry;
 import com.github.shap_po.shappoli.integration.walkers.util.WalkersUtil;
 import com.github.shap_po.shappoli.util.MiscUtil;
 import io.github.apace100.apoli.condition.BiEntityCondition;
@@ -9,24 +9,21 @@ import io.github.apace100.apoli.data.TypedDataObjectFactory;
 import io.github.apace100.apoli.power.PowerConfiguration;
 import io.github.apace100.apoli.power.type.PowerType;
 import io.github.apace100.calio.data.SerializableData;
-import io.github.apace100.calio.data.SerializableDataTypes;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.NotNull;
 import tocraft.walkers.ability.AbilityRegistry;
 import tocraft.walkers.ability.ShapeAbility;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 public class PreventShapeAbilityUsePowerType extends PowerType {
     public static final TypedDataObjectFactory<PreventShapeAbilityUsePowerType> DATA_FACTORY = PowerType.createConditionedDataFactory(
         new SerializableData()
             .add("bientity_condition", BiEntityCondition.DATA_TYPE.optional(), Optional.empty())
-            .add("ability", SerializableDataTypes.IDENTIFIER, null)
-            .add("abilities", SerializableDataTypes.IDENTIFIERS, null),
+            .add("ability", ShappoliWalkersShapeAbilityClassRegistry.DATA_TYPE, null)
+            .add("abilities", ShappoliWalkersShapeAbilityClassRegistry.DATA_TYPE.list(), null),
         (data, condition) -> new PreventShapeAbilityUsePowerType(
             data.get("bientity_condition"),
             MiscUtil.listFromData(data, "ability", "abilities"),
@@ -34,25 +31,20 @@ public class PreventShapeAbilityUsePowerType extends PowerType {
         ),
         (powerType, serializableData) -> serializableData.instance()
             .set("bientity_condition", powerType.bientityCondition)
-            .set("abilities", powerType.abilityIds)
+            .set("abilities", powerType.abilities)
     );
 
     private final Optional<BiEntityCondition> bientityCondition;
-    private final List<Identifier> abilityIds;
-    private final List<? extends Class<? extends ShapeAbility<?>>> abilityClasses;
+    private final List<? extends Class<? extends ShapeAbility<?>>> abilities;
 
     public PreventShapeAbilityUsePowerType(
         Optional<BiEntityCondition> biEntityCondition,
-        List<Identifier> abilityIds,
+        List<? extends Class<? extends ShapeAbility<?>>> abilities,
         Optional<EntityCondition> condition
     ) {
         super(condition);
         this.bientityCondition = biEntityCondition;
-        this.abilityIds = abilityIds;
-        this.abilityClasses = abilityIds.stream()
-            .map(ShappoliWalkersRegistries.SHAPE_ABILITY_CLASS::get)
-            .filter(Objects::nonNull)
-            .toList();
+        this.abilities = abilities;
     }
 
     public boolean doesApply() {
@@ -70,7 +62,7 @@ public class PreventShapeAbilityUsePowerType extends PowerType {
             return false;
         }
 
-        return abilityClasses.stream().anyMatch(a -> a.isInstance(shapeAbility));
+        return abilities.stream().anyMatch(a -> a.isInstance(shapeAbility));
     }
 
     @Override
